@@ -8,22 +8,30 @@ import { fileURLToPath } from 'node:url'
 import { readFileSync } from 'node:fs'
 
 const app = Fastify()
-const rootDir = dirname(fileURLToPath(import.meta.url))
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+// console.log(__dirname)
 
 app.register(fastifyView, {
   engine: {
       ejs
-  }
+  },
+  root: join(__dirname, 'views'),
 })
 
 app.register(fastifyFormBody)
 
 app.register(fastifyStatic, {
-  root: join(rootDir, 'public')
+  root: join(__dirname, 'public')
 })
 
 app.get('/', async (req, res) => {
-  res.send("Welcome to FT_TRANSCENDENCE !")
+  res.view('index.ejs')
+})
+
+app.get('/about', async (req, res) => {
+  res.view('about.ejs', { name: "Mateo" })
 })
 
 app.setErrorHandler((error, req, res) => {
