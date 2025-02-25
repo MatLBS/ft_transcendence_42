@@ -1,12 +1,12 @@
 // Import Fastify
-import Fastify from 'fastify'
+import Fastify from 'fastify';
 
 
-const app = Fastify()
+const app = Fastify({ logger: true })
 
 // Define a simple route
 app.get("/", (request, reply) => {
-  return { message: "Hello, Miguel!" };
+  return { message: "Hello, Mateo2!" };
 });
 
 // Start the server

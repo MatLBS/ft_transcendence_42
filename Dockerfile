@@ -1,15 +1,13 @@
-FROM node:18
-
-RUN apt-get update
-RUN apt-get upgrade -y
+FROM node:22-alpine
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-COPY . .
 
-RUN npm install
+RUN npm install && npm install -g nodemon
+
+COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["nodemon", "server.js"]
