@@ -26,13 +26,15 @@ function loadRoutesFromDirectory(directory, useEjs) {
 	const files = fs.readdirSync(directory);
 
 	files.forEach(file => {
-		const routeName = path.basename(file, path.extname(file)); // Nom du fichier sans extension
-		routes[routeName] = {
-			dir: directory,
-			file: file,
-			useEjs: useEjs,
-			css: "public/style/" + routeName + ".css"
-		};
+		if (file !== "style") {
+			const routeName = path.basename(file, path.extname(file)); // Nom du fichier sans extension
+			routes[routeName] = {
+				dir: directory,
+				file: file,
+				useEjs: useEjs,
+				css: "public/style/" + routeName + ".css"
+			};
+		}
 	});
 	return routes;
 }
@@ -64,7 +66,7 @@ app.post('/url', async (req, reply) => {
 	let content = "";
 	let css = "";
 	// objet a remplacer par db
-	const user = { name: 'John', age: 24 };
+	const user = { name: 'John', age: 18 };
 	// router
 	for (const route of Object.keys(routes)) {
 		if (file === route) {

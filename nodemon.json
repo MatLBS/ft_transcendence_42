@@ -1,6 +1,6 @@
 {
-	"watch": ["/", "server.js", "dist/", "public/", "views/"],
+	"watch": ["server.js", "dist/", "public/", "views/"],
 	"ext": "js,json,ejs,html,css",
-	"ignore": ["node_modules/", ".git/"],
+	"ignore": ["node_modules", ".git/", "*.json"],
 	"delay": "100"
 }
