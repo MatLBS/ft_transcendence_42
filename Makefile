@@ -11,6 +11,10 @@ build:
 run:
 	@docker run -p 3000:3000 --name $(CONTAINER_NAME) -v "$(PWD)":/usr/src/app -v /usr/src/app/node_modules $(IMAGE_NAME)
 
+it:
+	@docker build -t $(IMAGE_NAME) .
+	@docker run --rm -it -p 3000:3000 --name $(CONTAINER_NAME) -v "$(PWD)":/usr/src/app -v /usr/src/app/node_modules $(IMAGE_NAME) sh
+
 fclean:
 	@docker stop $(CONTAINER_NAME)
 	@docker rm $(CONTAINER_NAME)
