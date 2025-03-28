@@ -6,8 +6,8 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"outDir": "./dist"
+		"outDir": "srcs/dist"
 	},
-	"include": ["src/**/*.ts", "public/**/*.ts"],
+	"include": ["./srcs/**/*.ts", "./srcs/public/**/*.ts"],
 	"exclude": ["node_modules"]
 }

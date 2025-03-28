@@ -13,4 +13,3 @@ RUN npx tsc
 EXPOSE 3000
 
 CMD ["npm", "run", "dev"]
-# CMD ["sh", "-c", "npx tsc && nodemon server.js"]

@@ -1,11 +1,11 @@
 {
 	"name": "app",
 	"version": "1.0.0",
-	"main": "/server.js",
+	"main": "srcs/server.js",
 	"type": "module",
 	"scripts": {
-		"start": "node server.js",
-		"dev": "concurrently \"tsc --watch\" \"nodemon server.js\"",
+		"start": "node srcs/server.js",
+		"dev": "concurrently \"tsc --watch\" \"nodemon srcs/server.js\"",
 		"build": "tsc"
 	},
 	"repository": {

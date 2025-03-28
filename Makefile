@@ -9,7 +9,7 @@ build:
 	@docker build -t $(IMAGE_NAME) .
 
 run:
-	@docker run -p 3000:3000 --name $(CONTAINER_NAME) -v "$(PWD)":/usr/src/app -v /usr/src/app/node_modules $(IMAGE_NAME)
+	@docker run -p 3000:3000 --name $(CONTAINER_NAME) $(IMAGE_NAME)
 
 it:
 	@docker build -t $(IMAGE_NAME) .

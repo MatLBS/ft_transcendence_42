@@ -66,7 +66,7 @@ app.post('/url', async (req, reply) => {
 	let content = "";
 	let css = "";
 	// objet a remplacer par db
-	const user = { name: 'John', age: 18 };
+	const user = { name: 'John', age: 24 };
 	// router
 	for (const route of Object.keys(routes)) {
 		if (file === route) {
