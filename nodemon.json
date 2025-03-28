@@ -1,6 +1,6 @@
 {
-	"watch": ["srcs/server.js", "srcs/dist/", "srcs/public/", "srcs/views/"],
-	"ext": "js,json,ejs,html,css",
+	"watch": ["server.js", "srcs/**/*.js", "srcs/**/*.ts", "srcs/**/*.ejs", "srcs/**/*.html", "srcs/**/*.css"],
+	"ext": "js,ts,json,ejs,html,css",
 	"ignore": ["node_modules", ".git/", "*.json"],
-	"delay": "100"
+	"delay": "500"
 }

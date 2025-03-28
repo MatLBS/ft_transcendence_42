@@ -32,7 +32,7 @@ function loadRoutesFromDirectory(directory, useEjs) {
 				dir: directory,
 				file: file,
 				useEjs: useEjs,
-				css: "public/style/" + routeName + ".css"
+				css: "/public/style/" + routeName + ".css"
 			};
 		}
 	});
