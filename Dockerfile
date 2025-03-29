@@ -10,6 +10,10 @@ COPY . .
 
 RUN npx tsc
 
+# RUN chmod -R 777 srcs/public/style/
+
+# RUN ls -l srcs/public/style/ && npm run build:css
+
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "npm run build:css && npm run dev"]
