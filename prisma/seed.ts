@@ -7,7 +7,7 @@ export async function createUser (username: string, password: string, email: str
 		where: {
 			OR: [
 				{ email: email},
-				{ password: password},
+				{ username: username},
 			  ],
 		},
 	})

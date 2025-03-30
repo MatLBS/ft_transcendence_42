@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="public/js/register.js"></script>
     <title>Document</title>
 </head>
 <body>
     <div class="border-2 border-sky-500">
         <h1 class="text-center">Register</h1>
-        <% if (message.error) { %>
+        <% if (message && message.error) { %>
             <div class="text-red-500">
                 <%= message.error %>
             </div>
         <% } %>
-        <form action="/createUser" method="post" onsubmit="validateForm(event)">
+        <form action="/createUser" method="post">
             <div class="mb-2">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username">

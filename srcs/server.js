@@ -8,9 +8,10 @@ import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
 import fastifyFormbody from '@fastify/formbody';
 import fastifyBcrypt from 'fastify-bcrypt';
+import { validatePassword } from './public/js/register.js';
 import { createUser, deleteAllUsers, deleteUser } from "./dist/prisma/seed.js"
 
-const app = Fastify({ logger: true })
+const app = Fastify()
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -97,8 +98,9 @@ app.post('/url', async (req, reply) => {
 
 app.post('/createUser', async (req, reply) => {
 	try {
+		await validatePassword(req.body.password)
 		const hashedPassword = await app.bcrypt.hash(req.body.password, 10);
-		createUser(req.body.username, hashedPassword, req.body.email);
+		await createUser(req.body.username, hashedPassword, req.body.email);
 		reply.redirect('/home')
 	}
 	catch {
