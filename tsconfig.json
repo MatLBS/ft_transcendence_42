@@ -1,13 +1,14 @@
 {
 	"compilerOptions": {
-		"target": "ES2020",
-		"module": "commonjs",
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "node",
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
 		"outDir": "srcs/dist"
 	},
-	"include": ["./srcs/**/*.ts", "./srcs/public/**/*.ts"],
+	"include": ["./srcs/**/*.ts", "./srcs/public/**/*.ts", "srcs/public/js/login.js", "prisma/**/*.ts"],
 	"exclude": ["node_modules"]
 }

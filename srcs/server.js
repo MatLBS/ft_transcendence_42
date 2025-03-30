@@ -6,6 +6,9 @@ import ejs from 'ejs';
 import { fileURLToPath } from 'url';
 import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
+import fastifyFormbody from '@fastify/formbody';
+import fastifyBcrypt from 'fastify-bcrypt';
+import { createUser, deleteAllUsers, deleteUser } from "./dist/prisma/seed.js"
 
 const app = Fastify({ logger: true })
 
@@ -15,6 +18,10 @@ app.register(fastifyStatic, {
 	root: path.join(__dirname, '.'),
 	prefix: '/',
 });
+
+app.register(fastifyBcrypt);
+
+app.register(fastifyFormbody)
 
 app.register(fastifyView, {
 	engine: { ejs: ejs },
@@ -87,6 +94,18 @@ app.post('/url', async (req, reply) => {
 	}
 	return reply.send({ content, css });
 });
+
+app.post('/createUser', async (req, reply) => {
+	try {
+		const hashedPassword = await app.bcrypt.hash(req.body.password, 10);
+		createUser(req.body.username, hashedPassword, req.body.email);
+		reply.redirect('/home')
+	}
+	catch {
+		console.log("error");
+		reply.redirect('/register')
+	}
+})
 
 // lancer le serv
 const start = async () => {
