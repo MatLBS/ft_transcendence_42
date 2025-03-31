@@ -9,6 +9,6 @@
 		"forceConsistentCasingInFileNames": true,
 		"outDir": "srcs/dist"
 	},
-	"include": ["./srcs/**/*.ts", "./srcs/public/**/*.ts", "srcs/public/js/login.js", "prisma/**/*.ts"],
+	"include": ["./srcs/**/*.ts", "./srcs/public/**/*.ts", "srcs/public/scripts/login.ts", "prisma/**/*.ts"],
 	"exclude": ["node_modules"]
 }
