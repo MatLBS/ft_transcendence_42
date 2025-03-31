@@ -12,16 +12,31 @@ function recvContent(url: string): void {
 		body: JSON.stringify({ url }),
 	})
 		.then((response: Response) => response.json())
-		.then((data: { css: string; content: string; errcode?: number }) => {
+		.then((data: { js: string; css: string; content: string; errcode?: number }) => {
+
+			const existingScript = document.getElementById('js');
+			if (existingScript)
+				existingScript.remove();
+			const existingCss = document.getElementById('css');
+			if (existingCss)
+				existingCss.remove();
+
 			const appElement = document.getElementById('app');
-			if (appElement) {
+			if (appElement)
 				appElement.innerHTML = data.content;
-			}
 			if (data.css) {
 				const linkElement = document.createElement('link');
 				linkElement.rel = 'stylesheet';
 				linkElement.href = data.css;
+				linkElement.id = "css";
 				document.head.appendChild(linkElement);
+			}
+			if (data.js) {
+				const scriptElement = document.createElement('script');
+				scriptElement.type = 'module';
+				scriptElement.src = data.js;
+				scriptElement.id = "js";
+				document.body.appendChild(scriptElement);
 			}
 		})
 		.catch((error: unknown) => {
