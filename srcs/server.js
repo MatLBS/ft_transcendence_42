@@ -6,10 +6,6 @@ export const app = Fastify({ logger: true })
 
 app.register(userRoutes);
 
-app.register(fastifyBcrypt);
-
-app.register(fastifyFormbody)
-
 // lancer le serv
 const start = async () => {
 	try {
