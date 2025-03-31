@@ -10,9 +10,7 @@ COPY . .
 
 RUN npx tsc
 
-# RUN chmod -R 777 srcs/public/style/
-
-# RUN ls -l srcs/public/style/ && npm run build:css
+RUN npx prisma generate --schema=./prisma/schema.prisma 
 
 EXPOSE 3000
 

@@ -4,6 +4,8 @@ import { fileURLToPath } from 'url';
 import ejs from 'ejs';
 import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
+import fastifyFormbody from '@fastify/formbody';
+import fastifyBcrypt from 'fastify-bcrypt';
 
 // peut etre sauvegarder le content des fichier html.
 
@@ -75,6 +77,19 @@ const getPost = async (req, reply) => {
 	return reply.send({ content, css, js });
 };
 
+const createUser = async (req, reply) => {
+	try {
+		// await validatePassword(req.body.password)
+		const hashedPassword = await app.bcrypt.hash(req.body.password, 10);
+		await createUser(req.body.username, hashedPassword, req.body.email);
+		reply.redirect('/home')
+	}
+	catch {
+		console.log("error");
+		reply.redirect('/register')
+	}
+};
+
 export default async function userRoutes(app) {
 	app.register(fastifyStatic, {
 		root: path.join(__dirname, '.'),
@@ -86,7 +101,12 @@ export default async function userRoutes(app) {
 		root: path.join(__dirname, "views"),
 	});
 
+	app.register(fastifyBcrypt);
+	
+	app.register(fastifyFormbody)
+
 	app.get('/:page', getPage);
 	app.get('/', getHome);
 	app.post('/url', getPost);
+	app.post('/register', createUser);
 }

@@ -41,3 +41,7 @@ fastify.log
 # Build artifacts
 build/
 coverage/
+
+#Prisma 
+generated/
+generated
