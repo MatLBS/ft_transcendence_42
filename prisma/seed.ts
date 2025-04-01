@@ -3,18 +3,22 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export async function createUser (username: string, password: string, email: string) {
-	const userAlreadyExist = await prisma.user.findFirst({
+	const usernameAlreadyExist = await prisma.user.findFirst({
 		where: {
-			OR: [
-				{ email: email},
-				{ username: username},
-			  ],
+			username: username,
 		},
 	})
 
-	if (userAlreadyExist) {
-		throw new Error(`The email ${email} already exists for a user`)
-	}
+	const emailAlreadyExist = await prisma.user.findFirst({
+		where: {
+			email: email,
+		},
+	})
+
+	if (usernameAlreadyExist)
+		throw new Error(`The username \"${username}\" already exists`);
+	if (emailAlreadyExist)
+		throw new Error(`The email \"${email}\" already exists for a user`);
 
 	await prisma.user.create({
 		data: {
