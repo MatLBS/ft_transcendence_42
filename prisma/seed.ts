@@ -52,3 +52,7 @@ export async function deleteUser (username: string) {
 	})
 }
 
+export async function getAllUsers() {
+	const users = await prisma.user.findMany();
+	return users;
+}
