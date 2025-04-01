@@ -1,14 +1,19 @@
-<div>
-    <h1>Login</h1>
-    <form action="/createUser" method="post">
-        <div class="mb-2">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username">
+<div class="flex justify-center h-screen">
+    <div class="border-2 border-indigo-500 h-1/2 w-1/2 mt-[10%] bg-gray-100 shadow-xl">
+        <h1 class="text-5xl text-center mt-[10%]">Login</h1>
+        <div id="error_input"></div>
+        <div class="flex justify-center items-center flex-col text-center m-[2%] gap-4 border-2 border-red-500">
+            <div class="flex flex-col items-center w-1/2 h-12">
+                <input type="text" id="username" name="username" placeholder="username" class="border-2 border-gray-500 w-full h-full rounded-l">
+            </div>
+            <div class="flex flex-col items-center w-1/2 h-12">
+                <input type="password" id="password" name="password" placeholder="password" class="border-2 border-gray-500 w-full h-full rounded-l">
+            </div>
+            <button id="login_button" class="bg-blue-500 rounded-xl px-10 py-2 max-w-40">Confirm</button>
         </div>
-        <div class="mb-2">
-            <label for="email">Password</label>
-            <input type="password" id="password" name="password">
+        <div class="text-center">
+            <p>Don't have a account ?</p>
+            <a class="my underline" href="/register">Register</a>
         </div>
-        <button type="submit" class="bg-green-500">Confirm</button>
-    </form>
+    </div>
 </div>

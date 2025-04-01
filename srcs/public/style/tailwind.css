@@ -558,10 +558,6 @@ video {
   margin: 2%;
 }
 
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-
 .mt-\[10\%\] {
   margin-top: 10%;
 }
@@ -652,11 +648,6 @@ video {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
 }
 
-.bg-green-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(34 197 94 / var(--tw-bg-opacity, 1));
-}
-
 .px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
@@ -682,6 +673,10 @@ video {
 
 .lowercase {
   text-transform: lowercase;
+}
+
+.underline {
+  text-decoration-line: underline;
 }
 
 .shadow-xl {

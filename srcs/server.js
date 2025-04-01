@@ -4,7 +4,7 @@ import {__dirname} from './router.js';
 import fastifyBcrypt from 'fastify-bcrypt';
 
 
-export const app = Fastify({ logger: true });
+export const app = Fastify();
 
 app.register(userRoutes);
 

@@ -4,11 +4,16 @@ import { createUser } from '../dist/prisma/seed.js';
 
 export const checkUserBack = async (req, reply) => {
 	const password = req.body.password;
+	const email = req.body.email;
 	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
-	if (!passwordRegex.test(password)) {
+	const emailRegex = /[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
+	
+	
+	if (!passwordRegex.test(password))
 		return reply.send({message : "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character."});
-	}
-	// verif email
+
+	if (!emailRegex.test(email) && error_input)
+		return reply.send({message : "The email is not valide."});
 
 	const hashedPassword = await app.bcrypt.hash(password);
 
