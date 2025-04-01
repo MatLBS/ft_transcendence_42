@@ -8,18 +8,15 @@ interface ResponseData {
 function recvContent(url: string): void {
 	fetch('/url', {
 		method: 'POST',
+		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ url }),
 	})
 		.then((response: Response) => response.json())
 		.then((data: { js: string; css: string; content: string; errcode?: number }) => {
 
-			const existingScript = document.getElementById('js');
-			if (existingScript)
-				existingScript.remove();
-			const existingCss = document.getElementById('css');
-			if (existingCss)
-				existingCss.remove();
+			document.getElementById('js')?.remove();
+			document.getElementById('css')?.remove();
 
 			const appElement = document.getElementById('app');
 			if (appElement)

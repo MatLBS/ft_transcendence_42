@@ -2,13 +2,21 @@ import fs from 'fs';
 import path from 'path';
 import ejs from 'ejs';
 import { routes } from "../router.js";
+import { __dirname } from "../router.js";
+import { getAllUsers } from "../dist/prisma/seed.js";
+
+const getObj = async (req, file) => { // a modifier
+	if (file === "admin")
+		return await getAllUsers() // tmp pour test
+	return { name: 'John', age: 24 }; // objet a remplacer par db fonction getUser
+}
 
 // traiter la requete post et envoyer la page demandée (voir public/main.js)
 export const getPost = async (req, reply) => {
-	const file = req.body.url.split("/").pop() || "home"; // a ne pas oublier (moi?id=1)
-	let content = "", css = "", js = "";
+	const file = req.body.url.split("/").pop() || "home"; // a ne pas oublier (moi?id=1) peut etre
+	let content, css, js;
+	const user = await getObj(req, file);
 
-	const user = { name: 'John', age: 24 }; // objet a remplacer par db
 	// router
 	for (const route of Object.keys(routes)) {
 		if (file === route) {
