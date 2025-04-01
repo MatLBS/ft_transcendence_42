@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import userRoutes from './router.js';
 import {__dirname} from './router.js';
 
-export const app = Fastify({ logger: true })
+export const app = Fastify({ logger: true });
 
 app.register(userRoutes);
 

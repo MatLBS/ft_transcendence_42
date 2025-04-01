@@ -6,7 +6,7 @@ import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
 import fastifyFormbody from '@fastify/formbody';
 import fastifyBcrypt from 'fastify-bcrypt';
-import { createUser } from './controllers/createUser.js';
+import { checkUserBack } from './controllers/createUser.js';
 import { getPost } from './controllers/getPost.js';
 import { getHome } from './controllers/getHome.js';
 import { getPage } from './controllers/getPage.js';
@@ -62,5 +62,5 @@ export default async function userRoutes(app) {
 	app.get('/', getHome);
 	app.get('/:page', getPage);
 	app.post('/url', getPost);
-	app.post('/register', createUser);
+	app.post('/registerUser', checkUserBack);
 }
