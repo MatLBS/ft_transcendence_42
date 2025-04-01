@@ -6,9 +6,9 @@ const usernameElement = document.getElementById('username') as HTMLInputElement 
 const error_input = document.getElementById('error_input');
 const register_button = document.getElementById('register_button');
 
-register_button?.addEventListener('click', (event) => {validateForm(event)});
+register_button?.addEventListener('click', () => {validateForm()});
 
-function validateForm(event: Event) {
+function validateForm() {
 	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
 	const emailRegex = /[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
 

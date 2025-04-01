@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+// import { app } from '../srcs/server.js';
 
 const prisma = new PrismaClient()
 
@@ -59,4 +60,15 @@ export async function deleteUser (username: string) {
 export async function getAllUsers() {
 	const users = await prisma.user.findMany();
 	return users;
+}
+
+export async function findUser(username: string) {
+	const user = await prisma.user.findFirst({
+		where: {
+			username: username,
+		},
+	});
+	if (!user)
+		throw new Error(`Username '${username}' do not exits in the database.`)
+	return user;
 }
