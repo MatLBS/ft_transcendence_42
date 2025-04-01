@@ -8,20 +8,14 @@ export const checkUserBack = async (req, reply) => {
 	if (!passwordRegex.test(password)) {
 		return reply.send({message : "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character."});
 	}
+	// verif email
 
+	const hashedPassword = await app.bcrypt.hash(password);
 
-	console.log("password is ok")
-	// const hashedPassword = await app.bcrypt.hash(password);
-
-	// console.log(hashedPassword)
-
-	createUser(req.body.username, password, req.body.email);
-
-	console.log("ici1")
-	console.log(result);
-	// if (result === "1") {
-	// 	return reply.send({message : "An user with those informations already exists in the database."});
-	// }
-	console.log("ici2")
-	return reply.send({message : ""});
+	try {
+		const result = await createUser(req.body.username, hashedPassword, req.body.email);
+	} catch (error) {
+		return reply.send({message: error.message});
+	}
+	return reply.send({message : "ok"});
 };

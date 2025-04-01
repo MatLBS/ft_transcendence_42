@@ -1,10 +1,14 @@
 import Fastify from 'fastify';
 import userRoutes from './router.js';
 import {__dirname} from './router.js';
+import fastifyBcrypt from 'fastify-bcrypt';
+
 
 export const app = Fastify({ logger: true });
 
 app.register(userRoutes);
+
+app.register(fastifyBcrypt);
 
 // lancer le serv
 const start = async () => {

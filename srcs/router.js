@@ -5,7 +5,6 @@ import ejs from 'ejs';
 import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
 import fastifyFormbody from '@fastify/formbody';
-import fastifyBcrypt from 'fastify-bcrypt';
 import { checkUserBack } from './controllers/createUser.js';
 import { getPost } from './controllers/getPost.js';
 import { getHome } from './controllers/getHome.js';
@@ -54,8 +53,6 @@ export default async function userRoutes(app) {
 		engine: { ejs: ejs },
 		root: path.join(__dirname, "views"),
 	});
-
-	app.register(fastifyBcrypt);
 
 	app.register(fastifyFormbody)
 
