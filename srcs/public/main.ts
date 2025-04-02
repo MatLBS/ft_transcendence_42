@@ -55,6 +55,32 @@ function handleLinks(): void {
 	});
 }
 
+function handleLogout(): void {
+	const link: HTMLAnchorElement | null = document.querySelector('a.logout');
+	if (link) {
+		console.log('Logout link found:', link);
+		link.addEventListener('click', (e: MouseEvent) => {
+			e.preventDefault();
+			console.log('Déconnexion...');
+			fetch('/logout', {
+				method: 'POST',
+				credentials: 'include',
+			})
+				.then((response: Response) => response.json())
+				.then((data: {status: number}) => {
+					console.log('Logout response:', data);
+					if (data.status === 200) {
+						// recvContent('/login'); a voir
+						window.location.href = '/login';
+					}
+				})
+				.catch((error: unknown) => {
+					console.error('Erreur lors de la déconnexion:', error);
+				});
+		});
+	}
+}
+
 // Gère le retour en arrière du navigateur
 window.addEventListener('popstate', () => {
 	recvContent(window.location.pathname);
@@ -62,10 +88,10 @@ window.addEventListener('popstate', () => {
 
 // Lance la fonction recvContent au chargement de la page
 function start(): void {
-	// alert('Page is loading...');
 	recvContent(window.location.pathname);
 }
 
 // Initialisation
 start();
 handleLinks();
+handleLogout();
