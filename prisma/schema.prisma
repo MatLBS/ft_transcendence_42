@@ -11,23 +11,24 @@ datasource db {
 }
 
 model User {
-  id    Int @id @default(autoincrement())
-  username  String @unique
-  password  String 
-  email String @unique
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  email    String @unique
 }
 
 model Tournament {
-  id    Int @id @default(autoincrement())
+  id      Int                 @id @default(autoincrement())
   players TournamentPlayers[]
 }
 
 model TournamentPlayers {
-  id       Int  @id @default(autoincrement())
-  name   String
-  NbVictory Int
-  rank Int
+  id           Int        @id @default(autoincrement())
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
   tournamentId Int
+
+  name         String
+  NbVictory    Int
+  rank         Int
   playerNumber Int
-  tournament Tournament @relation(fields: [tournamentId], references: [id])
 }
