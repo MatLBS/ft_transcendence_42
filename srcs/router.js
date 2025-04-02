@@ -11,7 +11,7 @@ import { getPost } from './controllers/getPost.js';
 import { getHome } from './controllers/getHome.js';
 import { getPage } from './controllers/getPage.js';
 import { logout } from './controllers/logout.js';
-
+import { refresh } from './controllers/tokens.js';
 // peut etre sauvegarder le content des fichier html.
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -64,4 +64,5 @@ export default async function userRoutes(app) {
 	app.post('/registerUser', checkUserBack);
 	app.post('/loginUser', loginUser);
 	app.post('/logout', logout);
+	app.post('/refresh', refresh);
 }

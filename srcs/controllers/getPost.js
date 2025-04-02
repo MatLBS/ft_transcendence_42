@@ -7,10 +7,20 @@ import { authenticateUser } from "./tokens.js";
 import { findUser } from "../dist/prisma/seed.js";
 
 // Fonction pour charger une page d'erreur
-const getErrorPage = (reply, errorCode) => {
+const getErrorPage = (reply, response, errorCode) => {
 	const css = path.join(__dirname, 'public', `error_page/style/${errorCode}.css`);
 	const content = fs.readFileSync(path.join(__dirname, 'public', `error_page/${errorCode}.html`), 'utf8');
-	return reply.code(errorCode).send({ content, css });
+	if (response.status === 200 && response.newAccessToken) {
+		return reply
+			.setCookie('access_token', response.newAccessToken, {
+				httpOnly: true,
+				secure: false,
+				sameSite: 'Strict'
+			})
+			.code(errorCode).send({ content, css });
+	} else {
+		return reply.code(errorCode).send({ content, css });
+	}
 };
 
 // Vérifie si une page nécessite une connexion
@@ -27,9 +37,9 @@ export const getPost = async (req, reply) => {
 		// Authentification de l'utilisateur
 		const response = await authenticateUser(req);
 		if (!response.user) {
-			if (needLogin(file)) return getErrorPage(reply, response.status);
+			if (needLogin(file)) return getErrorPage(reply, response, 403);
 		} else {
-			if (dontNeedLogin(file)) return getErrorPage(reply, 403);
+			if (dontNeedLogin(file)) return getErrorPage(reply, response, 403);
 			user = await findUser(response.user.username);
 		}
 
@@ -44,13 +54,23 @@ export const getPost = async (req, reply) => {
 			css = route.css;
 			js = route.js;
 		} else {
-			return getErrorPage(reply, 404);
+			return getErrorPage(reply, response, 404);
 		}
 
 		// Envoi de la réponse
-		return reply.send({ content, css, js });
+		if (response.status === 200 && response.newAccessToken) {
+			return reply
+				.setCookie('access_token', response.newAccessToken, {
+					httpOnly: true,
+					secure: false,
+					sameSite: 'Strict'
+				})
+				.send({ content, css, js });
+		} else {
+			return reply.send({ content, css, js });
+		}
 	} catch (error) {
 		console.error("Error in getPost:", error);
-		return getErrorPage(reply, 500);
+		return getErrorPage(reply, response, 500);
 	}
 };

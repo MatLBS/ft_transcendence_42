@@ -43,7 +43,6 @@ function recvContent(url: string): void {
 }
 
 function linkClickHandler(e: MouseEvent): void {
-	console.log('Click sur un lien:', e);
 	e.preventDefault();
 	const target = e.currentTarget as HTMLAnchorElement;
 	window.history.pushState({}, '', target.href);
@@ -63,7 +62,6 @@ function handleLinks(): void {
 function handleLogout(): void {
 	const link: HTMLAnchorElement | null = document.querySelector('a.logout');
 	if (link) {
-		console.log('Logout link found:', link);
 		link.addEventListener('click', (e: MouseEvent) => {
 			e.preventDefault();
 			console.log('Déconnexion...');
