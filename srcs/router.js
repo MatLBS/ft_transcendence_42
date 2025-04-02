@@ -11,7 +11,9 @@ import { getPost } from './controllers/getPost.js';
 import { getHome } from './controllers/getHome.js';
 import { getPage } from './controllers/getPage.js';
 import { logout } from './controllers/logout.js';
-import { multiplayer } from './controllers/multiplayer.js';
+import { refresh } from './controllers/tokens.js';
+import { tournament } from './controllers/tournament.js';
+import { createTournament } from './controllers/createTournament.js';
 
 
 // peut etre sauvegarder le content des fichier html.
@@ -65,6 +67,8 @@ export default async function userRoutes(app) {
 	app.post('/url', getPost);
 	app.post('/registerUser', checkUserBack);
 	app.post('/loginUser', loginUser);
+	app.post('/refresh', refresh);
 	app.post('/logout', logout);
-	app.post('/multiplayer', multiplayer)
+	app.post('/tournament', tournament)
+	app.post('/createTournament', createTournament)
 }
