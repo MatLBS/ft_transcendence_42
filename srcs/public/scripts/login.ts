@@ -1,3 +1,5 @@
+import { recvContent } from '../main.js';
+
 const passwordElement = document.getElementById('password') as HTMLInputElement | null;
 const usernameElement = document.getElementById('username') as HTMLInputElement | null;
 const error_input = document.getElementById('error_input');
@@ -18,9 +20,11 @@ function validateLogin() {
 	})
 	.then(async (response) => {
 		const data = await response.json();
-		if (data.message === "ok")
-			window.location.href = "/";
-		else if (error_input)
+		if (data.message === "ok") {
+			recvContent("/");
+			history.pushState(null, '', '/');
+		} else if (error_input) {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
+		}
 	})
 }

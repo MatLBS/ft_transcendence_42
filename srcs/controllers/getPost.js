@@ -8,6 +8,7 @@ import { findUser } from "../dist/prisma/seed.js";
 
 // Fonction pour charger une page d'erreur
 const getErrorPage = (reply, response, errorCode) => {
+	const isConnected = response.status === 200;
 	const css = path.join(__dirname, 'public', `error_page/style/${errorCode}.css`);
 	const content = fs.readFileSync(path.join(__dirname, 'public', `error_page/${errorCode}.html`), 'utf8');
 	if (response.status === 200 && response.newAccessToken) {
@@ -17,9 +18,9 @@ const getErrorPage = (reply, response, errorCode) => {
 				secure: false,
 				sameSite: 'Strict'
 			})
-			.code(errorCode).send({ content, css });
+			.code(errorCode).send({ content, css, isConnected });
 	} else {
-		return reply.code(errorCode).send({ content, css });
+		return reply.code(errorCode).send({ content, css, isConnected });
 	}
 };
 
@@ -31,14 +32,15 @@ const dontNeedLogin = (file) => ["login", "register"].includes(file);
 
 export const getPost = async (req, reply) => {
 	const file = req.body.url.split("/").pop() || "home";
-	let content = "", css = "", js = "", user = null;
+	let content = "", css = "", js = "", user = null, isConnected = false;
 
 	try {
 		// Authentification de l'utilisateur
 		const response = await authenticateUser(req);
-		if (!response.user) {
+		if (response.status !== 200) {
 			if (needLogin(file)) return getErrorPage(reply, response, 403);
 		} else {
+			isConnected = true;
 			if (dontNeedLogin(file)) return getErrorPage(reply, response, 403);
 			user = await findUser(response.user.username);
 		}
@@ -65,9 +67,9 @@ export const getPost = async (req, reply) => {
 					secure: false,
 					sameSite: 'Strict'
 				})
-				.send({ content, css, js });
+				.send({ content, css, js, isConnected });
 		} else {
-			return reply.send({ content, css, js });
+			return reply.send({ content, css, js, isConnected });
 		}
 	} catch (error) {
 		console.error("Error in getPost:", error);
