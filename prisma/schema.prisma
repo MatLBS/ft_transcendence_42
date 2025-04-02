@@ -16,3 +16,18 @@ model User {
   password  String 
   email String @unique
 }
+
+model Tournament {
+  id    Int @id @default(autoincrement())
+  players TournamentPlayers[]
+}
+
+model TournamentPlayers {
+  id       Int  @id @default(autoincrement())
+  name   String
+  NbVictory Int
+  rank Int
+  tournamentId Int
+  playerNumber Int
+  tournament Tournament @relation(fields: [tournamentId], references: [id])
+}

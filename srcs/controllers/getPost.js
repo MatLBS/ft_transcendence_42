@@ -3,34 +3,54 @@ import path from 'path';
 import ejs from 'ejs';
 import { routes } from "../router.js";
 import { __dirname } from "../router.js";
-import { getAllUsers } from "../dist/prisma/seed.js";
+import { authenticateUser } from "./tokens.js";
+import { findUser } from "../dist/prisma/seed.js";
 
-const getObj = async (req, file) => { // a modifier
-	if (file === "admin")
-		return await getAllUsers() // tmp pour test
-	return { name: 'John', age: 24 }; // objet a remplacer par db fonction getUser
-}
+// Fonction pour charger une page d'erreur
+const getErrorPage = (reply, errorCode) => {
+	const css = path.join(__dirname, 'public', `error_page/style/${errorCode}.css`);
+	const content = fs.readFileSync(path.join(__dirname, 'public', `error_page/${errorCode}.html`), 'utf8');
+	return reply.code(errorCode).send({ content, css });
+};
 
-// traiter la requete post et envoyer la page demandée (voir public/main.js)
+// Vérifie si une page nécessite une connexion
+const needLogin = (file) => ["admin", "profil", "game"].includes(file);
+
+// Vérifie si une page nécessite que le user ne soit pas connecté
+const dontNeedLogin = (file) => ["login", "register"].includes(file);
+
 export const getPost = async (req, reply) => {
-	const file = req.body.url.split("/").pop() || "home"; // a ne pas oublier (moi?id=1) peut etre
-	let content, css, js;
-	const user = await getObj(req, file);
+	const file = req.body.url.split("/").pop() || "home";
+	let content = "", css = "", js = "", user = null;
 
-	// router
-	for (const route of Object.keys(routes)) {
-		if (file === route) {
-			content = routes[route].useEjs // si c'est un ejs alors ejs.renderFile car c'est un template
-				? await ejs.renderFile(path.join(routes[route].dir, routes[route].file), { user })
-				: fs.readFileSync(path.join(routes[route].dir, routes[route].file), 'utf8');
-			css = routes[route].css;
-			js = routes[route].js;
+	try {
+		// Authentification de l'utilisateur
+		const response = await authenticateUser(req);
+		if (!response.user) {
+			if (needLogin(file)) return getErrorPage(reply, response.status);
+		} else {
+			if (dontNeedLogin(file)) return getErrorPage(reply, 403);
+			user = await findUser(response.user.username);
 		}
+
+		// Recherche de la route correspondante
+		const route = routes[file];
+		if (route) {
+			if (route.useEjs) {
+				content = await ejs.renderFile(path.join(route.dir, route.file), { user });
+			} else {
+				content = fs.readFileSync(path.join(route.dir, route.file), 'utf8');
+			}
+			css = route.css;
+			js = route.js;
+		} else {
+			return getErrorPage(reply, 404);
+		}
+
+		// Envoi de la réponse
+		return reply.send({ content, css, js });
+	} catch (error) {
+		console.error("Error in getPost:", error);
+		return getErrorPage(reply, 500);
 	}
-	if (content === "") {
-		css = path.join(__dirname, 'public', "error_page/style/404.css");
-		content = fs.readFileSync(path.join(__dirname, 'public', "error_page/404.html"), 'utf8');
-		return reply.code(404).send({ content, css }); // error code a check
-	}
-	return reply.send({ content, css, js });
 };

@@ -10,7 +10,7 @@ COPY . .
 
 RUN npx tsc
 
-RUN npx prisma generate --schema=./prisma/schema.prisma 
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 EXPOSE 3000
 

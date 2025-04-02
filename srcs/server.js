@@ -2,11 +2,16 @@ import Fastify from 'fastify';
 import userRoutes from './router.js';
 import {__dirname} from './router.js';
 import fastifyBcrypt from 'fastify-bcrypt';
+import fastifyCookie from '@fastify/cookie';
 
 
-export const app = Fastify();
+export const app = Fastify({
+	logger: true,
+});
 
 app.register(userRoutes);
+
+app.register(fastifyCookie);
 
 app.register(fastifyBcrypt);
 

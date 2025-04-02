@@ -10,6 +10,7 @@ import { loginUser } from './controllers/loginUser.js';
 import { getPost } from './controllers/getPost.js';
 import { getHome } from './controllers/getHome.js';
 import { getPage } from './controllers/getPage.js';
+import { logout } from './controllers/logout.js';
 
 // peut etre sauvegarder le content des fichier html.
 
@@ -62,4 +63,5 @@ export default async function userRoutes(app) {
 	app.post('/url', getPost);
 	app.post('/registerUser', checkUserBack);
 	app.post('/loginUser', loginUser);
+	app.post('/logout', logout);
 }
