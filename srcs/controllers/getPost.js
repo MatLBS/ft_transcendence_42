@@ -14,7 +14,7 @@ const getErrorPage = (reply, errorCode) => {
 };
 
 // Vérifie si une page nécessite une connexion
-const needLogin = (file) => ["admin", "profile", "game"].includes(file);
+const needLogin = (file) => ["admin", "profil", "game"].includes(file);
 
 // Vérifie si une page nécessite que le user ne soit pas connecté
 const dontNeedLogin = (file) => ["login", "register"].includes(file);

@@ -35,23 +35,28 @@ function recvContent(url: string): void {
 				scriptElement.id = "js";
 				document.body.appendChild(scriptElement);
 			}
+			handleLinks();
 		})
 		.catch((error: unknown) => {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
 }
 
-// Gère les balises <a> avec la classe 'my'
+function linkClickHandler(e: MouseEvent): void {
+	console.log('Click sur un lien:', e);
+	e.preventDefault();
+	const target = e.currentTarget as HTMLAnchorElement;
+	window.history.pushState({}, '', target.href);
+	recvContent(target.href);
+}
+
 function handleLinks(): void {
 	const links: NodeListOf<HTMLAnchorElement> = document.querySelectorAll('a.my');
-
 	links.forEach((link: HTMLAnchorElement) => {
-		link.addEventListener('click', (e: MouseEvent) => {
-			e.preventDefault();
-			const target = e.currentTarget as HTMLAnchorElement;
-			window.history.pushState({}, '', target.href);
-			recvContent(target.href);
-		});
+		// D'abord, retirer l'écouteur s'il est déjà attaché
+		link.removeEventListener('click', linkClickHandler);
+		// Puis, ajouter l'écouteur
+		link.addEventListener('click', linkClickHandler);
 	});
 }
 
@@ -88,6 +93,7 @@ window.addEventListener('popstate', () => {
 
 // Lance la fonction recvContent au chargement de la page
 function start(): void {
+	console.log('Démarrage...');
 	recvContent(window.location.pathname);
 }
 
