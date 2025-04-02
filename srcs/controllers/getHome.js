@@ -1,3 +1,6 @@
+import { authenticateUser } from "./tokens.js";
+
 export const getHome = async (req, reply) => {
-	return reply.view("index.ejs");
+	const response = await authenticateUser(req);
+	return reply.view("index.ejs", { response });
 }

@@ -1,14 +1,14 @@
-import { create } from 'domain';
 import { app } from '../server.js';
 import { createUser } from '../dist/prisma/seed.js';
+import { loginUser } from './loginUser.js';
 
 export const checkUserBack = async (req, reply) => {
 	const password = req.body.password;
 	const email = req.body.email;
 	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
 	const emailRegex = /[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
-	
-	
+
+
 	if (!passwordRegex.test(password))
 		return reply.send({message : "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character."});
 
@@ -22,5 +22,5 @@ export const checkUserBack = async (req, reply) => {
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
-	return reply.send({message : "ok"});
+	return loginUser(req, reply);
 };
