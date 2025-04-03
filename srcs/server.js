@@ -5,8 +5,6 @@ import fastifyBcrypt from 'fastify-bcrypt';
 import fastifyCookie from '@fastify/cookie';
 import fastifyMultipart from '@fastify/multipart';
 
-
-
 export const app = Fastify({
 	logger: true,
 });

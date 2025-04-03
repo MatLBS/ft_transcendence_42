@@ -48,3 +48,6 @@ generated
 prisma/migrations/
 
 srcs/uploads/
+#TestHtml
+srcs/testHTML
+

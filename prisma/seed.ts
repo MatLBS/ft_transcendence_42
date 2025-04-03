@@ -73,3 +73,24 @@ export async function findUser(username: string) {
 		throw new Error(`Username '${username}' do not exits in the database.`)
 	return user;
 }
+
+
+export async function createTournamentDb(playersData: Map<string, { name: string; NbVictory: number; rank: number; playerNumber: number }>) {
+
+	const tournament = await prisma.tournament.create({
+		data: {}
+	})
+
+
+	for (const [key, value] of playersData) {
+		await prisma.tournamentPlayers.create({
+			data: {
+				name: value.name,
+				NbVictory: value.NbVictory,
+				rank: value.rank,
+				playerNumber: value.playerNumber,
+				tournamentId: tournament.id,
+			},
+		});
+	}
+}
