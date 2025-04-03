@@ -42,6 +42,9 @@ fastify.log
 build/
 coverage/
 
-#Prisma 
+#Prisma
 generated/
 generated
+prisma/migrations/
+
+srcs/uploads/

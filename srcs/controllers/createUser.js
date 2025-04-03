@@ -1,26 +1,53 @@
 import { app } from '../server.js';
 import { createUser } from '../dist/prisma/seed.js';
 import { loginUser } from './loginUser.js';
+import path from 'path';
+import fs from 'fs';
+import { __dirname } from '../router.js';
+import crypto from 'crypto';
 
 export const checkUserBack = async (req, reply) => {
-	const password = req.body.password;
-	const email = req.body.email;
+
+	let fields = {};
+	let filePath = null, originalExtension = null, fileName = null;
+
+	// Utiliser req.parts() pour traiter les fichiers et les champs
+	const parts = req.parts();
+	for await (const part of parts) {
+		if (part.file) {
+			// Si c'est un fichier, le sauvegarder
+			const uploadDir = path.join(__dirname, './uploads');
+			if (!fs.existsSync(uploadDir)) {
+				fs.mkdirSync(uploadDir, { recursive: true });
+			}
+
+			originalExtension = path.extname(part.filename);
+			fileName = crypto.randomBytes(8).toString('hex') + `temp_${Date.now()}${originalExtension}`;
+			filePath = path.join(uploadDir, fileName);
+			await fs.promises.writeFile(filePath, await part.toBuffer());
+		} else {
+			// Si c'est un champ, l'ajouter à fields
+			fields[part.fieldname] = part.value;
+		}
+	}
+
+	const password = fields.password;
+	const email = fields.email;
+	const username = fields.username;
 	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
 	const emailRegex = /[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
-
 
 	if (!passwordRegex.test(password))
 		return reply.send({message : "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character."});
 
-	if (!emailRegex.test(email) && error_input)
+	if (!emailRegex.test(email))
 		return reply.send({message : "The email is not valide."});
 
 	const hashedPassword = await app.bcrypt.hash(password);
-
 	try {
-		const result = await createUser(req.body.username, hashedPassword, req.body.email);
+		await createUser(username, hashedPassword, email, fileName);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
-	return loginUser(req, reply);
+	return loginUser(req, reply, password, username);
 };
