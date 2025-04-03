@@ -16,6 +16,11 @@ function validateForm() {
 	const email = emailElement?.value || '';
 	const username = usernameElement?.value || '';
 
+	if ((username === '' || email === '' || password === '') && error_input) {
+		error_input.innerHTML = `<p>You must fill all the options.</p>`;
+		return;
+	}
+
 	if (password && !passwordRegex.test(password) && error_input) {
 		error_input.innerHTML = `<p>Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.</p>`;
 		return;

@@ -6,7 +6,7 @@ import fastifyCookie from '@fastify/cookie';
 
 
 export const app = Fastify({
-	logger: true,
+	// logger: true,
 });
 
 app.register(userRoutes);
