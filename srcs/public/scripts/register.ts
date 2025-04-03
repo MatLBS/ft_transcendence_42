@@ -1,4 +1,4 @@
-import { error } from "console";
+import { recvContent } from '../main.js';
 
 const passwordElement = document.getElementById('password') as HTMLInputElement | null;
 const emailElement = document.getElementById('email') as HTMLInputElement | null;
@@ -33,9 +33,11 @@ function validateForm() {
 	})
 	.then(async (response) => {
 		const data = await response.json();
-		if (data.message === "ok")
-			window.location.href = "/";
-		else if (error_input)
+		if (data.message === "ok") {
+			recvContent("/");
+			history.pushState(null, '', '/');
+		} else if (error_input) {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
+		}
 	})
 }
