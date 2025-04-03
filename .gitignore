@@ -44,7 +44,7 @@ coverage/
 
 #Prisma 
 generated/
-generated
+prisma/migrations
 
 #TestHtml
 srcs/testHTML
