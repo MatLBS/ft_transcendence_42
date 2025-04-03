@@ -12,8 +12,8 @@ export const getPage = async (req, reply) => {
 				secure: false,
 				sameSite: 'Strict'
 			})
-			.view("index.ejs", { response });
+			.view("index.ejs");
 	} else {
-		return reply.view("index.ejs", { response });
+		return reply.view("index.ejs");
 	}
 }

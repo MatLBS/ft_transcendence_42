@@ -1,11 +1,14 @@
 // Définition du type pour la réponse serveur
 interface ResponseData {
 	content: string;
-	error?: string;
+	js?: string;
+	css?: string;
+	errcode?: number;
+	isConnected: boolean;
 }
 
 // Fait une requête au serveur pour récupérer le contenu de la page demandée (sans recharger la page)
-function recvContent(url: string): void {
+export function recvContent(url: string): void {
 	fetch('/url', {
 		method: 'POST',
 		credentials: 'include',
@@ -13,89 +16,116 @@ function recvContent(url: string): void {
 		body: JSON.stringify({ url }),
 	})
 		.then((response: Response) => response.json())
-		.then((data: { js: string; css: string; content: string; errcode?: number }) => {
-
-			document.getElementById('js')?.remove();
-			document.getElementById('css')?.remove();
-
-			const appElement = document.getElementById('app');
-			if (appElement)
-				appElement.innerHTML = data.content;
-			if (data.css) {
-				const linkElement = document.createElement('link');
-				linkElement.rel = 'stylesheet';
-				linkElement.href = data.css;
-				linkElement.id = "css";
-				document.head.appendChild(linkElement);
-			}
-			if (data.js) {
-				const scriptElement = document.createElement('script');
-				scriptElement.type = 'module';
-				scriptElement.src = data.js;
-				scriptElement.id = "js";
-				document.body.appendChild(scriptElement);
-			}
-			handleLinks();
-		})
+		.then(updatePageContent)
 		.catch((error: unknown) => {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
 }
 
-function linkClickHandler(e: MouseEvent): void {
-	e.preventDefault();
-	const target = e.currentTarget as HTMLAnchorElement;
-	window.history.pushState({}, '', target.href);
-	recvContent(target.href);
+// Met à jour le contenu de la page avec les données reçues du serveur
+function updatePageContent(data: ResponseData): void {
+	// Supprime les anciens fichiers CSS et JS
+	document.getElementById('js')?.remove();
+	document.getElementById('css')?.remove();
+
+	// Met à jour le contenu principal
+	const appElement = document.getElementById('app');
+	if (appElement) appElement.innerHTML = data.content;
+
+	// Ajoute le fichier CSS si présent
+	if (data.css) {
+		const linkElement = document.createElement('link');
+		linkElement.rel = 'stylesheet';
+		linkElement.href = data.css;
+		linkElement.id = 'css';
+		document.head.appendChild(linkElement);
+	}
+
+	// Ajoute le fichier JS si présent
+	if (data.js) {
+		const scriptElement = document.createElement('script');
+		scriptElement.type = 'module';
+		scriptElement.src = data.js;
+		scriptElement.id = 'js';
+		document.body.appendChild(scriptElement);
+	}
+
+	// Met à jour l'affichage des éléments connectés/déconnectés
+	hideElements(data.isConnected);
 }
 
+// Affiche ou masque les éléments en fonction de l'état de connexion de l'utilisateur
+function hideElements(isConnected: boolean): void {
+	const toggleDisplay = (selector: string, display: string) => {
+		document.querySelectorAll(selector).forEach((el) => {
+			(el as HTMLElement).style.display = display;
+		});
+	};
+
+	if (isConnected) {
+		toggleDisplay('.disconnected', 'none');
+		toggleDisplay('.connected', 'block');
+	} else {
+		toggleDisplay('.connected', 'none');
+		toggleDisplay('.disconnected', 'block');
+	}
+}
+
+// Gère les clics sur les liens dynamiques avec délégation d'événements
 function handleLinks(): void {
-	const links: NodeListOf<HTMLAnchorElement> = document.querySelectorAll('a.my');
-	links.forEach((link: HTMLAnchorElement) => {
-		// D'abord, retirer l'écouteur s'il est déjà attaché
-		link.removeEventListener('click', linkClickHandler);
-		// Puis, ajouter l'écouteur
-		link.addEventListener('click', linkClickHandler);
+	document.body.addEventListener('click', (e: MouseEvent) => {
+		const target = e.target as HTMLAnchorElement;
+
+		// Vérifie si l'élément cliqué est un lien avec la classe 'my'
+		if (target.tagName === 'A' && target.classList.contains('my')) {
+			e.preventDefault();
+			window.history.pushState({}, '', target.href);
+			recvContent(target.href);
+		}
 	});
 }
 
+// Gère la déconnexion de l'utilisateur
 function handleLogout(): void {
-	const link: HTMLAnchorElement | null = document.querySelector('a.logout');
-	if (link) {
-		link.addEventListener('click', (e: MouseEvent) => {
+	document.body.addEventListener('click', (e: MouseEvent) => {
+		const target = e.target as HTMLAnchorElement;
+
+		// Vérifie si l'élément cliqué est un lien avec la classe 'logout'
+		if (target.tagName === 'A' && target.classList.contains('logout')) {
 			e.preventDefault();
-			console.log('Déconnexion...');
 			fetch('/logout', {
 				method: 'POST',
 				credentials: 'include',
 			})
 				.then((response: Response) => response.json())
-				.then((data: {status: number}) => {
-					console.log('Logout response:', data);
+				.then((data: { status: number }) => {
 					if (data.status === 200) {
-						// recvContent('/login'); a voir
-						window.location.href = '/login';
+						recvContent('/login');
+						window.history.pushState({}, '', '/login');
 					}
 				})
 				.catch((error: unknown) => {
 					console.error('Erreur lors de la déconnexion:', error);
 				});
-		});
-	}
+		}
+	});
 }
 
 // Gère le retour en arrière du navigateur
-window.addEventListener('popstate', () => {
-	recvContent(window.location.pathname);
-});
+function handlePopState(): void {
+	window.addEventListener('popstate', () => {
+		recvContent(window.location.pathname);
+	});
+}
 
-// Lance la fonction recvContent au chargement de la page
+// Initialise l'application
 function start(): void {
 	console.log('Démarrage...');
 	recvContent(window.location.pathname);
+	handleLinks();
+	handleLogout();
+	handlePopState();
 }
 
-// Initialisation
+// Lancement de l'application
 start();
-handleLinks();
-handleLogout();
