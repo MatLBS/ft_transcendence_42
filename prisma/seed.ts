@@ -73,15 +73,29 @@ export async function findUser(username: string) {
 	return user;
 }
 
+export async function findUsersTournament(tournamentId: number) {
+	const players = await prisma.tournamentPlayers.findMany({
+		where: {
+			tournamentId: tournamentId,
+		},
+	});
+	if (!players)
+		throw new Error(`No player were found for tournament with id '${tournamentId}'.`)
+	return players;
+}
+
 export async function createTournamentDb(playersData: Map<string, { name: string; NbVictory: number; rank: number; playerNumber: number }>) {
 
 	const tournament = await prisma.tournament.create({
 		data: {}
 	})
 
+	if (!tournament)
+		throw new Error(`Failed to create a new tournament.`)
+
 
 	for (const [key, value] of playersData) {
-		await prisma.tournamentPlayers.create({
+		const player = await prisma.tournamentPlayers.create({
 			data: {
 				name: value.name,
 				NbVictory: value.NbVictory,
@@ -90,5 +104,9 @@ export async function createTournamentDb(playersData: Map<string, { name: string
 				tournamentId: tournament.id,
 			},
 		});
+		if (!player)
+			throw new Error(`Failed to create a new player for the tournament.`)
 	}
+
+	return (tournament.id)
 }
