@@ -33,3 +33,20 @@ model TournamentPlayers {
   rank         Int
   playerNumber Int
 }
+
+model Local {
+  id      Int                 @id @default(autoincrement())
+  players LocalPlayers[]
+
+  winner  String?
+  score   String?
+
+}
+
+model LocalPlayers {
+  id           Int        @id @default(autoincrement())
+  local   Local @relation(fields: [localId], references: [id])
+  localId Int
+
+  username    String
+}

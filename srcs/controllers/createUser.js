@@ -35,13 +35,13 @@ export const checkUserBack = async (req, reply) => {
 	const email = fields.email;
 	const username = fields.username;
 	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
-	const emailRegex = /[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
+	const emailRegex = /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
 
 	if (!passwordRegex.test(password))
 		return reply.send({message : "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character."});
 
 	if (!emailRegex.test(email))
-		return reply.send({message : "The email is not valide."});
+		return reply.send({message : "The email is not valid."});
 
 	const hashedPassword = await app.bcrypt.hash(password);
 	try {

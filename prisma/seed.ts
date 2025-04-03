@@ -111,3 +111,30 @@ export async function createTournamentDb(playersData: Map<string, { name: string
 
 	return (tournament.id)
 }
+
+export async function createLocalDb(player1: string, player2: string) {
+
+	const localParty = await prisma.local.create({
+		data: {}
+	})
+
+	if (!localParty)
+		throw new Error(`Failed to create a new local party.`)
+
+	const player1Db = await prisma.localPlayers.create({
+		data: {
+			localId: localParty.id,
+			username: player1
+		}
+	})
+
+	const player2Db = await prisma.localPlayers.create({
+		data: {
+			localId: localParty.id,
+			username: player2
+		}
+	})
+
+	if (!player1Db || !player2Db)
+		throw new Error(`Failed to create a player for local party.`)
+}
