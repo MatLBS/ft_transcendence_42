@@ -1,3 +1,5 @@
+import { applyLink } from './scripts/utils.js';
+
 // Définition du type pour la réponse serveur
 interface ResponseData {
 	content: string;
@@ -73,43 +75,60 @@ function hideElements(isConnected: boolean): void {
 
 // Gère les clics sur les liens dynamiques avec délégation d'événements
 function handleLinks(): void {
-	document.body.addEventListener('click', (e: MouseEvent) => {
+	const nav = document.querySelector('nav');
+	if (!nav) return;
+	nav.addEventListener('click', (e: MouseEvent) => {
 		const target = e.target as HTMLAnchorElement;
-
-		// Vérifie si l'élément cliqué est un lien avec la classe 'my'
-		if (target.tagName === 'A' && target.classList.contains('my')) {
-			e.preventDefault();
-			window.history.pushState({}, '', target.href);
-			recvContent(target.href);
+		applyLink(target, e);
+		if (target.tagName === 'A' && target.classList.contains('logout')) {
+			handleLogout(e);
 		}
 	});
 }
+
+function handleLogout(e: Event): void {
+	e.preventDefault();
+	fetch('/logout', {
+		method: 'POST',
+		credentials: 'include',
+	})
+		.then((response: Response) => response.json())
+		.then((data: { status: number }) => {
+			if (data.status === 200) {
+				recvContent('/login');
+				window.history.pushState({}, '', '/login');
+			}
+		})
+		.catch((error: unknown) => {
+			console.error('Erreur lors de la déconnexion:', error);
+		});
+	}
 
 // Gère la déconnexion de l'utilisateur
-function handleLogout(): void {
-	document.body.addEventListener('click', (e: MouseEvent) => {
-		const target = e.target as HTMLAnchorElement;
+// function handleLogout(): void {
+// 	document.body.addEventListener('click', (e: MouseEvent) => {
+// 		const target = e.target as HTMLAnchorElement;
 
-		// Vérifie si l'élément cliqué est un lien avec la classe 'logout'
-		if (target.tagName === 'A' && target.classList.contains('logout')) {
-			e.preventDefault();
-			fetch('/logout', {
-				method: 'POST',
-				credentials: 'include',
-			})
-				.then((response: Response) => response.json())
-				.then((data: { status: number }) => {
-					if (data.status === 200) {
-						recvContent('/login');
-						window.history.pushState({}, '', '/login');
-					}
-				})
-				.catch((error: unknown) => {
-					console.error('Erreur lors de la déconnexion:', error);
-				});
-		}
-	});
-}
+// 		// Vérifie si l'élément cliqué est un lien avec la classe 'logout'
+// 		if (target.tagName === 'A' && target.classList.contains('logout')) {
+// 			e.preventDefault();
+// 			fetch('/logout', {
+// 				method: 'POST',
+// 				credentials: 'include',
+// 			})
+// 				.then((response: Response) => response.json())
+// 				.then((data: { status: number }) => {
+// 					if (data.status === 200) {
+// 						recvContent('/login');
+// 						window.history.pushState({}, '', '/login');
+// 					}
+// 				})
+// 				.catch((error: unknown) => {
+// 					console.error('Erreur lors de la déconnexion:', error);
+// 				});
+// 		}
+// 	});
+// }
 
 // Gère le retour en arrière du navigateur
 function handlePopState(): void {
@@ -123,7 +142,7 @@ function start(): void {
 	console.log('Démarrage...');
 	recvContent(window.location.pathname);
 	handleLinks();
-	handleLogout();
+	// handleLogout();
 	handlePopState();
 }
 
