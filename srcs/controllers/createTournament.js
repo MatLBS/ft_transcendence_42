@@ -34,7 +34,6 @@ function createBrackets(players) {
 			let player = sortedPlayers[i]
 			let opponent = sortedPlayers[i + 1]
 
-			// console.log(player.name + " will play against " + opponent.name)
 			i++
 			if (i % 2 !== 0)
 				players[i].NbVictory++
@@ -83,62 +82,3 @@ export const createTournament = async (req, reply) => {
 	//Je vais ensuite boucler le nombre de rounds nécessaires (rounds = NBparticipants) / 2) et à la fin, le gagnant est le joueur avec le plus de victories
 
 };
-
-
-// {
-//    id: 9,
-//    tournamentId: 3,
-//    name: 'mateo',
-//    NbVictory: 0,
-//    rank: 0,
-//    playerNumber: 3
-//  }
-//  {
-//    id: 10,
-//    tournamentId: 3,
-//    name: 'miguelita',
-//    NbVictory: 0,
-//    rank: 0,
-//    playerNumber: 2
-//  }
-//  {
-//    id: 11,
-//    tournamentId: 3,
-//    name: 'simon',
-//    NbVictory: 0,
-//    rank: 0,
-//    playerNumber: 1
-//  }
-//  {
-//    id: 12,
-//    tournamentId: 3,
-//    name: 'jb',
-//    NbVictory: 0,
-//    rank: 0,
-//    playerNumber: 4
-//  }
-
-
-// rounds = 0
-// players = []
-// dct = {}
-// brackets = []
-// x = 0
-
-// participants = raw_input("Please enter the number of players in the tournament.") # Number of participants 
-
-// rounds = int(participants) / 2 # Articulates how many rounds will be required
-
-// print "There will be %s participants competing throughout %s rounds" % (participants, rounds) # Clarifies user input. 
-
-// while len(players) < int(participants): # While the number of players entered is shorter than the number of players specificed then     keep asking for more player names.
-//     x = raw_input ("Please enter the name the next challenger.")
-//     players.append(x)
-
-// print "The following players have been added %s" % (players) # Checks all players were added correctly
-
-// p = len(players) # Gets number of players and assigns to p
-
-// random.shuffle(players) # Shuffles order of entered players
-
-// print players

@@ -52,14 +52,14 @@ tournament.addEventListener('click', async () => {
 			playerNames.innerHTML = '';
 
 			const value: number = parseInt(hiddenValue.value || '0');
-					
+
 			for (let i = 0; i < value; i++) {
 				const playerContainer = document.createElement('div');
 				playerContainer.className = 'flex flex-col border-2 border-red-500 m-3 text-center';
 
 				playerContainer.innerHTML += `<span>Player ${i + 1}</span>`;
 				playerContainer.innerHTML += `<input type="text" id="playerName" name="playerName" placeholder="enter a name..." class="border-2 border-gray-500 w-100 rounded-lg">`;
-			
+
 				playerNames.appendChild(playerContainer);
 			}
 

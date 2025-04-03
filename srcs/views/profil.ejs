@@ -1,3 +1,16 @@
 <div>
 	<p>je suis <%= user.username %> voici mon adress mail <%= user.email %></p>
+	<% if (user.profilePicture) { %>
+		<div class="profile-image-container">
+			<h3>Mon image de profil:</h3>
+			<img
+				src="/uploads/<%= user.profilePicture %>"
+				alt="Photo de profil de <%= user.username %>"
+				class="profile-image"
+				style="max-width: 200px; border-radius: 50%;"
+			/>
+		</div>
+	<% } else { %>
+		<p>Aucune image de profil disponible</p>
+	<% } %>
 </div>
