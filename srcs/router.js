@@ -6,7 +6,7 @@ import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
 import fastifyFormbody from '@fastify/formbody';
 import { checkUserBack } from './controllers/createUser.js';
-import { loginUser } from './controllers/loginUser.js';
+import { login } from './controllers/loginUser.js';
 import { getPost } from './controllers/getPost.js';
 import { getHome } from './controllers/getHome.js';
 import { getPage } from './controllers/getPage.js';
@@ -55,6 +55,12 @@ export default async function userRoutes(app) {
 		prefix: '/',
 	});
 
+	app.register(fastifyStatic, {
+		root: path.join(__dirname, './uploads'),
+		prefix: '/uploads/',
+		decorateReply: false // évite les conflits avec l'autre instance fastifyStatic
+	});
+
 	app.register(fastifyView, {
 		engine: { ejs: ejs },
 		root: path.join(__dirname, "views"),
@@ -66,9 +72,9 @@ export default async function userRoutes(app) {
 	app.get('/:page', getPage);
 	app.post('/url', getPost);
 	app.post('/registerUser', checkUserBack);
-	app.post('/loginUser', loginUser);
-	app.post('/refresh', refresh);
+	app.post('/loginUser', login);
 	app.post('/logout', logout);
+	app.post('/refresh', refresh);
 	app.post('/tournament', tournament)
 	app.post('/createTournament', createTournament)
 }

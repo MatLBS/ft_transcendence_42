@@ -42,10 +42,12 @@ fastify.log
 build/
 coverage/
 
-#Prisma 
+#Prisma
 generated/
-prisma/migrations
+generated
+prisma/migrations/
 
+srcs/uploads/
 #TestHtml
 srcs/testHTML
 

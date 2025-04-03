@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function createUser (username: string, password: string, email: string) {
+export async function createUser (username: string, password: string, email: string, profilePicture?: string) {
 	const usernameAlreadyExist = await prisma.user.findFirst({
 		where: {
 			username: username,
@@ -26,6 +26,7 @@ export async function createUser (username: string, password: string, email: str
 			username: username,
 			password: password,
 			email: email,
+			profilePicture: profilePicture || null,
 		},
 	})
 }
@@ -72,6 +73,7 @@ export async function findUser(username: string) {
 		throw new Error(`Username '${username}' do not exits in the database.`)
 	return user;
 }
+
 
 export async function createTournamentDb(playersData: Map<string, { name: string; NbVictory: number; rank: number; playerNumber: number }>) {
 
