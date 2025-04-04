@@ -20,9 +20,57 @@ if (appDiv) {
 	});
 }
 
-// local.addEventListener('click', () => {});
+local.addEventListener('click', async () => {
+	await fetch('/local', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(""),
+	})
+	.then(async (response) => {
+		const data = await response.json();
+		gameSettings.innerHTML = data.content;
+		const linkElement = document.createElement('link');
+		linkElement.rel = 'stylesheet';
+		linkElement.href = "public/style/local.css";
+		linkElement.id = "css";
+		document.head.appendChild(linkElement);
+	})
+
+
+	const buttonValidation = document.getElementById('buttonValidation')
+
+	if (!buttonValidation)
+		throw new Error('Element not found');
+
+	buttonValidation.addEventListener('click', function() {
+		const usernameElement = document.getElementById('username') as HTMLInputElement | null;
+
+		const player2 = usernameElement?.value || '';
+
+		if (player2 === "") {
+			alert(`Player has an empty name. Please fill in the field.`);
+			return;
+		}
+
+		fetch('/createLocal', {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ player2 }),
+		})
+	})
+
+});
+
+
 
 // multiplayer.addEventListener('click', async () => {});
+
+
+
+
+
 
 tournament.addEventListener('click', async () => {
 	await fetch('/tournament', {
