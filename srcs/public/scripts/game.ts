@@ -1,115 +1,144 @@
 import { applyLink } from './utils.js';
 
-const local = document.getElementById('local');
-const multiplayer = document.getElementById('multiplayer');
-const tournament = document.getElementById('tournament');
-const gameSettings = document.getElementById('gameSettings');
-
-if (!local || !multiplayer || !tournament || !gameSettings)
-	throw new Error('Element not found');
-
+// Ajoute un gestionnaire d'événements global pour la délégation
 const appDiv = document.getElementById("app");
 if (appDiv) {
-	appDiv.addEventListener("click", (e: MouseEvent) => {
+	appDiv.addEventListener('click', (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
+
+		// Gestion des liens dynamiques pour les éléments avec la classe "my"
 		applyLink(target, e);
-		// Check if the clicked element is the tournament div
-		if (target.tagName === "DIV" && target.id === "tournament") {
+
+		// Gestion des clics sur le bouton "Tournament"
+		if (target.tagName === 'DIV' && target.id === 'tournament') {
+			tournamentClick();
+			return;
+		}
+
+		// Gestion des clics sur le bouton "Local"
+		if (target.tagName === 'DIV' && target.id === 'local') {
+			localClick();
+			return;
+		}
+
+		// Gestion des clics sur le bouton "Multiplayer"
+		if (target.tagName === 'DIV' && target.id === 'multiplayer') {
+			multiplayerClick();
+			return;
+		}
+
+		// Gestion des clics sur le bouton "Custom Select"
+		if (target.closest('#custom-select'))  {
+			const customOptions = document.getElementById('custom-options');
+			if (customOptions) customOptions.classList.toggle('open');
+			return;
+		}
+
+		// Gestion des clics sur le bouton "Validation"
+		if (target.tagName === 'BUTTON' && target.id === 'buttonValidation') {
+			validateLocalGame();
 			return;
 		}
 	});
 }
 
-local.addEventListener('click', async () => {
+async function localClick() {
 	await fetch('/local', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(""),
+		body: JSON.stringify(''),
 	})
-	.then(async (response) => {
-		const data = await response.json();
-		gameSettings.innerHTML = data.content;
-		const linkElement = document.createElement('link');
-		linkElement.rel = 'stylesheet';
-		linkElement.href = "public/style/local.css";
-		linkElement.id = "css";
-		document.head.appendChild(linkElement);
-	})
+		.then(async (response) => {
+			const data = await response.json();
+			const gameSettings = document.getElementById('gameSettings');
+			if (gameSettings) gameSettings.innerHTML = data.content;
 
+			// Ajoute le fichier CSS pour le mode local
+			const linkElement = document.createElement('link');
+			linkElement.rel = 'stylesheet';
+			linkElement.href = 'public/style/local.css';
+			linkElement.id = 'css';
+			document.head.appendChild(linkElement);
+		});
+}
 
-	const buttonValidation = document.getElementById('buttonValidation')
+function validateLocalGame() {
+	const usernameElement = document.getElementById('username') as HTMLInputElement | null;
 
-	if (!buttonValidation)
-		throw new Error('Element not found');
+	if (!usernameElement) {
+		alert('Username input not found.');
+		return;
+	}
 
-	buttonValidation.addEventListener('click', function() {
-		const usernameElement = document.getElementById('username') as HTMLInputElement | null;
+	const player2 = usernameElement.value;
 
-		const player2 = usernameElement?.value || '';
+	if (player2 === '') {
+		alert(`Player has an empty name. Please fill in the field.`);
+		return;
+	}
 
-		if (player2 === "") {
-			alert(`Player has an empty name. Please fill in the field.`);
-			return;
-		}
+	fetch('/createLocal', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ player2 }),
+	});
+}
 
-		fetch('/createLocal', {
-			method: 'POST',
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ player2 }),
-		})
-	})
+async function multiplayerClick() {
+	console.log('Multiplayer mode clicked');
+}
 
-});
-
-
-
-// multiplayer.addEventListener('click', async () => {});
-
-
-
-
-
-
-tournament.addEventListener('click', async () => {
+async function tournamentClick() {
 	await fetch('/tournament', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(""),
+		body: JSON.stringify(''),
 	})
-	.then(async (response) => {
-		const data = await response.json();
-		gameSettings.innerHTML = data.content;
-		const linkElement = document.createElement('link');
-		linkElement.rel = 'stylesheet';
-		linkElement.href = "public/style/tournament.css";
-		linkElement.id = "css";
-		document.head.appendChild(linkElement);
-	})
+		.then(async (response) => {
+			const data = await response.json();
+			const gameSettings = document.getElementById('gameSettings');
+			if (gameSettings) gameSettings.innerHTML = data.content;
 
-	const customSelecter = document.getElementById('custom-select')
-	const customOptions = document.getElementById('custom-options')
-	const customOptionsItems = document.querySelectorAll('#custom-options li')
-	const customDefault = document.getElementById('custom-default')
-	const hiddenValue = document.getElementById('hiddenValue') as HTMLInputElement | null;
-	const playerNames = document.getElementById('playerNames')
-	const divButton = document.getElementById('divButton')
+			// Ajoute le fichier CSS pour le mode tournoi
+			const linkElement = document.createElement('link');
+			linkElement.rel = 'stylesheet';
+			linkElement.href = 'public/style/tournament.css';
+			linkElement.id = 'css';
+			document.head.appendChild(linkElement);
 
+			// Initialise le sélecteur personnalisé après le chargement du contenu
+			initCustomSelect();
+		});
+}
 
-	if(!customSelecter || !customOptions || !divButton || !customOptionsItems || !customDefault || !hiddenValue || !playerNames)
-		throw new Error('Element not found');
-	customSelecter.addEventListener('click', () => {
-		customOptions.classList.toggle('open');
-	});
+function initCustomSelect() {
+	const gameSettings = document.getElementById('gameSettings');
 
-	customOptionsItems.forEach(option => {
-		option.addEventListener('click', function() {
+	if (!gameSettings) {
+		console.error('gameSettings for custom select are missing.');
+		return;
+	}
+
+	gameSettings.addEventListener('click', (e: MouseEvent) => {
+		const target = e.target as HTMLElement;
+		if (target.matches('#custom-options li')) {
+			const customDefault = document.getElementById('custom-default');
+			const hiddenValue = document.getElementById('hiddenValue') as HTMLInputElement | null;
+			const playerNames = document.getElementById('playerNames');
+			const divButton = document.getElementById('divButton');
+
+			if (!customDefault || !hiddenValue || !playerNames || !divButton) {
+				console.error('One or more elements for custom select are missing.');
+				return;
+			}
+
 			customDefault.innerHTML = `
-			${option.textContent}
-			<span class="material-icons">expand_more</span>`
-			hiddenValue.value = option.getAttribute('data-value') || '';
+			${target.textContent}
+			<span class="material-icons">expand_more</span>`;
+			hiddenValue.value = target.getAttribute('data-value') || '';
 
 			playerNames.innerHTML = '';
 
@@ -128,31 +157,34 @@ tournament.addEventListener('click', async () => {
 			// Ajouter un bouton de validation
 			const validateButton = document.createElement('button');
 			validateButton.textContent = 'Validate';
+			validateButton.id = 'submit-button';
 			validateButton.className = 'bg-blue-500 text-white px-4 py-2 rounded-lg mt-4';
-			validateButton.addEventListener('click', () => {
-				const playerInputs = playerNames.querySelectorAll("#playerName");
-				const playerData: string[] = [];
 
-				playerInputs.forEach(input => {
-					playerData.push((input as HTMLInputElement).value);
-				});
+			gameSettings.addEventListener('click', (e: MouseEvent) => {
+				const target = e.target as HTMLElement;
+				if (target.matches('#submit-button')) {
+					console.log('Button clicked'); // test
+					const playerInputs = playerNames.querySelectorAll('#playerName');
+					const playerData: string[] = [];
 
-				for (let i = 0; i < playerData.length; i++) {
-					if (playerData[i].trim() === '') {
-						alert(`Player ${i + 1} has an empty name. Please fill in all fields.`);
-						return; // Arrête la validation si une valeur est vide
+					playerInputs.forEach((input) => {
+						playerData.push((input as HTMLInputElement).value);
+					});
+
+					for (let i = 0; i < playerData.length; i++) {
+						if (playerData[i].trim() === '') {
+							alert(`Player ${i + 1} has an empty name. Please fill in all fields.`);
+							return;
+						}
 					}
+
+					fetch('/createTournament', {
+						method: 'POST',
+						credentials: 'include',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ playerData }),
+					});
 				}
-
-				// console.log('Player Names:', playerData);
-				// alert(`Player Names: ${playerData.join(', ')}`);
-
-				fetch('/createTournament', {
-					method: 'POST',
-					credentials: 'include',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ playerData }),
-				})
 			});
 
 			const existingButton = divButton.querySelector('button');
@@ -161,7 +193,6 @@ tournament.addEventListener('click', async () => {
 			}
 
 			divButton.appendChild(validateButton);
-		})
+		}
 	});
-});
-
+};
