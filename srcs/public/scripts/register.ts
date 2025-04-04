@@ -8,13 +8,15 @@ if (appDiv) {
 	appDiv.addEventListener("click", (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
 		applyLink(target, e);
+
 		if (target.tagName === "BUTTON" && target.id === "register_button") {
 			validateForm()
 		}
+		if (target.tagName === "SPAN" && target.id === "login-eye") {
+			showPassword()
+		}
 	});
 }
-
-// register_button?.addEventListener('click', () => {validateForm()});
 
 function validateForm() {
 
@@ -68,4 +70,17 @@ function validateForm() {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
 		}
 	})
+}
+
+//function to change password to text 
+function showPassword() {
+
+	const input = document.getElementById('password') as HTMLInputElement | null;
+	let iconEye = document.getElementById('login-eye') as HTMLInputElement | null;
+
+	if (!input || !iconEye)
+		return;
+
+	iconEye.innerText = (iconEye.textContent === 'visibility_off') ? 'visibility' : 'visibility_off';
+	input.type = (input.type === 'password') ? 'text' : 'password'
 }
