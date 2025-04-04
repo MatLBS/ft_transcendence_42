@@ -20,6 +20,7 @@ if (appDiv) {
 
 function validateForm() {
 
+	console.log("validateForm");
 	const passwordElement = document.getElementById('password') as HTMLInputElement | null;
 	const emailElement = document.getElementById('email') as HTMLInputElement | null;
 	const usernameElement = document.getElementById('username') as HTMLInputElement | null;
