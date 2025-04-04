@@ -6,7 +6,7 @@ import fastifyCookie from '@fastify/cookie';
 import fastifyMultipart from '@fastify/multipart';
 
 export const app = Fastify({
-	// logger: true,
+	logger: true,
 });
 
 app.register(fastifyCookie);
