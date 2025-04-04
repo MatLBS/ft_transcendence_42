@@ -1,15 +1,29 @@
 import { recvContent } from '../main.js';
+import { applyLink } from './utils.js';
 
-const passwordElement = document.getElementById('password') as HTMLInputElement | null;
-const emailElement = document.getElementById('email') as HTMLInputElement | null;
-const usernameElement = document.getElementById('username') as HTMLInputElement | null;
-const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
-const error_input = document.getElementById('error_input');
-const register_button = document.getElementById('register_button');
+// const register_button = document.getElementById('register_button');
 
-register_button?.addEventListener('click', () => {validateForm()});
+const appDiv = document.getElementById("app");
+if (appDiv) {
+	appDiv.addEventListener("click", (e: MouseEvent) => {
+		const target = e.target as HTMLElement;
+		applyLink(target, e);
+		if (target.tagName === "BUTTON" && target.id === "register_button") {
+			validateForm()
+		}
+	});
+}
+
+// register_button?.addEventListener('click', () => {validateForm()});
 
 function validateForm() {
+
+	const passwordElement = document.getElementById('password') as HTMLInputElement | null;
+	const emailElement = document.getElementById('email') as HTMLInputElement | null;
+	const usernameElement = document.getElementById('username') as HTMLInputElement | null;
+	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
+	const error_input = document.getElementById('error_input');
+
 	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
 	const emailRegex = /[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
 

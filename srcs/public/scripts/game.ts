@@ -1,3 +1,5 @@
+import { applyLink } from './utils.js';
+
 const local = document.getElementById('local');
 const multiplayer = document.getElementById('multiplayer');
 const tournament = document.getElementById('tournament');
@@ -5,6 +7,18 @@ const gameSettings = document.getElementById('gameSettings');
 
 if (!local || !multiplayer || !tournament || !gameSettings)
 	throw new Error('Element not found');
+
+const appDiv = document.getElementById("app");
+if (appDiv) {
+	appDiv.addEventListener("click", (e: MouseEvent) => {
+		const target = e.target as HTMLElement;
+		applyLink(target, e);
+		// Check if the clicked element is the tournament div
+		if (target.tagName === "DIV" && target.id === "tournament") {
+			return;
+		}
+	});
+}
 
 local.addEventListener('click', async () => {
 	await fetch('/local', {
@@ -48,6 +62,8 @@ local.addEventListener('click', async () => {
 	})
 
 });
+
+
 
 // multiplayer.addEventListener('click', async () => {});
 

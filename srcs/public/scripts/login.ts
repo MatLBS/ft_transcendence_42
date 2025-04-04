@@ -1,14 +1,30 @@
 import { recvContent } from '../main.js';
+import { applyLink } from './utils.js';
 
-const passwordElement = document.getElementById('password') as HTMLInputElement | null;
-const usernameElement = document.getElementById('username') as HTMLInputElement | null;
-const error_input = document.getElementById('error_input');
-const login_button = document.getElementById('login_button');
+// const login_button = document.getElementById('login_button');
 
-login_button?.addEventListener('click', () => {validateLogin()});
+/// Fonction pour gérer les clics sur les liens dynamiques
+/// @param target - L'élément cible du clic
+/// @param e - L'événement de clic
+/// @returns void
+const appDiv = document.getElementById("app");
+if (appDiv) {
+	appDiv.addEventListener("click", (e: MouseEvent) => {
+		const target = e.target as HTMLElement;
+		applyLink(target, e);
+		if (target.tagName === "BUTTON" && target.id === "login_button") {
+			validateLogin()
+		}
+	});
+}
+
+// login_button?.addEventListener('click', () => {validateLogin()});
 
 
 function validateLogin() {
+	const error_input = document.getElementById('error_input');
+	const passwordElement = document.getElementById('password') as HTMLInputElement | null;
+	const usernameElement = document.getElementById('username') as HTMLInputElement | null;
 
 	const password = passwordElement?.value || '';
 	const username = usernameElement?.value || '';
