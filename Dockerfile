@@ -10,8 +10,6 @@ COPY . .
 
 RUN npx tsc
 
-RUN npx prisma migrate dev --name init
-
 EXPOSE 3000
 
 CMD ["sh", "-c", "npm run build:css && npm run dev"]

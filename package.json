@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"start": "node srcs/server.js",
-		"dev": "concurrently \"tsc --watch\" \"nodemon srcs/server.js\"",
+		"dev": "npx prisma db push && concurrently \"tsc --watch\" \"nodemon srcs/server.js\"",
 		"build": "tsc",
 		"build:css": "npx tailwindcss -i srcs/public/style/input.css -o srcs/public/style/tailwind.css"
 	},
