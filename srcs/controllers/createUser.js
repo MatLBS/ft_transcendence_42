@@ -43,6 +43,15 @@ export const checkUserBack = async (req, reply) => {
 	if (!emailRegex.test(email))
 		return reply.send({message : "The email is not valid."});
 
+	if (!username)
+		return reply.send({message : "Username is required."});
+
+	if (!fileName) {
+		fileName = crypto.randomBytes(8).toString('hex') + `temp_${Date.now()}.png`;
+		filePath = path.join(__dirname, './uploads', fileName);
+		fs.copyFileSync(path.join(__dirname, "./public/images/flamme.png"), filePath);
+	}
+
 	const hashedPassword = await app.bcrypt.hash(password);
 	try {
 		await createUser(username, hashedPassword, email, fileName);
