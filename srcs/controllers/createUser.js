@@ -15,6 +15,9 @@ export const checkUserBack = async (req, reply) => {
 	const parts = req.parts();
 	for await (const part of parts) {
 		if (part.file) {
+			if (!part.mimetype.startsWith('image/')) {
+				return reply.send({ message: 'Invalid file type. Only images are allowed.' });
+			}
 			// Si c'est un fichier, le sauvegarder
 			const uploadDir = path.join(__dirname, './uploads');
 			if (!fs.existsSync(uploadDir)) {
