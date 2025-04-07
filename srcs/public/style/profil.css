@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+.header__wrapper header {
+  background: url("../images/profil_bg.jpeg") no-repeat 50% 20% / cover;
+  min-height: calc(100px + 15vw);
+}
+
+.header__wrapper .user__infos__container .user__infos {
+  padding: 25px 20px;
+  text-align: center;
+  width: 1000px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.header__wrapper .user__infos__container .user__infos .img__container {
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translatex(-50%);
+}
+.header__wrapper .user__infos__container .user__infos .img__container img {
+  width: auto;
+  height: 360px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.header__wrapper .user__infos__container .user__infos h2 {
+  margin-top: 150px;
+  font-weight: 600;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.stats__title {
+  font-weight: 600;
+  font-size: 26px;
+  margin-bottom: 5px;
+}
+
+h2 {
+  font-weight: 600;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.header__wrapper .user__infos__container .user__infos p {
+  font-size: 0.9rem;
+  color: #818181;
+  margin: 0;
+}
+
+
+.user__infos__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user__infos {
+  margin: auto;
+}
