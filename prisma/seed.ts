@@ -74,6 +74,17 @@ export async function findUser(username: string) {
 	return user;
 }
 
+export async function findUserById(id: number) {
+	const user = await prisma.user.findFirst({
+		where: {
+			id: id,
+		},
+	});
+	if (!user)
+		throw new Error(`User with id '${id}' do not exits in the database.`)
+	return user;
+}
+
 export async function findUsersTournament(tournamentId: number) {
 	const players = await prisma.tournamentPlayers.findMany({
 		where: {

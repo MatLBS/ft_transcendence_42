@@ -4,17 +4,19 @@ import { loginUser } from './loginUser.js';
 import path from 'path';
 import fs from 'fs';
 import { __dirname } from '../router.js';
-import crypto from 'crypto';
 
 export const checkUserBack = async (req, reply) => {
 
 	let fields = {};
-	let filePath = null, originalExtension = null, fileName = null;
+	let fileBuffer = null, originalExtension = null, fileName = null;
 
 	// Utiliser req.parts() pour traiter les fichiers et les champs
 	const parts = req.parts();
 	for await (const part of parts) {
 		if (part.file) {
+			if (!part.mimetype.startsWith('image/')) {
+				return reply.send({ message: 'Invalid file type. Only images are allowed.' });
+			}
 			// Si c'est un fichier, le sauvegarder
 			const uploadDir = path.join(__dirname, './uploads');
 			if (!fs.existsSync(uploadDir)) {
@@ -22,9 +24,8 @@ export const checkUserBack = async (req, reply) => {
 			}
 
 			originalExtension = path.extname(part.filename);
-			fileName = crypto.randomBytes(8).toString('hex') + `temp_${Date.now()}${originalExtension}`;
-			filePath = path.join(uploadDir, fileName);
-			await fs.promises.writeFile(filePath, await part.toBuffer());
+			fileName = `temp_${Date.now()}${originalExtension}`;
+			fileBuffer = await part.toBuffer();
 		} else {
 			// Si c'est un champ, l'ajouter à fields
 			fields[part.fieldname] = part.value;
@@ -43,9 +44,21 @@ export const checkUserBack = async (req, reply) => {
 	if (!emailRegex.test(email))
 		return reply.send({message : "The email is not valid."});
 
+	if (!username)
+		return reply.send({message : "Username is required."});
+
+	if (!fileName) {
+		fileName = `temp_${Date.now()}.png`;
+		const filePath = path.join(__dirname, './uploads', username + fileName);
+		fs.copyFileSync(path.join(__dirname, "./public/images/flamme.png"), filePath);
+	} else {
+		const filePath = path.join(__dirname, './uploads', username + fileName);
+		fs.writeFileSync(filePath, fileBuffer);
+	}
+
 	const hashedPassword = await app.bcrypt.hash(password);
 	try {
-		await createUser(username, hashedPassword, email, fileName);
+		await createUser(username, hashedPassword, email, username + fileName);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
