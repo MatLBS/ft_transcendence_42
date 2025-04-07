@@ -50,6 +50,4 @@ prisma/dev.db-journal
 prisma/dev.db
 
 srcs/uploads/
-#TestHtml
-srcs/testHTML
 
