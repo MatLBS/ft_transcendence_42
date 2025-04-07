@@ -36,7 +36,7 @@ function validateForm() {
 	const profile_picture = profile_pictureElement?.files?.[0];
 
 	if ((username === '' || email === '' || password === '') && error_input) {
-		error_input.innerHTML = `<p>You must fill all the options.</p>`;
+		error_input.innerHTML = `<p>You must fill all the options.</p>`; // a changer
 		return;
 	}
 

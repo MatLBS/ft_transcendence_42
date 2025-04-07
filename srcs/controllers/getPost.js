@@ -4,7 +4,7 @@ import ejs from 'ejs';
 import { routes } from "../router.js";
 import { __dirname } from "../router.js";
 import { authenticateUser } from "./tokens.js";
-import { findUser } from "../dist/prisma/seed.js";
+import { findUserById } from "../dist/prisma/seed.js";
 
 // Fonction pour charger une page d'erreur
 const getErrorPage = (reply, response, errorCode) => {
@@ -42,7 +42,7 @@ export const getPost = async (req, reply) => {
 		} else {
 			isConnected = true;
 			if (dontNeedLogin(file)) return getErrorPage(reply, response, 403);
-			user = await findUser(response.user.username);
+			user = await findUserById(response.user.id);
 		}
 
 		// Recherche de la route correspondante
