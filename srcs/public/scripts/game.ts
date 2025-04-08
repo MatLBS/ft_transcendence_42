@@ -146,11 +146,14 @@ function initCustomSelect() {
 
 			for (let i = 0; i < value; i++) {
 				const playerContainer = document.createElement('div');
-				playerContainer.className = 'flex flex-col border-2 border-red-500 m-3 text-center';
+				playerContainer.className = 'flex flex-col my-5 mx-3 text-center w-[40%]';
 
 				playerContainer.innerHTML += `<span>Player ${i + 1}</span>`;
-				playerContainer.innerHTML += `<input type="text" id="playerName" name="playerName" placeholder="enter a name..." class="border-2 border-gray-500 w-100 rounded-lg">`;
-
+				const tempDiv = document.createElement('div');
+				tempDiv.className = 'flex justify-center align-center w-full';
+				tempDiv.innerHTML += `<input type="text" id="playerName" name="playerName" placeholder="enter a name..." class="border-2 border-gray-500 w-[50%] rounded-full">`;
+				
+				playerContainer.appendChild(tempDiv);
 				playerNames.appendChild(playerContainer);
 			}
 
