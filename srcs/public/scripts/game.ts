@@ -166,7 +166,6 @@ function initCustomSelect() {
 			gameSettings.addEventListener('click', (e: MouseEvent) => {
 				const target = e.target as HTMLElement;
 				if (target.matches('#submit-button')) {
-					console.log('Button clicked'); // test
 					const playerInputs = playerNames.querySelectorAll('#playerName');
 					const playerData: string[] = [];
 

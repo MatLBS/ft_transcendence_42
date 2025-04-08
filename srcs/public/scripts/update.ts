@@ -9,9 +9,6 @@ if (appDiv) {
 		const target = e.target as HTMLElement;
 		applyLink(target, e);
 
-		console.log(target.tagName);
-		console.log(target.id);
-
 		if (target.tagName === "BUTTON" && target.id === "update_button") {
 			validateForm()
 		}
@@ -49,7 +46,6 @@ function previewImage() {
 // register_button?.addEventListener('click', () => {validateForm()});
 
 function validateForm() {
-	console.log("validateForm");
 
 	const previousPasswordElement = document.getElementById('prev_password') as HTMLInputElement | null;
 	const newPasswordElement = document.getElementById('new_password') as HTMLInputElement | null;
@@ -109,9 +105,7 @@ function validateForm() {
 
 //function to change password to text 
 function showPassword(eye_id: string) {
-	
-	console.log("showPassword");
-	
+		
 	const input = eye_id === "prev_password_eye" ? document.getElementById('prev_password') as HTMLInputElement | null : document.getElementById('new_password') as HTMLInputElement | null;
 	let iconEye = document.getElementById(eye_id) as HTMLInputElement | null;
 	

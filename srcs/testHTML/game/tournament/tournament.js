@@ -56,9 +56,6 @@ const customSelecter = document.getElementById('custom-select')
 					}
 				}
 
-				// console.log('Player Names:', playerData);
-				// alert(`Player Names: ${playerData.join(', ')}`);
-
 				fetch('/createTournament', {
 					method: 'POST',
 					credentials: 'include',
