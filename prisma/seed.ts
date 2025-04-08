@@ -77,7 +77,6 @@ export async function deleteAllUsers () {
 }
 
 export async function deleteUser (username: string) {
-	console.log(username)
 	const user = await prisma.user.findFirst({
 		where: {
 			username: username,
