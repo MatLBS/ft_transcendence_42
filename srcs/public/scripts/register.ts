@@ -12,7 +12,7 @@ if (appDiv) {
 		if (target.tagName === "BUTTON" && target.id === "register_button") {
 			validateForm()
 		}
-		if (target.tagName === "SPAN" && target.id === "login-eye") {
+		if (target.tagName === "SPAN" && target.id === "register-eye") {
 			showPassword()
 		}
 	});
@@ -77,7 +77,7 @@ function validateForm() {
 function showPassword() {
 
 	const input = document.getElementById('password') as HTMLInputElement | null;
-	let iconEye = document.getElementById('login-eye') as HTMLInputElement | null;
+	let iconEye = document.getElementById('register-eye') as HTMLInputElement | null;
 
 	if (!input || !iconEye)
 		return;
