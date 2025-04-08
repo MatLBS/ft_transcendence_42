@@ -4,6 +4,7 @@ import { loginUser } from './loginUser.js';
 import path from 'path';
 import fs from 'fs';
 import { __dirname } from '../router.js';
+import { verifyForm } from '../dist/srcs/middleware/verify.js';
 
 export const checkUserBack = async (req, reply) => {
 
@@ -35,17 +36,11 @@ export const checkUserBack = async (req, reply) => {
 	const password = fields.password;
 	const email = fields.email;
 	const username = fields.username;
-	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
-	const emailRegex = /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
 
-	if (!passwordRegex.test(password))
-		return reply.send({message : "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character."});
-
-	if (!emailRegex.test(email))
-		return reply.send({message : "The email is not valid."});
-
-	if (!username)
-		return reply.send({message : "Username is required."});
+	const formResponse = verifyForm(username, email, password);
+	if (formResponse.message !== "ok") {
+		return reply.send({message : formResponse.message});
+	}
 
 	if (!fileName) {
 		fileName = `temp_${Date.now()}.png`;

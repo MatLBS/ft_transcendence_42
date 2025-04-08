@@ -12,7 +12,11 @@ export function applyLink(target: HTMLElement, e: Event): void {
 		const url = target.getAttribute('href');
 		if (url) {
 			recvContent(url);
-			window.history.pushState({}, '', url);
 		}
 	}
 }
+
+export const getInputValue = (id: string): string => {
+	const input = document.getElementById(id) as HTMLInputElement | null;
+	return input?.value ?? '';
+};

@@ -42,14 +42,13 @@ function validateLogin() {
 		const data = await response.json();
 		if (data.message === "ok") {
 			recvContent("/");
-			history.pushState(null, '', '/');
 		} else if (error_input) {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
 		}
 	})
 }
 
-//function to change password to text 
+//function to change password to text
 function showPassword() {
 
 	const input = document.getElementById('password') as HTMLInputElement | null;

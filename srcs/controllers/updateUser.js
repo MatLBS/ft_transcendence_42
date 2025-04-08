@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { __dirname } from '../router.js';
 import { authenticateUser } from './tokens.js';
+import { verifyForm } from '../dist/srcs/middleware/verify.js';
 
 export const updateUser = async (req, reply) => {
 
@@ -18,10 +19,6 @@ export const updateUser = async (req, reply) => {
 				return reply.send({ message: 'Invalid file type. Only images are allowed.' });
 			}
 			// Si c'est un fichier, le sauvegarder
-			const uploadDir = path.join(__dirname, './uploads');
-			if (!fs.existsSync(uploadDir)) {
-				fs.mkdirSync(uploadDir, { recursive: true });
-			}
 			originalExtension = path.extname(part.filename);
 			fileName = `temp_${Date.now()}${originalExtension}`;
 			fileBuffer = await part.toBuffer();
@@ -34,8 +31,6 @@ export const updateUser = async (req, reply) => {
 	const newPassword = fields.newPassword;
 	const email = fields.email;
 	const username = fields.username;
-	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
-	const emailRegex = /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
 	const prePassword = fields.previousPassword;
 
 	const response = await authenticateUser(req);
@@ -46,11 +41,10 @@ export const updateUser = async (req, reply) => {
 	if (!validPassword)
 		return reply.send({message : "The password is incorrect."});
 
-	if (!emailRegex.test(email))
-		return reply.send({message : "The email is not valid."});
-
-	if (!username)
-		return reply.send({message : "Username is required."});
+	const formResponse = verifyForm(username, email, newPassword);
+	if (formResponse.message !== "ok") {
+		return reply.send({message : formResponse.message});
+	}
 
 	if (fileName) {
 		fileName = username + fileName;
@@ -60,12 +54,7 @@ export const updateUser = async (req, reply) => {
 		fs.writeFileSync(filePath, fileBuffer);
 	}
 
-	let hashedPassword = "";
-	if (newPassword) {
-		if (!passwordRegex.test(newPassword))
-			return reply.send({message : "The new password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character."});
-		hashedPassword = await app.bcrypt.hash(newPassword);
-	}
+	const hashedPassword = await app.bcrypt.hash(newPassword);
 
 	try {
 		await updateUserDb(response.user.id, username, hashedPassword, email, fileName);
