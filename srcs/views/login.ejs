@@ -2,37 +2,39 @@
 	<img src="../public/images/login&register-bg.png" alt="login image" class="login__img">
 
 	<div action="" class="login__form">
-	<h1 class="login__title">Login</h1>
-	<div id="error_input" class="mb-2"></div>
+		<h1 class="login__title">Login</h1>
+		<div id="error_input" class="mb-2"></div>
 
-	<div class="login__content">
-		<div>
-			<i class="bx bx-lock-alt"></i>
-			<div class="login__box">
-				<div class="login__box-input">
-					<input type="text" id="username" required class="login__input" placeholder="">
-					<label for="" class="login__label">Username</label>
-				</div>
-			</div>
-		</div>
-
-		<div class="login__box">
+		<div class="login__content">
 			<div>
-				<i class="ri-lock-2-line login__icon"></i>
-				<div class="login__box-input">
-					<input type="password" required class="login__input" id="password" placeholder="">
-					<label for="" class="login__label">Password</label>
-					<i class="ri-eye-off-line login__eye"></i>
+				<i class="bx bx-lock-alt"></i>
+				<div class="login__box">
+					<div class="login__box-input">
+						<input type="text" id="username" required class="login__input" placeholder="">
+						<label for="" class="login__label">Username</label>
+					</div>
 				</div>
 			</div>
-			<span class="material-symbols-outlined text-right" id="login-eye">visibility_off</span>
+
+			<div class="login__box flex align-center">
+				<div class="w-11/12">
+					<i class="ri-lock-2-line login__icon"></i>
+					<div class="login__box-input">
+						<input type="password" required class="login__input" id="password" placeholder="">
+						<label for="" class="login__label">Password</label>
+						<i class="ri-eye-off-line login__eye"></i>
+					</div>
+				</div>
+				<div class="w-1/12 flex items-center justify-center">
+					<span class="material-symbols-outlined text-right" id="login-eye">visibility_off</span>
+				</div>
+			</div>
 		</div>
-	</div>
 
-	<button type="submit" id="login_button" class="login__button text-black">Login</button>
+		<button type="submit" id="login_button" class="login__button text-black">Login</button>
 
-	<p class="login__register">
-		Don't have an account ? <a class="my" href="/register">Register</a>
-	</p>
+		<p class="login__register">
+			Don't have an account ? <a class="my" href="/register">Register</a>
+		</p>
 	</div>
 </div>
