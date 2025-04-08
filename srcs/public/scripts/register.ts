@@ -1,5 +1,6 @@
 import { recvContent } from '../main.js';
-import { applyLink } from './utils.js';
+import { applyLink, getInputValue } from './utils.js';
+import { verifyForm } from '../../middleware/verify.js';
 
 // const register_button = document.getElementById('register_button');
 
@@ -19,34 +20,20 @@ if (appDiv) {
 }
 
 function validateForm() {
-
-	console.log("validateForm");
-	const passwordElement = document.getElementById('password') as HTMLInputElement | null;
-	const emailElement = document.getElementById('email') as HTMLInputElement | null;
-	const usernameElement = document.getElementById('username') as HTMLInputElement | null;
-	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const error_input = document.getElementById('error_input');
+	const password = getInputValue('password');
+	const email = getInputValue('email');
+	const username = getInputValue('username');
 
-	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
-	const emailRegex = /[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
-
-	const password = passwordElement?.value || '';
-	const email = emailElement?.value || '';
-	const username = usernameElement?.value || '';
+	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
 
-	if ((username === '' || email === '' || password === '') && error_input) {
-		error_input.innerHTML = `<p>You must fill all the options.</p>`; // a changer
+	if (!error_input)
 		return;
-	}
 
-	if (password && !passwordRegex.test(password) && error_input) {
-		error_input.innerHTML = `<p>Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.</p>`;
-		return;
-	}
-
-	if (email && !emailRegex.test(email) && error_input) {
-		error_input.innerHTML = `<p>The email is not valide.</p>`;
+	const formResponse = verifyForm(username, email, password);
+	if (formResponse.message !== "ok") {
+		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
 		return;
 	}
 
@@ -55,7 +42,7 @@ function validateForm() {
 	formData.append('email', email);
 	formData.append('password', password);
 	if (profile_picture) {
-		formData.append('profile_picture', profile_picture); // Ajouter le fichier
+		formData.append('profile_picture', profile_picture);
 	}
 
 	fetch('/registerUser', {
@@ -66,14 +53,13 @@ function validateForm() {
 		const data = await response.json();
 		if (data.message === "ok") {
 			recvContent("/");
-			history.pushState(null, '', '/');
 		} else if (error_input) {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
 		}
 	})
 }
 
-//function to change password to text 
+//function to change password to text
 function showPassword() {
 
 	const input = document.getElementById('password') as HTMLInputElement | null;

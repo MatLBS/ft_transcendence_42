@@ -55,13 +55,11 @@ export async function updateUserDb (id: number, username: string, password: stri
 	if (emailAlreadyExist)
 		throw new Error(`The email \"${email}\" already exists for a user`);
 
-	const updateUser: { username: string, password?: string, email: string, profilePicture?: string } = {
+	const updateUser: { username: string, password: string, email: string, profilePicture?: string } = {
 		username: username,
 		email: email,
+		password: password,
 	};
-
-	if (password)
-		updateUser.password = password;
 	if (profilePicture)
 		updateUser.profilePicture = profilePicture;
 	const user = await prisma.user.update({

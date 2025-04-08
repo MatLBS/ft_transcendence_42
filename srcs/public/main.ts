@@ -22,6 +22,7 @@ export function recvContent(url: string): void {
 		.catch((error: unknown) => {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
+	history.pushState({}, '', url);
 }
 
 // Met à jour le contenu de la page avec les données reçues du serveur
@@ -96,7 +97,6 @@ function handleLogout(e: Event): void {
 		.then((data: { status: number }) => {
 			if (data.status === 200) {
 				recvContent('/login');
-				window.history.pushState({}, '', '/login');
 			}
 		})
 		.catch((error: unknown) => {
