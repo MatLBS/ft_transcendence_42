@@ -11,27 +11,32 @@ if (appDiv) {
 		if (target.tagName === "BUTTON" && target.id === "update_button") {
 			validateForm()
 		}
+		if (target.tagName === "INPUT" && target.id === "profile_picture") {
+			previewImage()
+		}
 	});
 }
 
-const profile_picture = document.getElementById('profile_picture');
-if (profile_picture) {
-	profile_picture.addEventListener('change', function (event) {
-		const target = event.target as HTMLInputElement | null;
-		if (!target || !target.files) return;
-		const file = target.files[0];
-		const reader = new FileReader();
+function previewImage() {
+	const profile_picture = document.getElementById('profile_picture');
+	if (profile_picture) {
+		profile_picture.addEventListener('change', function (event) {
+			const target = event.target as HTMLInputElement | null;
+			if (!target || !target.files) return;
+			const file = target.files[0];
+			const reader = new FileReader();
 
-		reader.onload = function (e) {
-			const imagePreview = document.getElementById('preview_image');
-			if (!imagePreview) return;
-			(imagePreview as HTMLImageElement).src = e?.target?.result as string;
-		};
+			reader.onload = function (e) {
+				const imagePreview = document.getElementById('preview_image');
+				if (!imagePreview) return;
+				(imagePreview as HTMLImageElement).src = e?.target?.result as string;
+			};
 
-		if (file) {
-			reader.readAsDataURL(file);
-		}
-	});
+			if (file) {
+				reader.readAsDataURL(file);
+			}
+		});
+	}
 }
 
 // register_button?.addEventListener('click', () => {validateForm()});
