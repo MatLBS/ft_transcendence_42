@@ -8,11 +8,18 @@ if (appDiv) {
 	appDiv.addEventListener("click", (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
 		applyLink(target, e);
+
+		console.log(target.tagName);
+		console.log(target.id);
+
 		if (target.tagName === "BUTTON" && target.id === "update_button") {
 			validateForm()
 		}
 		if (target.tagName === "INPUT" && target.id === "profile_picture") {
 			previewImage()
+		}
+		if (target.tagName === "SPAN" && (target.id === "new_password_eye" || target.id === "prev_password_eye")) {
+			showPassword(target.id)
 		}
 	});
 }
@@ -44,7 +51,7 @@ function previewImage() {
 function validateForm() {
 	console.log("validateForm");
 
-	const previousPasswordElement = document.getElementById('pre_password') as HTMLInputElement | null;
+	const previousPasswordElement = document.getElementById('prev_password') as HTMLInputElement | null;
 	const newPasswordElement = document.getElementById('new_password') as HTMLInputElement | null;
 	const emailElement = document.getElementById('email') as HTMLInputElement | null;
 	const usernameElement = document.getElementById('username') as HTMLInputElement | null;
@@ -98,4 +105,20 @@ function validateForm() {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
 		}
 	})
+}
+
+//function to change password to text 
+function showPassword(eye_id: string) {
+	
+	console.log("showPassword");
+	
+	const input = eye_id === "prev_password_eye" ? document.getElementById('prev_password') as HTMLInputElement | null : document.getElementById('new_password') as HTMLInputElement | null;
+	let iconEye = document.getElementById(eye_id) as HTMLInputElement | null;
+	
+	if (!input || !iconEye)
+		return;
+
+	iconEye.innerText = (iconEye.textContent === 'visibility_off') ? 'visibility' : 'visibility_off';
+
+	input.type = (input.type === 'password') ? 'text' : 'password'
 }

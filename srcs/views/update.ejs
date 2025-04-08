@@ -1,33 +1,81 @@
-<div class="flex justify-center h-screen">
-	<div class="border-2 border-indigo-500 h-1/2 w-1/2 mt-[10%] bg-gray-100 shadow-xl">
-		<h1 class="text-5xl text-center mt-[10%]">update</h1>
-		<div id="error_input"></div>
-		<div class="flex justify-center items-center flex-col text-center m-[2%] gap-4 border-2 border-red-500">
-			<div class="flex flex-col items-center w-1/2 h-12">
-				<input type="text" id="username" name="username" placeholder="username" class="border-2 border-gray-500 w-full h-full rounded-l" value="<%= user.username %>">
+<div class="login">
+	<img src="../public/images/login&register-bg.png" alt="login image" class="login__img">
+
+	<div action="" class="login__form">
+		<h1 class="login__title">Update</h1>
+		<div id="error_input" class="mb-2"></div>
+
+		<div class="login__content">
+			<div>
+				<i class="bx bx-lock-alt"></i>
+				<div class="login__box">
+					<div class="login__box-input">
+						<input type="text" id="username" name="username" required class="login__input" value="<%= user.username %>">
+						<label for="" class="login__label">Username</label>
+					</div>
+				</div>
 			</div>
-			<div class="flex flex-col items-center w-1/2 h-12">
-				<input type="email" id="email" name="email" placeholder="email" class="border-2 border-gray-500 w-full h-full rounded-l" value="<%= user.email %>">
+
+			<div class="login__content">
+				<div>
+					<i class="bx bx-lock-alt"></i>
+					<div class="login__box">
+						<div class="login__box-input">
+							<input type="email" id="email" required class="login__input" value="<%= user.email %>">
+							<label for="" class="login__label">Email</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="login__box flex align-center">
+					<div class="w-11/12">
+						<i class="ri-lock-2-line login__icon"></i>
+						<div class="login__box-input">
+							<input type="password" required class="login__input" id="prev_password">
+							<label for="" class="login__label">Previous Password</label>
+							<i class="ri-eye-off-line login__eye"></i>
+						</div>
+					</div>
+					<div class="w-1/12 flex items-center justify-center">
+						<span class="material-symbols-outlined" id="prev_password_eye">visibility_off</span>
+					</div>
+				</div>
+				
+				<div class="login__box flex align-center">
+					<div class="w-11/12">
+						<i class="ri-lock-2-line login__icon"></i>
+						<div class="login__box-input">
+							<input type="password" id="new_password" required class="login__input">
+							<label for="" class="login__label">New Password</label>
+							<i class="ri-eye-off-line login__eye"></i>
+						</div>
+					</div>
+					<div class="w-1/12 flex items-center justify-center">
+						<span class="material-symbols-outlined" id="new_password_eye">visibility_off</span>
+					</div>
+				</div>
+
+				<div class="login__content">
+					<div>
+						<i class="bx bx-lock-alt"></i>
+						<div class="login__box-input">
+							<input type="file" id="profile_picture" class="login__input" name="profile_picture" accept="image/*">
+						</div>
+					</div>
+				</div>
+
+				<div class="flex justify-center">
+					<img
+						src="/uploads/<%= user.profilePicture %>"
+						id="preview_image"
+						alt="Photo de profil de <%= user.username %>"
+						class="profile-image rounded-full h-32 w-auto"
+						style="max-width: 200px;"
+					/>
+				</div>
 			</div>
-			<div class="flex flex-col items-center w-1/2 h-12">
-				<input type="password" id="pre_password" name="pre_password" placeholder="previous password" class="border-2 border-gray-500 w-full h-full rounded-l">
-			</div>
-			<div class="flex flex-col items-center w-1/2 h-12">
-				<input type="password" id="new_password" name="new_password" placeholder="new password" class="border-2 border-gray-500 w-full h-full rounded-l">
-			</div>
-			<div class="flex flex-col items-center w-1/2 h-12">
-				<input type="file" id="profile_picture" name="profile_picture" accept="image/*" class="border-2 border-gray-500 w-full h-full rounded-l">
-			</div>
-			<div class="profile-image-container">
-				<img
-					src="/uploads/<%= user.profilePicture %>"
-					id="preview_image"
-					alt="Photo de profil de <%= user.username %>"
-					class="profile-image rounded-full h-32 w-auto"
-					style="max-width: 100px;"
-				/>
-			</div>
-			<button id="update_button" class="bg-blue-500 rounded-xl px-10 py-2 max-w-40">Confirm</button>
+
+			<button id="update_button" class="login__button text-black text-center">Confirm</button>
 		</div>
 	</div>
 </div>
