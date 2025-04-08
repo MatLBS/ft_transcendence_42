@@ -15,6 +15,9 @@ if (appDiv) {
 		if (target.tagName === "BUTTON" && target.id === "login_button") {
 			validateLogin()
 		}
+		if (target.tagName === "SPAN" && target.id === "login-eye") {
+			showPassword()
+		}
 	});
 }
 
@@ -43,4 +46,17 @@ function validateLogin() {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
 		}
 	})
+}
+
+//function to change password to text 
+function showPassword() {
+
+	const input = document.getElementById('password') as HTMLInputElement | null;
+	let iconEye = document.getElementById('login-eye') as HTMLInputElement | null;
+
+	if (!input || !iconEye)
+		return;
+
+	iconEye.innerText = (iconEye.textContent === 'visibility_off') ? 'visibility' : 'visibility_off';
+	input.type = (input.type === 'password') ? 'text' : 'password'
 }
