@@ -8,7 +8,7 @@ if (appDiv) {
 	appDiv.addEventListener("click", (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
 		applyLink(target, e);
-		if (target.tagName === "BUTTON" && target.id === "register_button") {
+		if (target.tagName === "BUTTON" && target.id === "update_button") {
 			validateForm()
 		}
 	});
@@ -44,7 +44,6 @@ function validateForm() {
 	const emailElement = document.getElementById('email') as HTMLInputElement | null;
 	const usernameElement = document.getElementById('username') as HTMLInputElement | null;
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
-	const userIdElement = document.getElementById('userId') as HTMLInputElement | null;
 	const error_input = document.getElementById('error_input');
 
 	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
@@ -77,7 +76,7 @@ function validateForm() {
 	formData.append('previousPassword', previousPassword);
 	formData.append('newPassword', newPassword);
 	if (profile_picture) {
-		formData.append('profile_picture', profile_picture); // Ajouter le fichier
+		formData.append('profile_picture', profile_picture);
 	}
 
 	fetch('/updateUser', {

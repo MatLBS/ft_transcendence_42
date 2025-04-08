@@ -54,7 +54,8 @@ export const updateUser = async (req, reply) => {
 
 	if (fileName) {
 		fileName = username + fileName;
-		fs.unlinkSync(path.join(__dirname, './uploads', user.profilePicture));
+		const unlinkFile = path.join(__dirname, './uploads', user.profilePicture);
+		if (fs.existsSync(unlinkFile)) fs.unlinkSync(unlinkFile);
 		const filePath = path.join(__dirname, './uploads', fileName);
 		fs.writeFileSync(filePath, fileBuffer);
 	}

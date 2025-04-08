@@ -32,6 +32,29 @@ export async function createUser (username: string, password: string, email: str
 }
 
 export async function updateUserDb (id: number, username: string, password: string, email: string, profilePicture?: string) {
+	const usernameAlreadyExist = await prisma.user.findFirst({
+		where: {
+			username: username,
+			NOT: {
+				id: id,
+			},
+		},
+	})
+
+	const emailAlreadyExist = await prisma.user.findFirst({
+		where: {
+			email: email,
+			NOT: {
+				id: id,
+			},
+		},
+	})
+
+	if (usernameAlreadyExist)
+		throw new Error(`The username \"${username}\" already exists`);
+	if (emailAlreadyExist)
+		throw new Error(`The email \"${email}\" already exists for a user`);
+
 	const updateUser: { username: string, password?: string, email: string, profilePicture?: string } = {
 		username: username,
 		email: email,

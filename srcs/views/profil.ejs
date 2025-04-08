@@ -1,17 +1,34 @@
-<div>
-	<p>je suis <%= user.username %> voici mon adress mail <%= user.email %></p>
-	<% if (user.profilePicture) { %>
-		<div class="profile-image-container">
-			<h3>Mon image de profil:</h3>
-			<img
-				src="/uploads/<%= user.profilePicture %>"
-				alt="Photo de profil de <%= user.username %>"
-				class="profile-image"
-				style="max-width: 200px; border-radius: 50%;"
-			/>
+<div class="header__wrapper">
+	<header></header>
+	<div class="user__infos__container items-center">
+		<div class="user__infos">
+			<div class="img__container">
+				<img
+					src="/uploads/<%= user.profilePicture %>"
+					alt="Photo de profil de <%= user.username %>"
+				/>
+			</div>
+			<h2 id="username" class="underline">
+				<%= user.username %>
+			</h2>
 		</div>
-	<% } else { %>
-		<p>Aucune image de profil disponible</p>
-	<% } %>
+	</div>
+	<h2 class="stats__title text-center">Statistics</h2>
+	<div class="stats flex justify-center align-center gap-16">
+		<div id="match__history" class="w-2/5 border-2 border-gray-300">
+			<h2 class="text-center p-5">Match History</h2>
+			<div class="flex justify-around align-center">
+				<div id="match__results">Result</div>
+				<div id="match__scores">Score</div>
+				<div id="match__opponents">Opponent</div>
+			</div>
+		</div>
+		<div id="graphs" class="w-2/5 border-2 border-gray-300">
+			<h2 class="text-center p-5">Graphics</h2>
+			<div class="flex justify-around align-center">
+				<div id="global_graphs"></div>
+			</div>
+		</div>
+	</div>
 </div>
 <a href="/update">update</a>
