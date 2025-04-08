@@ -11,6 +11,10 @@ export const checkUserBack = async (req, reply) => {
 	let fileBuffer = null, originalExtension = null, fileName = null;
 
 	// Utiliser req.parts() pour traiter les fichiers et les champs
+	const uploadDir = path.join(__dirname, './uploads');
+	if (!fs.existsSync(uploadDir)) {
+		fs.mkdirSync(uploadDir, { recursive: true });
+	}
 	const parts = req.parts();
 	for await (const part of parts) {
 		if (part.file) {
@@ -18,10 +22,6 @@ export const checkUserBack = async (req, reply) => {
 				return reply.send({ message: 'Invalid file type. Only images are allowed.' });
 			}
 			// Si c'est un fichier, le sauvegarder
-			const uploadDir = path.join(__dirname, './uploads');
-			if (!fs.existsSync(uploadDir)) {
-				fs.mkdirSync(uploadDir, { recursive: true });
-			}
 
 			originalExtension = path.extname(part.filename);
 			fileName = `temp_${Date.now()}${originalExtension}`;
