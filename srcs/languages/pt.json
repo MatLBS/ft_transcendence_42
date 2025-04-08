@@ -1,0 +1,63 @@
+{
+	"about": {
+	  "title": "Conheça a equipe"
+	},
+
+	"home": {
+	  "title": "Olá mundo",
+	  "subtitle": "Página inicial"
+	},
+
+	"index": {
+	  "home": "início",
+	  "about": "sobre",
+	  "game": "jogo",
+	  "profile": "perfil",
+	  "logout": "sair",
+	  "login": "Entrar"
+	},
+
+	"localParty": {
+	  "label": "Digite um nome para o segundo jogador...",
+	  "button": "Validar"
+	},
+
+	"login": {
+	  "title": "Entrar",
+	  "username": "Nome de usuário",
+	  "password": "Senha",
+	  "button": "Entrar",
+	  "register_p": "Não tem uma conta?",
+	  "register_a": "Registrar"
+	},
+
+	"register": {
+	  "title": "Registro",
+	  "username": "Nome de usuário",
+	  "email": "E-mail",
+	  "password": "Senha",
+	  "button": "Confirmar"
+	},
+
+	"profil": {
+	  "statistics": "Estatísticas",
+	  "matchHistory": "Histórico de partidas",
+	  "result": "Resultado",
+	  "score": "Pontuação",
+	  "opponent": "Adversário",
+	  "graphics": "Gráficos",
+	  "update": "Atualizar"
+	},
+	
+	"tournament": {
+		"nbPlayers": "Quantos jogadores participarão do torneio?"
+	},
+
+	"update": {
+	  "username": "Nome de usuário",
+	  "email": "E-mail",
+	  "prevPassword": "Senha anterior",
+	  "newPassword": "Nova senha",
+	  "button": "Confirmar"
+	}
+}

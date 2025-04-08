@@ -23,6 +23,7 @@ export function recvContent(url: string): void {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
 	history.pushState({}, '', url);
+
 }
 
 // Met à jour le contenu de la page avec les données reçues du serveur
@@ -115,6 +116,9 @@ function handlePopState(): void {
 function start(): void {
 	console.log('Démarrage...');
 	recvContent(window.location.pathname);
+
+	//do a fetch to /languages here, thisis only the first fetch
+
 	handleLinks();
 	handlePopState();
 }
