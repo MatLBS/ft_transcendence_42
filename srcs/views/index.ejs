@@ -8,18 +8,31 @@
 	<link rel="stylesheet" href="public/style/tailwind.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
-	<script src="../languages/fr.json"></script>
 </head>
 <body>
-	<nav class="bg-blue-500">
-		<ul>
-			<li><a class="my" href="/">home</a></li>
-			<li><a class="my" href="/about">about</a></li>
-			<li><a class="my" href="/game">game</a></li>
-			<li><a class="my connected" href="/profil">profil</a></li>
-			<li><a class="logout connected" href="/login" >logout</a></li>
-			<li><a class="my disconnected" href="/login">Login</a></li>
+	<nav class="bg-blue-500 h-32">
+		<ul class="flex gap-5">
+			<li><a class="my" href="/">home %></a></li>
+			<li><a class="my" href="/about">about %></a></li>
+			<li><a class="my" href="/game">game %></a></li>
+			<li><a class="my connected" href="/profil">profil %></a></li>
+			<li><a class="logout connected" href="/login" >logout %></a></li>
+			<li><a class="my disconnected" href="/login">login %></a></li>
 		</ul>
+		<div id="language-select" class="border-2 border-red-500">
+			<div id="language-default" class="flex justify-center items-center rounded-full p-2 border-2 border-indigo-500">
+				🇬🇧
+				<span class="material-icons pl-5">expand_more</span>
+			</div>
+			<div>
+				<ul id="languages-options" class="rounded-lg mt-2 w-[25%] text-center border-2 border-gray-500">
+					<li data-value="fr" id="language-options" class=" hover:bg-gray-200">🇫🇷</li>
+					<li data-value="en" id="language-options" class="hover:bg-gray-200 ">🇬🇧</li>
+					<li data-value="es" id="language-options" class="hover:bg-gray-200">🇪🇸</li>
+					<li data-value="pt" id="language-options" class="hover:bg-gray-200">🇵🇹</li>
+				</ul>
+			</div>
+		</div>
 	</nav>
 	<div id="app"></div>
 	<script type="module" src="dist/srcs/public/main.js"></script>

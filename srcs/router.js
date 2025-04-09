@@ -8,6 +8,7 @@ import fastifyFormbody from '@fastify/formbody';
 import { checkUserBack } from './controllers/createUser.js';
 import { login } from './controllers/loginUser.js';
 import { getPost } from './controllers/getPost.js';
+import { setLanguage } from './controllers/setLanguage.js';
 import { getHome } from './controllers/getHome.js';
 import { getPage } from './controllers/getPage.js';
 import { logout } from './controllers/logout.js';
@@ -73,6 +74,7 @@ export default async function userRoutes(app) {
 	app.get('/', getHome);
 	app.get('/:page', getPage);
 	app.post('/url', getPost);
+	app.post('/languages', setLanguage);
 	app.post('/registerUser', checkUserBack);
 	app.post('/updateUser', updateUser);
 	app.post('/loginUser', login);
