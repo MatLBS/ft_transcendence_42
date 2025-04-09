@@ -31,6 +31,41 @@ export async function createUser (username: string, password: string, email: str
 	})
 }
 
+export async function createUserGoogle (username: string, email: string, profilePicture: string) {
+	let usernameAlreadyExist: any;
+	let i: number = 0;
+	while (true) {
+		console.log("username", username);
+		usernameAlreadyExist = await prisma.user.findFirst({
+			where: {
+				username: username,
+			},
+		})
+		if (!usernameAlreadyExist)
+			break;
+		username += i;
+		i++;
+	}
+
+	const emailAlreadyExist = await prisma.user.findFirst({
+		where: {
+			email: email,
+		},
+	})
+
+	if (emailAlreadyExist)
+		return;
+
+	await prisma.user.create({
+		data: {
+			username: username,
+			email: email,
+			profilePicture: profilePicture,
+		},
+	})
+	return;
+}
+
 export async function updateUserDb (id: number, username: string, password: string, email: string, profilePicture?: string) {
 	const usernameAlreadyExist = await prisma.user.findFirst({
 		where: {
@@ -122,6 +157,17 @@ export async function findUserById(id: number) {
 	});
 	if (!user)
 		throw new Error(`User with id '${id}' do not exits in the database.`)
+	return user;
+}
+
+export async function findUserByEmail(email: string) {
+	const user = await prisma.user.findFirst({
+		where: {
+			email: email,
+		},
+	});
+	if (!user)
+		throw new Error(`Email '${email}' do not exits in the database.`)
 	return user;
 }
 

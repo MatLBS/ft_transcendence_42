@@ -59,15 +59,6 @@ function validateForm() {
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
 
-	if (newPassword === previousPassword && newPassword !== "" && error_input) {
-		error_input.innerHTML = `<p>The new password can't be the same as the previous.</p>`;
-		return;
-	}
-	
-	if (newPassword === '')
-		newPassword = previousPassword;
-
-
 	const formResponse = verifyForm(username, email, newPassword);
 	if (formResponse.message !== "ok") {
 		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;

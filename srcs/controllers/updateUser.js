@@ -36,10 +36,14 @@ export const updateUser = async (req, reply) => {
 	const response = await authenticateUser(req);
 
 	const user = await findUserById(response.user.id);
+
 	const validPassword = await app.bcrypt.compare(prePassword, user.password);
 
 	if (!validPassword)
 		return reply.send({message : "The password is incorrect."});
+
+	if (newPassword === prePassword)
+		return reply.send({message : "The new password must be different from the previous one."});
 
 	const formResponse = verifyForm(username, email, newPassword);
 	if (formResponse.message !== "ok") {

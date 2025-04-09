@@ -19,7 +19,18 @@ if (appDiv) {
 		if (target.tagName === "SPAN" && target.id === "register-eye") {
 			showPassword()
 		}
+		if (target.tagName === "BUTTON" && target.id === "register_button_google") {
+			googleLogin();
+		}
 	});
+}
+
+function googleLogin() {
+	const error_input = document.getElementById('error_input');
+	if (!error_input)
+		return;
+
+	window.location.href = "/auth/google";
 }
 
 function validateForm() {
