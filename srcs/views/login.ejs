@@ -2,7 +2,7 @@
 	<img src="../public/images/login&register-bg.png" alt="login image" class="login__img">
 
 	<div action="" class="login__form">
-		<h1 class="login__title">Login</h1>
+		<h1 class="login__title"><%= jsonLanguage.login.title %></h1>
 		<div id="error_input" class="mb-2"></div>
 
 		<div class="login__content">
@@ -11,7 +11,7 @@
 				<div class="login__box">
 					<div class="login__box-input">
 						<input type="text" id="username" required class="login__input" placeholder="">
-						<label for="" class="login__label">Username</label>
+						<label for="" class="login__label"><%= jsonLanguage.login.username %></label>
 					</div>
 				</div>
 			</div>
@@ -21,7 +21,7 @@
 					<i class="ri-lock-2-line login__icon"></i>
 					<div class="login__box-input">
 						<input type="password" required class="login__input" id="password" placeholder="">
-						<label for="" class="login__label">Password</label>
+						<label for="" class="login__label"><%= jsonLanguage.login.password %></label>
 						<i class="ri-eye-off-line login__eye"></i>
 					</div>
 				</div>
@@ -31,10 +31,10 @@
 			</div>
 		</div>
 
-		<button type="submit" id="login_button" class="login__button text-black">Login</button>
+		<button type="submit" id="login_button" class="login__button text-black"><%= jsonLanguage.login.button %></button>
 
 		<p class="login__register">
-			Don't have an account ? <a class="my" href="/register">Register</a>
+			<%= jsonLanguage.login.register_p %> <a class="my" href="/register"><%= jsonLanguage.login.register_a %></a>
 		</p>
 	</div>
 </div>

@@ -1,5 +1,6 @@
 import { json } from 'stream/consumers';
 import { applyLink } from './scripts/utils.js';
+
 let language = "en";
 
 // Définition du type pour la réponse serveur
@@ -27,7 +28,6 @@ export async function recvContent(url: string): Promise<void> {
 		.catch((error: unknown) => {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
-
 	
 	fetch('/url', {
 		method: 'POST',
@@ -100,8 +100,7 @@ function handleLinks(): void {
 	nav.addEventListener('click', (e: MouseEvent) => {
 		const target = e.target as HTMLAnchorElement;
 		applyLink(target, e);
-		// console.log(target.tagName)
-		// console.log(target.id)
+
 		if (target.tagName === 'A' && target.classList.contains('logout')) {
 			handleLogout(e);
 		}
@@ -124,8 +123,6 @@ function handleLanguage(e: Event): void {
 		console.error('One or more elements for custom select are missing.');
 		return;
 	}
-
-	console.log(target)
 
 	languageDefault.innerHTML = `
 	${target.textContent}

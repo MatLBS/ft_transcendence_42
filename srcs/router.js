@@ -71,6 +71,7 @@ export default async function userRoutes(app) {
 
 	app.register(fastifyFormbody)
 
+
 	app.get('/', getHome);
 	app.get('/:page', getPage);
 	app.post('/url', getPost);
