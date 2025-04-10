@@ -137,7 +137,7 @@ function initCustomSelect() {
 
 			customDefault.innerHTML = `
 			${target.textContent}
-			<span class="material-icons">expand_more</span>`;
+			<span class="material-icons pl-5">expand_more</span>`;
 			hiddenValue.value = target.getAttribute('data-value') || '';
 
 			playerNames.innerHTML = '';

@@ -576,6 +576,10 @@ video {
   margin-bottom: 0.5rem;
 }
 
+.mr-3 {
+  margin-right: 0.75rem;
+}
+
 .mt-10 {
   margin-top: 2.5rem;
 }
@@ -594,6 +598,10 @@ video {
 
 .mt-5 {
   margin-top: 1.25rem;
+}
+
+.ml-3 {
+  margin-left: 0.75rem;
 }
 
 .block {
@@ -630,6 +638,10 @@ video {
 
 .w-2\/5 {
   width: 40%;
+}
+
+.w-24 {
+  width: 6rem;
 }
 
 .w-\[25\%\] {
@@ -674,6 +686,10 @@ video {
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
 }
 
 .justify-around {
@@ -780,6 +796,10 @@ video {
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
+}
+
+.pl-2 {
+  padding-left: 0.5rem;
 }
 
 .pl-5 {

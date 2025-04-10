@@ -101,12 +101,12 @@ function handleLinks(): void {
 		const target = e.target as HTMLAnchorElement;
 		applyLink(target, e);
 
+
 		if (target.tagName === 'A' && target.classList.contains('logout')) {
 			handleLogout(e);
 		}
-		if (target.closest('#language-default'))  {
+		if (target.closest('#language-select'))  {
 			const languageOptions = document.getElementById('languages-options');
-			console.log(languageOptions)
 			if (languageOptions)
 				languageOptions.classList.toggle('open');
 		}
@@ -126,7 +126,7 @@ function handleLanguage(e: Event): void {
 
 	languageDefault.innerHTML = `
 	${target.textContent}
-	<span class="material-icons">expand_more</span>`;
+	<span class="material-icons pl-2">expand_more</span>`;
 	language = target.getAttribute('data-value') || '';
 	recvContent(window.location.pathname);
 }

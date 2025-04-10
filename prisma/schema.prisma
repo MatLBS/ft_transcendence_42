@@ -50,3 +50,8 @@ model LocalPlayers {
 
   username String
 }
+
+// model Website {
+//   id      Int   @id @default(autoincrement())
+//   language String?
+// }

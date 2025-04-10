@@ -10,8 +10,8 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
 </head>
 <body>
-	<nav class="bg-blue-500 h-32">
-		<ul class="flex gap-5">
+	<nav class="bg-blue-500 h-32 flex justify-between items-center">
+		<ul class="flex gap-5 ml-3">
 			<li><a class="my" href="/">home</a></li>
 			<li><a class="my" href="/about">about</a></li>
 			<li><a class="my" href="/game">game</a></li>
@@ -19,18 +19,22 @@
 			<li><a class="logout connected" href="/login" >logout</a></li>
 			<li><a class="my disconnected" href="/login">login</a></li>
 		</ul>
-		<div id="language-select" class="border-2 border-red-500">
-			<div id="language-default" class="flex justify-center items-center rounded-full p-2 border-2 border-indigo-500">
-				🇬🇧
-				<span class="material-icons pl-5">expand_more</span>
-			</div>
-			<div>
-				<ul id="languages-options" class="rounded-lg mt-2 w-[25%] text-center border-2 border-gray-500">
-					<li data-value="fr" id="language-options" class=" hover:bg-gray-200">🇫🇷</li>
-					<li data-value="en" id="language-options" class="hover:bg-gray-200 ">🇬🇧</li>
-					<li data-value="es" id="language-options" class="hover:bg-gray-200">🇪🇸</li>
-					<li data-value="pt" id="language-options" class="hover:bg-gray-200">🇵🇹</li>
-				</ul>
+		<div class="mr-3">
+			<div id="language-select" class="w-24 relative">
+				<div class="flex justify-center align-center">
+					<div id="language-default" class="flex justify-center items-center w-full rounded-full p-2">
+						🇬🇧
+						<span class="material-icons pl-2">expand_more</span>
+					</div>
+				</div>
+				<div class="flex justify-center align-center absolute w-full">
+					<ul id="languages-options" class="list-inside rounded-lg hidden mt-2 w-full text-center border-2 border-gray-500">
+						<li data-value="fr" id="language-options" class=" hover:bg-gray-200">🇫🇷</li>
+						<li data-value="en" id="language-options" class="hover:bg-gray-200 ">🇬🇧</li>
+						<li data-value="es" id="language-options" class="hover:bg-gray-200">🇪🇸</li>
+						<li data-value="pt" id="language-options" class="hover:bg-gray-200">🇵🇹</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</nav>
