@@ -190,3 +190,19 @@ export async function updateUserLanguage(id: number, newLanguage: string) {
 		data: { language: newLanguage }
 	})
 }
+
+export async function updateSiteLanguage(newLanguage: string) {
+	const siteLanguage = await prisma.website.upsert({
+		where: { id: 1 },
+		update: { language: newLanguage },
+		create: { id: 1, language: newLanguage },
+	});
+	return siteLanguage;
+}
+
+export async function getSiteLanguage() {
+	const siteLanguage = await prisma.website.findFirst({
+		where: { id: 1 },
+	});
+	return siteLanguage;
+}
