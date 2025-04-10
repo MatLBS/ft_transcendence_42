@@ -8,11 +8,11 @@ const __dirname = path.dirname(__filename);
 
 export default {
     entry: {
-        client: './public/script.ts',
+        pong: './srcs/public/scripts/pong.ts',
     },
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'srcs/dist/srcs/public/scripts/'),
         library: {
             type: 'module',
         },

@@ -1,14 +1,15 @@
 {
 	"compilerOptions": {
-		"target": "ESNext",
-		"module": "ESNext",
+		"target": "es2020",
+		"module": "es2020",
 		"moduleResolution": "node",
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"outDir": "srcs/dist"
+		"outDir": "srcs/dist",
+		"allowSyntheticDefaultImports": true
 	},
 	"include": ["./srcs/**/*.ts", "./srcs/public/**/*.ts", "srcs/public/scripts/login.ts", "prisma/**/*.ts"],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", "./srcs/public/scripts/pong.ts"]
 }

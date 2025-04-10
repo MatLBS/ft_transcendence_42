@@ -78,6 +78,12 @@ function validateLocalGame() {
 		return;
 	}
 
+	const scriptElement = document.createElement('script');
+	scriptElement.type = 'module';
+	scriptElement.src = "dist/srcs/public/scripts/pong.js"
+	scriptElement.id = 'js';
+	document.body.appendChild(scriptElement);
+
 	fetch('/createLocal', {
 		method: 'POST',
 		credentials: 'include',
