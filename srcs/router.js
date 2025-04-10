@@ -16,7 +16,7 @@ import { tournament } from './controllers/tournament.js';
 import { createTournament } from './controllers/createTournament.js';
 import { local } from './controllers/local.js';
 import { createLocal } from './controllers/createLocal.js';
-import { updateUser } from './controllers/updateUser.js';
+import { updateUser, updateUserGoogle } from './controllers/updateUser.js';
 import { googleAuth, googleCallback } from './controllers/google.js';
 
 // peut etre sauvegarder le content des fichier html.
@@ -76,6 +76,7 @@ export default async function userRoutes(app) {
 	app.post('/url', getPost);
 	app.post('/registerUser', checkUserBack);
 	app.post('/updateUser', updateUser);
+	app.post('/updateUserGoogle', updateUserGoogle);
 	app.post('/loginUser', login);
 	app.post('/logout', logout);
 	app.post('/refresh', refresh);

@@ -33,7 +33,7 @@ export const refresh = async (req) => {
 	}
 	try {
 		const user = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-		const newAccessToken = generateAccessToken(user);
+		const newAccessToken = generateAccessToken(user, user.google);
 
 		const decoded = jwt.verify(newAccessToken, process.env.JWT_SECRET);
 		req.user = decoded;
