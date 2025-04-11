@@ -13,7 +13,6 @@ export const getLanguage = async (req, reply) => {
 		return reply.status(400).send({ error: "Language not supported" });
 	
 	const response = await authenticateUser(req);
-
 	//Vérifier si l'utilisateur est connecté
 	if (response.status === 200) {
 		const user = await findUserById(response.user.id);

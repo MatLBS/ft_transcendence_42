@@ -90,6 +90,7 @@ async function multiplayerClick() {
 	console.log('Multiplayer mode clicked');
 }
 
+
 async function tournamentClick() {
 	await fetch('/tournament', {
 		method: 'POST',
