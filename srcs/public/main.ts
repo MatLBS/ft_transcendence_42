@@ -1,7 +1,7 @@
 import { json } from 'stream/consumers';
 import { applyLink } from './scripts/utils.js';
 
-let language = "";
+export let language = "en"; // Langue par défaut
 
 // Définition du type pour la réponse serveur
 interface ResponseData {
@@ -115,7 +115,7 @@ function handleLinks(): void {
 	});
 }
 
-function handleLanguage(e: Event): void {
+async function handleLanguage(e: Event): Promise<void> {
 	const target = e.target as HTMLElement;
 	const languageDefault = document.getElementById('language-default');
 	
@@ -123,11 +123,20 @@ function handleLanguage(e: Event): void {
 		console.error('One or more elements for custom select are missing.');
 		return;
 	}
-
 	languageDefault.innerHTML = `
 	${target.textContent}
 	<span class="material-icons pl-2">expand_more</span>`;
 	language = target.getAttribute('data-value') || '';
+	await fetch('/updateUserLanguage', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ language }),
+	})
+		.catch((error: unknown) => {
+			console.error('Erreur lors de la récupération du contenu:', error);
+		});
+
 	recvContent(window.location.pathname);
 }
 

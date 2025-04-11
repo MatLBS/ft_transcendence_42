@@ -17,6 +17,7 @@ import { tournament } from './controllers/tournament.js';
 import { createTournament } from './controllers/createTournament.js';
 import { local } from './controllers/local.js';
 import { createLocal } from './controllers/createLocal.js';
+import { updateUserLanguage } from './controllers/updateUserLanguage.js';
 import { updateUser, updateUserGoogle } from './controllers/updateUser.js';
 import { googleAuth, googleCallback } from './controllers/google.js';
 
@@ -87,6 +88,7 @@ export default async function userRoutes(app) {
 	app.post('/createTournament', createTournament)
 	app.post('/local', local)
 	app.post('/createLocal', createLocal)
+	app.post('/updateUserLanguage', updateUserLanguage)
 	app.get('/auth/google', googleAuth)
 	app.get('/auth/google/callback', googleCallback)
 }
