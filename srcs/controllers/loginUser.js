@@ -45,7 +45,6 @@ export const loginUserGoogle = async (req, reply, email) => {
 	let accessToken, refreshToken;
 	try {
 		const user = await findUserByEmail(email);
-		console.log("user", user);
 
 		accessToken = generateAccessToken(user, 1);
 		refreshToken = generateRefreshToken(user, 1);

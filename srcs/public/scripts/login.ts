@@ -19,10 +19,19 @@ if (appDiv) {
 		if (target.tagName === "SPAN" && target.id === "login-eye") {
 			showPassword()
 		}
+		if (target.tagName === "BUTTON" && target.id === "login_button_google") {
+			googleLogin();
+		}
 	});
 }
 
-// login_button?.addEventListener('click', () => {validateLogin()});
+function googleLogin() {
+	const error_input = document.getElementById('error_input');
+	if (!error_input)
+		return;
+
+	window.location.href = "/auth/google";
+}
 
 
 function validateLogin() {
@@ -53,7 +62,7 @@ function showPassword() {
 
 	const input = document.getElementById('password') as HTMLInputElement | null;
 	let iconEye = document.getElementById('login-eye') as HTMLInputElement | null;
-	
+
 	if (!input || !iconEye)
 		return;
 

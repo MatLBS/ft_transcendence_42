@@ -63,8 +63,6 @@ async function exchangeCodeForTokens(code) {
 		};
 	}
 
-	console.log("Tokens:", data);
-
 	return {
 		access_token: data.access_token,
 		id_token: data.id_token,

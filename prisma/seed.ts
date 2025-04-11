@@ -35,7 +35,6 @@ export async function createUserGoogle (username: string, email: string, profile
 	let usernameAlreadyExist: any;
 	let i: number = 0;
 	while (true) {
-		console.log("username", username);
 		usernameAlreadyExist = await prisma.user.findFirst({
 			where: {
 				username: username,

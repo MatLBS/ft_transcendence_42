@@ -48,7 +48,6 @@ function previewImage() {
 }
 
 function validateFormGoogle() {
-	console.log("test");
 	const error_input = document.getElementById('error_input');
 	if (!error_input)
 		return;
