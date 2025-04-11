@@ -1,5 +1,5 @@
 import { app } from '../server.js';
-import { createUser } from '../dist/prisma/seed.js';
+import { createUser, updateSiteLanguage } from '../dist/prisma/seed.js';
 import { loginUser } from './loginUser.js';
 import path from 'path';
 import fs from 'fs';
@@ -54,6 +54,7 @@ export const checkUserBack = async (req, reply) => {
 	const hashedPassword = await app.bcrypt.hash(password);
 	try {
 		await createUser(username, hashedPassword, email, username + fileName);
+		await updateSiteLanguage("en");
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
