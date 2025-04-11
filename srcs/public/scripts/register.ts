@@ -10,7 +10,7 @@ if (appDiv) {
 		const target = e.target as HTMLElement;
 		applyLink(target, e);
 
-		if (target.tagName === "BUTTON" && target.id === "register_button") {
+		if (target.tagName === "BUTTON" && target.id === "confirm_button") {
 			validateForm()
 		}
 		if (target.tagName === "INPUT" && target.id === "profile_picture") {
@@ -21,6 +21,9 @@ if (appDiv) {
 		}
 		if (target.tagName === "BUTTON" && target.id === "register_button_google") {
 			googleLogin();
+		}
+		if (target.tagName === "BUTTON" && target.id === "register_button") {
+			registerUser();
 		}
 	});
 }
@@ -33,14 +36,50 @@ function googleLogin() {
 	window.location.href = "/auth/google";
 }
 
+function registerUser() {
+	const error_input = document.getElementById('error_input');
+	const password = getInputValue('password');
+	const email = getInputValue('email');
+	const username = getInputValue('username');
+	const verif_email = getInputValue('verif_email');
+
+	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
+	const profile_picture = profile_pictureElement?.files?.[0];
+
+	if (!error_input)
+		return;
+
+	const formData = new FormData();
+	formData.append('username', username);
+	formData.append('email', email);
+	formData.append('password', password);
+	if (profile_picture) {
+		formData.append('profile_picture', profile_picture);
+	}
+	formData.append('verif_email', verif_email);
+	fetch('/registerUser', {
+		method: 'POST',
+		body: formData,
+	})
+	.then(async (response) => {
+		const data = await response.json();
+		console.log("data.message = ", data.message);
+		if (data.message !== "ok") {
+			error_input.innerHTML = `<p>` + data.message + `</p>`;
+			const modal = document.getElementById('modal');
+			if (modal)
+				modal.classList.add('hidden');
+		} else {
+			recvContent('/profil');
+		}
+	})
+}
+
 function validateForm() {
 	const error_input = document.getElementById('error_input');
 	const password = getInputValue('password');
 	const email = getInputValue('email');
 	const username = getInputValue('username');
-
-	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
-	const profile_picture = profile_pictureElement?.files?.[0];
 
 	if (!error_input)
 		return;
@@ -55,22 +94,25 @@ function validateForm() {
 	formData.append('username', username);
 	formData.append('email', email);
 	formData.append('password', password);
-	if (profile_picture) {
-		formData.append('profile_picture', profile_picture);
-	}
-
-	fetch('/registerUser', {
+	fetch('/verifForm', {
 		method: 'POST',
 		body: formData,
 	})
 	.then(async (response) => {
 		const data = await response.json();
-		if (data.message === "ok") {
-			recvContent("/");
-		} else if (error_input) {
+		if (data.message !== "ok") {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
+			return;
 		}
 	})
+	const modal = document.getElementById('modal');
+	if (modal) {
+		modal.classList.remove('hidden');
+		const modalButton = document.getElementById('modal_button');
+		if (modalButton)
+			modalButton.id = 'register_button';
+	}
+	return;
 }
 
 //function to change password to text
