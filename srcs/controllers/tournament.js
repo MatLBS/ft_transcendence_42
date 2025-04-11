@@ -3,13 +3,19 @@ import ejs from 'ejs';
 import path from 'path';
 import { routes } from "../router.js";
 import { __dirname } from "../router.js";
+import { findUserById } from "../dist/prisma/seed.js";
+import { authenticateUser } from "./tokens.js";
+import { getLanguageWithoutBody } from "./getLanguage.js"
 
 export const tournament = async (req, reply) => {
 
-	const route = routes["tournament"];
+	const response = await authenticateUser(req);
+	let language = await findUserById(response.user.id)
+	language = language.language
+	const jsonLanguage = await getLanguageWithoutBody(language);
 
-	const content = await ejs.renderFile(path.join(route.dir, route.file), {message: null});
-	
-	// let content = fs.readFileSync(, 'utf8');
+
+	const route = routes["tournament"];
+	const content = await ejs.renderFile(path.join(route.dir, route.file), {message: null, jsonLanguage});
 	return (reply.send({ content }));
 }

@@ -5,6 +5,7 @@ import { routes } from "../router.js";
 import { __dirname } from "../router.js";
 import { authenticateUser } from "./tokens.js";
 import { findUserById } from "../dist/prisma/seed.js";
+import { json } from 'stream/consumers';
 
 // Fonction pour charger une page d'erreur
 const getErrorPage = (reply, response, errorCode) => {
@@ -32,6 +33,8 @@ const dontNeedLogin = (file) => ["login", "register"].includes(file);
 
 export const getPost = async (req, reply) => {
 	const file = req.body.url.split("/").pop() || "home";
+	const jsonLanguage = req.body.jsonLanguage;
+
 	let content = "", css = "", js = "", user = null, isConnected = false;
 
 	try {
@@ -50,7 +53,7 @@ export const getPost = async (req, reply) => {
 		const route = routes[file];
 		if (route) {
 			if (route.useEjs) {
-				content = await ejs.renderFile(path.join(route.dir, route.file), { user });
+				content = await ejs.renderFile(path.join(route.dir, route.file), { user, jsonLanguage });
 			} else {
 				content = fs.readFileSync(path.join(route.dir, route.file), 'utf8');
 			}

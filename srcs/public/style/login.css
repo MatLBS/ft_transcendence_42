@@ -14,15 +14,19 @@
 	   margin: 0;
 	 }
 
-	 body,
+	 /* body,
 	 input,
 	 button {
 	   font-size: var(--normal-font-size);
 	   font-family: var(--body-font);
-	 }
+	 } */
 
-	 body {
+	 /* body {
 	   color: var(--white-color);
+	 } */
+
+	 .login {
+		color: var(--white-color);
 	 }
 
 	 input,

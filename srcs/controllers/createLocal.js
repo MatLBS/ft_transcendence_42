@@ -12,8 +12,6 @@ export const createLocal = async (req, reply) => {
 	players.push(player1.username);
 	players.push(req.body.player2);
 
-	console.log("local party")
-
 	try {
 		await createLocalDb(players)
 	} catch (error) {

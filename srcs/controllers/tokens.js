@@ -14,6 +14,7 @@ export const generateRefreshToken = (user, google) => {
 export const authenticateUser = async (req) => {
 	const token = req.cookies.access_token;
 	if (!token) {
+		console.log(token)
 		return { status: 401, user: null };
 	}
 
@@ -25,6 +26,7 @@ export const authenticateUser = async (req) => {
 		return refresh(req);
 	}
 };
+
 
 export const refresh = async (req) => {
 	const refreshToken = req.cookies.refresh_token;

@@ -8,6 +8,7 @@ import fastifyFormbody from '@fastify/formbody';
 import { checkUserBack } from './controllers/createUser.js';
 import { login } from './controllers/loginUser.js';
 import { getPost } from './controllers/getPost.js';
+import { getLanguage } from './controllers/getLanguage.js';
 import { getHome } from './controllers/getHome.js';
 import { getPage } from './controllers/getPage.js';
 import { logout } from './controllers/logout.js';
@@ -16,6 +17,7 @@ import { tournament } from './controllers/tournament.js';
 import { createTournament } from './controllers/createTournament.js';
 import { local } from './controllers/local.js';
 import { createLocal } from './controllers/createLocal.js';
+import { updateUserLanguage } from './controllers/updateUserLanguage.js';
 import { updateUser, updateUserGoogle } from './controllers/updateUser.js';
 import { googleAuth, googleCallback } from './controllers/google.js';
 
@@ -71,9 +73,11 @@ export default async function userRoutes(app) {
 
 	app.register(fastifyFormbody)
 
+
 	app.get('/', getHome);
 	app.get('/:page', getPage);
 	app.post('/url', getPost);
+	app.post('/languages', getLanguage);
 	app.post('/registerUser', checkUserBack);
 	app.post('/updateUser', updateUser);
 	app.post('/updateUserGoogle', updateUserGoogle);
@@ -84,6 +88,7 @@ export default async function userRoutes(app) {
 	app.post('/createTournament', createTournament)
 	app.post('/local', local)
 	app.post('/createLocal', createLocal)
+	app.post('/updateUserLanguage', updateUserLanguage)
 	app.get('/auth/google', googleAuth)
 	app.get('/auth/google/callback', googleCallback)
 }

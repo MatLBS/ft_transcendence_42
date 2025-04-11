@@ -2,7 +2,7 @@
 	<img src="../public/images/login&register-bg.png" alt="login image" class="login__img">
 
 	<div action="" class="login__form">
-		<h1 class="login__title">Update</h1>
+		<h1 class="login__title"><%= jsonLanguage.update.title %></h1>
 		<div id="error_input" class="mb-2"></div>
 
 		<div class="login__content">
@@ -11,7 +11,7 @@
 				<div class="login__box">
 					<div class="login__box-input">
 						<input type="text" id="username" name="username" required class="login__input" value="<%= user.username %>">
-						<label for="" class="login__label">Username</label>
+						<label for="" class="login__label"><%= jsonLanguage.update.username %></label>
 					</div>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 						<div class="login__box">
 							<div class="login__box-input">
 								<input type="email" id="email" required class="login__input" value="<%= user.email %>">
-								<label for="" class="login__label">Email</label>
+								<label for="" class="login__label"><%= jsonLanguage.update.email %></label>
 							</div>
 						</div>
 					</div>
@@ -33,7 +33,7 @@
 							<i class="ri-lock-2-line login__icon"></i>
 							<div class="login__box-input">
 								<input type="password" required class="login__input" id="prev_password">
-								<label for="" class="login__label">Previous Password</label>
+								<label for="" class="login__label"><%= jsonLanguage.update.prevPassword %></label>
 								<i class="ri-eye-off-line login__eye"></i>
 							</div>
 						</div>
@@ -47,7 +47,7 @@
 						<i class="ri-lock-2-line login__icon"></i>
 						<div class="login__box-input">
 							<input type="password" id="new_password" required class="login__input">
-							<label for="" class="login__label">New Password</label>
+							<label for="" class="login__label"><%= jsonLanguage.update.newPassword %></label>
 							<i class="ri-eye-off-line login__eye"></i>
 						</div>
 						</div>
@@ -76,7 +76,7 @@
 					/>
 				</div>
 			</div>
-			<button id="<%= !user.google ? 'update_button' : 'update_button_google' %>" class="login__button text-black text-center">Confirm</button>
+			<button id="<%= !user.google ? 'update_button' : 'update_button_google' %>" class="login__button text-black text-center"><%= jsonLanguage.update.button %></button>
 		</div>
 	</div>
 </div>

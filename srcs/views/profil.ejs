@@ -6,6 +6,7 @@
 				<img
 					src="<%= user.profilePicture %>"
 					alt="Photo de profil de <%= user.username %>"
+					style="max-width: 400px;"
 				/>
 			</div>
 			<h2 id="username" class="underline">
@@ -13,22 +14,22 @@
 			</h2>
 		</div>
 	</div>
-	<h2 class="stats__title text-center">Statistics</h2>
+	<h2 class="stats__title text-center"><%= jsonLanguage.profil.statistics %></h2>
 	<div class="stats flex justify-center align-center gap-16">
 		<div id="match__history" class="w-2/5 border-2 border-gray-300">
-			<h2 class="text-center p-5">Match History</h2>
+			<h2 class="text-center p-5"><%= jsonLanguage.profil.matchHistory %></h2>
 			<div class="flex justify-around align-center">
-				<div id="match__results">Result</div>
-				<div id="match__scores">Score</div>
-				<div id="match__opponents">Opponent</div>
+				<div id="match__results"><%= jsonLanguage.profil.result %></div>
+				<div id="match__scores"><%= jsonLanguage.profil.score %></div>
+				<div id="match__opponents"><%= jsonLanguage.profil.opponent %></div>
 			</div>
 		</div>
 		<div id="graphs" class="w-2/5 border-2 border-gray-300">
-			<h2 class="text-center p-5">Graphics</h2>
+			<h2 class="text-center p-5"><%= jsonLanguage.profil.graphics %></h2>
 			<div class="flex justify-around align-center">
 				<div id="global_graphs"></div>
 			</div>
 		</div>
 	</div>
 </div>
-<a class="my" href="/update">update</a>
+<a class="my" href="/update"><%= jsonLanguage.profil.update %></a>
