@@ -1,9 +1,9 @@
-import { Scene, Engine, SceneLoader, FreeCamera, Vector3, HemisphericLight, CannonJSPlugin, MeshBuilder, PhysicsImpostor, ArcRotateCamera, PointLight, StandardMaterial, Color3, AbstractMesh, ActionManager, SetValueAction, ExecuteCodeAction, FlowGraphConsoleLogBlock, KeyboardEventTypes, TrailMesh, ParticleSystem, Color4, Texture } from "@babylonjs/core";
+import { Scene, Engine, SceneLoader, FreeCamera, Vector3, HemisphericLight, CannonJSPlugin, MeshBuilder, PhysicsImpostor, ArcRotateCamera, PointLight, StandardMaterial, Color3, AbstractMesh, ActionManager, SetValueAction, ExecuteCodeAction, FlowGraphConsoleLogBlock, KeyboardEventTypes, TrailMesh, ParticleSystem, Color4, Texture, StorageBuffer } from "@babylonjs/core";
 import "@babylonjs/loaders";
 import * as CANNON from "cannon";
-import * as GUI from "@babylonjs/gui"; 
+import * as GUI from "@babylonjs/gui";
 
-const WINPOINT = 100;
+const WINPOINT = 2;
 class FirstPersonController {
 	scene: Scene;
 	engine: Engine;
@@ -12,21 +12,35 @@ class FirstPersonController {
 	ball!: AbstractMesh;
 	private player1Score: number;
 	private player2Score: number;
+	private player1name: string = "";
+	private player2name: string = "";
+	private win: boolean = false;
 	private scoreText!: GUI.TextBlock;
 	private explosionEffect!: ParticleSystem;
 
 	constructor() {
 		//var canvas = document.createElement("canvas");
-		const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
-        /* canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        canvas.id = "gameCanvas"; */
-        //document.body.appendChild(canvas);
+		const canvas = document.getElementById("renderCanvas");
+		if (!(canvas instanceof HTMLCanvasElement)) {
+			throw new Error("Element with id 'renderCanvas' is not a canvas element.");
+		}
 		this.engine = new Engine(canvas, true);
 		this.scene = this.CreateScene();
 		this.player1Score = 0;
 		this.player2Score = 0;
 
+		fetch('/getUser', {
+			method: 'GET',
+			credentials: 'include',
+		})
+			.then(async (response) => {
+				const data = await response.json();
+				this.player1name = data.user.username as string;
+			})
+		const usernameElement = document.getElementById("username") as HTMLInputElement | null;
+		const player2 = usernameElement?.value;
+		this.player2name = player2 || "Player 2";
+		console.log("username2 = ", this.player2name);
 		this.CreateMeshes();
 		this.createExplosionEffect();
 		this.engine.runRenderLoop(() => {
@@ -35,18 +49,17 @@ class FirstPersonController {
 	}
 
 	createGame(): void {
-//		if (this.player1Score < WINPOINT && this.player2Score < WINPOINT)
 		this.scene.render();
 
-		if (this.player1Score === WINPOINT)
-		{
+		if (this.player1Score === WINPOINT && this.win == false) {
+			this.win = true;
 			console.log("player1 won");
-			this.showWinScreen("Player 1");
+			this.showWinScreen(this.player1name);
 		}
-		if (this.player2Score === WINPOINT)
-		{
+		if (this.player2Score === WINPOINT && this.win == false) {
+			this.win = true;
 			console.log("player2 won");
-			this.showWinScreen("Player 2");
+			this.showWinScreen(this.player2name);
 		}
 
 	}
@@ -57,12 +70,12 @@ class FirstPersonController {
 		hemilight.intensity = 1;
 
 		const advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-        this.scoreText = new GUI.TextBlock();
-        this.scoreText.text = "0 - 0";
-        this.scoreText.color = "white";
-        this.scoreText.fontSize = 48;
-        this.scoreText.top = -250;
-        advancedTexture.addControl(this.scoreText);
+		this.scoreText = new GUI.TextBlock();
+		this.scoreText.text = "0 - 0";
+		this.scoreText.color = "white";
+		this.scoreText.fontSize = 48;
+		this.scoreText.top = -250;
+		advancedTexture.addControl(this.scoreText);
 
 		scene.enablePhysics(new Vector3(0, 0, 0), new CannonJSPlugin(true, 0, CANNON));
 
@@ -79,6 +92,8 @@ class FirstPersonController {
 
 	countDown(): void {
 		// Test du compte a rebour 
+		if (this.player1Score >= WINPOINT || this.player2Score >= WINPOINT)
+			return;
 		const advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 		const countdownText = new GUI.TextBlock();
 		countdownText.text = "";
@@ -95,13 +110,14 @@ class FirstPersonController {
 				setTimeout(countdown, 500);
 			} else {
 				countdownText.text = "";
+				let rand = Math.random();
+				if (rand > 0.45 && rand < 0.55)
+					rand = 0.45;
 				const startDirection = new Vector3(
-					Math.random() > 0.5 ? 1 : -1,
+					rand > 0.5 ? 1 : -1,
 					0,
-					(Math.random() - 0.5) * 10.0
+					(rand - 0.5) * 10.0
 				).normalize();
-				//startDirection = new Vector3(0,0,1);
-
 				this.ball.physicsImpostor!.setLinearVelocity(startDirection.scale(5));
 			}
 		};
@@ -199,67 +215,68 @@ class FirstPersonController {
 			velocity!.normalize().scaleInPlace(10); // Vitesse constante
 			this.ball.physicsImpostor!.setLinearVelocity(velocity);
 		});
-		
+
 		this.CreateAction();
 		//this.addBallTrail();
 		this.handleCollision(topWall, bottomWall);
 		this.handleGoalCollisions(leftGoal, rightGoal);
-		
+
 
 	}
 
 	private handleGoalCollisions(leftGoal: AbstractMesh, rightGoal: AbstractMesh): void {
-        // Handle left goal (player 2 scores)
-        this.ball.physicsImpostor!.registerOnPhysicsCollide(
-            leftGoal.physicsImpostor!,
-            () => this.handleGoalScored(2)
-        );
+		// Handle left goal (player 2 scores)
+		this.ball.physicsImpostor!.registerOnPhysicsCollide(
+			leftGoal.physicsImpostor!,
+			() => this.handleGoalScored(2)
+		);
 
-        // Handle right goal (player 1 scores)
-        this.ball.physicsImpostor!.registerOnPhysicsCollide(
-            rightGoal.physicsImpostor!,
-            () => this.handleGoalScored(1)
-        );
-    }
+		// Handle right goal (player 1 scores)
+		this.ball.physicsImpostor!.registerOnPhysicsCollide(
+			rightGoal.physicsImpostor!,
+			() => this.handleGoalScored(1)
+		);
+	}
 
 	private handleGoalScored(scoringPlayer: number): void {
-        // Trigger explosion at ball position
-        this.explosionEffect.emitter = this.ball.position.clone();
-        this.explosionEffect.start();
-        
-        // Stop after 1 second
-        setTimeout(() => {
-            this.explosionEffect.stop();
-        }, 1000);
+		// Trigger explosion at ball position
+		this.explosionEffect.emitter = this.ball.position.clone();
+		this.explosionEffect.start();
 
-        // Hide ball temporarily
-        this.ball.setEnabled(false);
-        
-        // Update score
-        if (scoringPlayer === 1) {
-            this.player1Score++;
-        } else {
-            this.player2Score++;
-        }
-        this.scoreText.text = `${this.player1Score} - ${this.player2Score}`;
+		// Stop after 1 second
+		setTimeout(() => {
+			this.explosionEffect.stop();
+		}, 1000);
 
-        // Reset ball after explosion
-        setTimeout(() => {
-            this.resetBall();
-            this.ball.setEnabled(true);
-        }, 1500);
-    }
+		// Hide ball temporarily
+		this.ball.setEnabled(false);
 
-    private resetBall(): void {
-        // Stop ball and center position
-        this.ball.position = new Vector3(0, 0.5, 0);
-        this.ball.physicsImpostor!.setLinearVelocity(Vector3.Zero());
-        
-        // Start countdown again
-        this.countDown();
-    }
+		// Update score
+		if (scoringPlayer === 1) {
+			this.player1Score++;
+		} else {
+			this.player2Score++;
+		}
+		this.scoreText.text = `${this.player1Score} - ${this.player2Score}`;
 
-	private handleCollision(topWall: AbstractMesh, bottomWall: AbstractMesh): void{
+		// Reset ball after explosion
+		setTimeout(() => {
+			this.resetBall();
+			this.ball.setEnabled(true);
+		}, 1500);
+
+	}
+
+	private resetBall(): void {
+		// Stop ball and center position
+		this.ball.position = new Vector3(0, 0.5, 0);
+		this.ball.physicsImpostor!.setLinearVelocity(Vector3.Zero());
+
+		// Start countdown again
+		this.countDown();
+	}
+
+	private handleCollision(topWall: AbstractMesh, bottomWall: AbstractMesh): void {
 		this.ball.physicsImpostor!.registerOnPhysicsCollide(
 			this.paddle1.physicsImpostor!,
 			(collider, collidedAgainst, point) => {
@@ -299,15 +316,16 @@ class FirstPersonController {
 
 	private handlePaddleCollision(paddle: PhysicsImpostor) {
 		const paddleMesh = paddle.object as AbstractMesh;
-		const impactFactor = (this.ball.position.x - paddleMesh.position.x) * 0.5;
-
+		const impactFactor = 1 - ((this.ball.position.x - paddleMesh.position.x) * 2);
+		console.log("ball pos = %f and paddle pos = %f", this.ball.position.x, paddleMesh.position.x);
+		console.log("impact factor = ", impactFactor);
 		// Get current velocity
 		const currentVelocity = this.ball.physicsImpostor!.getLinearVelocity();
 		if (!currentVelocity) return;
-
+		console.log("current velocity = ", currentVelocity.x);
 		// Adjust direction based on paddle impact
 		const newVelocity = new Vector3(
-			currentVelocity.x + impactFactor, // Add impact factor to X-axis
+			currentVelocity.x * impactFactor, // Add impact factor to X-axis
 			0,                               // Keep Y-axis constant for 2D
 			-currentVelocity.z               // Reverse Z-axis to bounce back
 		);
@@ -354,49 +372,49 @@ class FirstPersonController {
 	}
 
 	private createExplosionEffect(): void {
-        // Create particle system
-        this.explosionEffect = new ParticleSystem("explosion", 1000, this.scene);
-        
-        // Texture for particles
-        this.explosionEffect.particleTexture = new Texture("https://www.babylonjs-playground.com/textures/flare.png", this.scene);
+		// Create particle system
+		this.explosionEffect = new ParticleSystem("explosion", 1000, this.scene);
 
-        // Where the particles come from
-        this.explosionEffect.emitter = new Vector3(0, 0, 0);
-        this.explosionEffect.minEmitBox = new Vector3(-0.5, -0.5, -0.5);
-        this.explosionEffect.maxEmitBox = new Vector3(0.5, 0.5, 0.5);
+		// Texture for particles
+		this.explosionEffect.particleTexture = new Texture("https://www.babylonjs-playground.com/textures/flare.png", this.scene);
 
-        // Colors
-        this.explosionEffect.color1 = new Color4(1, 0.8, 0, 1.0);
-        this.explosionEffect.color2 = new Color4(1, 0.2, 0, 1.0);
-        this.explosionEffect.colorDead = new Color4(0, 0, 0, 0.0);
+		// Where the particles come from
+		this.explosionEffect.emitter = new Vector3(0, 0, 0);
+		this.explosionEffect.minEmitBox = new Vector3(-0.5, -0.5, -0.5);
+		this.explosionEffect.maxEmitBox = new Vector3(0.5, 0.5, 0.5);
 
-        // Size
-        this.explosionEffect.minSize = 0.1;
-        this.explosionEffect.maxSize = 0.5;
+		// Colors
+		this.explosionEffect.color1 = new Color4(1, 0.8, 0, 1.0);
+		this.explosionEffect.color2 = new Color4(1, 0.2, 0, 1.0);
+		this.explosionEffect.colorDead = new Color4(0, 0, 0, 0.0);
 
-        // Lifetime
-        this.explosionEffect.minLifeTime = 0.3;
-        this.explosionEffect.maxLifeTime = 0.8;
+		// Size
+		this.explosionEffect.minSize = 0.1;
+		this.explosionEffect.maxSize = 0.5;
 
-        // Emission
-        this.explosionEffect.emitRate = 1000;
-        this.explosionEffect.blendMode = ParticleSystem.BLENDMODE_ONEONE;
+		// Lifetime
+		this.explosionEffect.minLifeTime = 0.3;
+		this.explosionEffect.maxLifeTime = 0.8;
 
-        // Speed
-        this.explosionEffect.minEmitPower = 2;
-        this.explosionEffect.maxEmitPower = 4;
-        this.explosionEffect.gravity = new Vector3(0, -2, 0);
+		// Emission
+		this.explosionEffect.emitRate = 1000;
+		this.explosionEffect.blendMode = ParticleSystem.BLENDMODE_ONEONE;
 
-        // Angular speed
-        this.explosionEffect.minAngularSpeed = 0;
-        this.explosionEffect.maxAngularSpeed = Math.PI;
+		// Speed
+		this.explosionEffect.minEmitPower = 2;
+		this.explosionEffect.maxEmitPower = 4;
+		this.explosionEffect.gravity = new Vector3(0, -2, 0);
 
-        // Disable by default
-        this.explosionEffect.stop();
+		// Angular speed
+		this.explosionEffect.minAngularSpeed = 0;
+		this.explosionEffect.maxAngularSpeed = Math.PI;
+
+		// Disable by default
+		this.explosionEffect.stop();
 	}
 
-// Function to display the win screen
-	private showWinScreen(winner : string) : void {
+	// Function to display the win screen
+	private showWinScreen(winner: string): void {
 		const advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
 		// Create a fullscreen rectangle for background
@@ -408,7 +426,7 @@ class FirstPersonController {
 		backgroundRect.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
 		backgroundRect.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
 		advancedTexture.addControl(backgroundRect);
-		
+
 		// Create a text block for the win message
 		const winText = new GUI.TextBlock();
 		winText.text = winner + " Win!";
@@ -418,7 +436,7 @@ class FirstPersonController {
 		winText.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
 		advancedTexture.addControl(winText);
 
-		
+
 
 		// Create a button to allow restarting the game
 		const restartButton = GUI.Button.CreateSimpleButton("restartButton", "Restart Game");
@@ -432,13 +450,22 @@ class FirstPersonController {
 		restartButton.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
 
 		// Attach click event to the button
-		restartButton.onPointerUpObservable.add(function() {
+		restartButton.onPointerUpObservable.add(() => {
 			// Clear UI elements (if you have other screens, manage them accordingly)
 			advancedTexture.dispose();
-			// Call your function to restart the game. Replace with your own game reset logic.
+			this.player2Score = 0;
+			this.player1Score = 0;
+			this.win = false;
+
+			// Reset ball and paddles
+			this.resetBall();
+			this.paddle1.position.x = 0;
+			this.paddle2.position.x = 0;
+
+			// to be redone 
 		});
-			
-			advancedTexture.addControl(restartButton);
+
+		advancedTexture.addControl(restartButton);
 	}
 }
 
