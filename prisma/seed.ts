@@ -31,6 +31,40 @@ export async function createUser (username: string, password: string, email: str
 	})
 }
 
+export async function createUserGoogle (username: string, email: string, profilePicture: string) {
+	let usernameAlreadyExist: any;
+	let i: number = 0;
+	while (true) {
+		usernameAlreadyExist = await prisma.user.findFirst({
+			where: {
+				username: username,
+			},
+		})
+		if (!usernameAlreadyExist)
+			break;
+		username += i;
+		i++;
+	}
+
+	const emailAlreadyExist = await prisma.user.findFirst({
+		where: {
+			email: email,
+		},
+	})
+
+	if (emailAlreadyExist)
+		return;
+
+	await prisma.user.create({
+		data: {
+			username: username,
+			email: email,
+			profilePicture: profilePicture,
+		},
+	})
+	return;
+}
+
 export async function updateUserDb (id: number, username: string, password: string, email: string, profilePicture?: string) {
 	const usernameAlreadyExist = await prisma.user.findFirst({
 		where: {
@@ -55,10 +89,39 @@ export async function updateUserDb (id: number, username: string, password: stri
 	if (emailAlreadyExist)
 		throw new Error(`The email \"${email}\" already exists for a user`);
 
-	const updateUser: { username: string, password: string, email: string, profilePicture?: string } = {
+	const updateUser: { username: string, password?: string, email: string, profilePicture?: string } = {
 		username: username,
 		email: email,
-		password: password,
+	};
+	if (password)
+		updateUser.password = password;
+	if (profilePicture)
+		updateUser.profilePicture = profilePicture;
+	const user = await prisma.user.update({
+		where: {
+			id: id,
+		},
+		data: updateUser,
+	})
+	if (!user)
+		throw new Error(`User do not exits in the database.`)
+}
+
+export async function updateUserGoogleDb (id: number, username: string, profilePicture?: string) {
+	const usernameAlreadyExist = await prisma.user.findFirst({
+		where: {
+			username: username,
+			NOT: {
+				id: id,
+			},
+		},
+	})
+
+	if (usernameAlreadyExist)
+		throw new Error(`The username \"${username}\" already exists`);
+
+	const updateUser: { username: string, profilePicture?: string } = {
+		username: username,
 	};
 	if (profilePicture)
 		updateUser.profilePicture = profilePicture;
@@ -122,6 +185,17 @@ export async function findUserById(id: number) {
 	});
 	if (!user)
 		throw new Error(`User with id '${id}' do not exits in the database.`)
+	return user;
+}
+
+export async function findUserByEmail(email: string) {
+	const user = await prisma.user.findFirst({
+		where: {
+			email: email,
+		},
+	});
+	if (!user)
+		throw new Error(`Email '${email}' do not exits in the database.`)
 	return user;
 }
 
