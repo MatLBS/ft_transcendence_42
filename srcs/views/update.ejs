@@ -17,43 +17,45 @@
 			</div>
 
 			<div class="login__content">
-				<div>
-					<i class="bx bx-lock-alt"></i>
-					<div class="login__box">
-						<div class="login__box-input">
-							<input type="email" id="email" required class="login__input" value="<%= user.email %>">
-							<label for="" class="login__label"><%= jsonLanguage.update.email %></label>
+				<% if (!user.google) { %>
+					<div>
+						<i class="bx bx-lock-alt"></i>
+						<div class="login__box">
+							<div class="login__box-input">
+								<input type="email" id="email" required class="login__input" value="<%= user.email %>">
+								<label for="" class="login__label"><%= jsonLanguage.update.email %></label>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="login__box flex align-center">
-					<div class="w-11/12">
-						<i class="ri-lock-2-line login__icon"></i>
-						<div class="login__box-input">
-							<input type="password" required class="login__input" id="prev_password">
-							<label for="" class="login__label"><%= jsonLanguage.update.prevPassword %></label>
-							<i class="ri-eye-off-line login__eye"></i>
+					<div class="login__box flex align-center">
+						<div class="w-11/12">
+							<i class="ri-lock-2-line login__icon"></i>
+							<div class="login__box-input">
+								<input type="password" required class="login__input" id="prev_password">
+								<label for="" class="login__label"><%= jsonLanguage.update.prevPassword %></label>
+								<i class="ri-eye-off-line login__eye"></i>
+							</div>
+						</div>
+						<div class="w-1/12 flex items-center justify-center">
+							<span class="material-symbols-outlined" id="prev_password_eye">visibility_off</span>
 						</div>
 					</div>
-					<div class="w-1/12 flex items-center justify-center">
-						<span class="material-symbols-outlined" id="prev_password_eye">visibility_off</span>
-					</div>
-				</div>
-				
-				<div class="login__box flex align-center">
-					<div class="w-11/12">
+
+					<div class="login__box flex align-center">
+						<div class="w-11/12">
 						<i class="ri-lock-2-line login__icon"></i>
 						<div class="login__box-input">
 							<input type="password" id="new_password" required class="login__input">
 							<label for="" class="login__label"><%= jsonLanguage.update.newPassword %></label>
 							<i class="ri-eye-off-line login__eye"></i>
 						</div>
+						</div>
+						<div class="w-1/12 flex items-center justify-center">
+							<span class="material-symbols-outlined" id="new_password_eye">visibility_off</span>
+						</div>
 					</div>
-					<div class="w-1/12 flex items-center justify-center">
-						<span class="material-symbols-outlined" id="new_password_eye">visibility_off</span>
-					</div>
-				</div>
+				<% } %>
 
 				<div class="login__content">
 					<div>
@@ -66,7 +68,7 @@
 
 				<div class="flex justify-center">
 					<img
-						src="/uploads/<%= user.profilePicture %>"
+						src="<%= user.profilePicture %>"
 						id="preview_image"
 						alt="Photo de profil de <%= user.username %>"
 						class="profile-image rounded-full h-32 w-auto"
@@ -74,8 +76,7 @@
 					/>
 				</div>
 			</div>
-
-			<button id="update_button" class="login__button text-black text-center"><%= jsonLanguage.update.button %></button>
+			<button id="<%= !user.google ? 'update_button' : 'update_button_google' %>" class="login__button text-black text-center"><%= jsonLanguage.update.button %></button>
 		</div>
 	</div>
 </div>

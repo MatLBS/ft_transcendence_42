@@ -4,14 +4,21 @@ import {__dirname} from './router.js';
 import fastifyBcrypt from 'fastify-bcrypt';
 import fastifyCookie from '@fastify/cookie';
 import fastifyMultipart from '@fastify/multipart';
+import cors from '@fastify/cors';
 
 export const app = Fastify({
-	// logger: true,
+	logger: true,
 });
 
 app.register(fastifyCookie);
 
 app.register(fastifyBcrypt);
+
+app.register(cors, {
+	origin: ["https://accounts.google.com", "http://localhost:3000"], // Add allowed origins
+	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
+	credentials: true, // Allow cookies to be sent with requests
+});
 
 app.register(fastifyMultipart, {
 	limits: {

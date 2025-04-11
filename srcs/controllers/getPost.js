@@ -26,7 +26,7 @@ const getErrorPage = (reply, response, errorCode) => {
 };
 
 // Vérifie si une page nécessite une connexion
-const needLogin = (file) => ["admin", "profil", "game"].includes(file);
+const needLogin = (file) => ["admin", "profil", "game", "update"].includes(file);
 
 // Vérifie si une page nécessite que le user ne soit pas connecté
 const dontNeedLogin = (file) => ["login", "register"].includes(file);
@@ -46,6 +46,7 @@ export const getPost = async (req, reply) => {
 			isConnected = true;
 			if (dontNeedLogin(file)) return getErrorPage(reply, response, 403);
 			user = await findUserById(response.user.id);
+			user.google = response.user.google;
 		}
 
 		// Recherche de la route correspondante

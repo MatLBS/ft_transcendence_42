@@ -53,7 +53,7 @@ export const checkUserBack = async (req, reply) => {
 
 	const hashedPassword = await app.bcrypt.hash(password);
 	try {
-		await createUser(username, hashedPassword, email, username + fileName);
+		await createUser(username, hashedPassword, email, '/uploads/' + username + fileName);
 		await updateSiteLanguage("en");
 	} catch (error) {
 		return reply.send({message: error.message});
