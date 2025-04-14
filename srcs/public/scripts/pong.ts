@@ -3,13 +3,15 @@ import "@babylonjs/loaders";
 import * as CANNON from "cannon";
 import * as GUI from "@babylonjs/gui";
 
-const WINPOINT = 2;
+const WINPOINT = 11;
 class FirstPersonController {
 	scene: Scene;
 	engine: Engine;
 	paddle1!: AbstractMesh;
 	paddle2!: AbstractMesh;
 	ball!: AbstractMesh;
+	private local:boolean;
+	private predictDir = 0;
 	private player1Score: number;
 	private player2Score: number;
 	private player1name: string = "";
@@ -18,12 +20,14 @@ class FirstPersonController {
 	private scoreText!: GUI.TextBlock;
 	private explosionEffect!: ParticleSystem;
 
-	constructor() {
-		//var canvas = document.createElement("canvas");
+	constructor(isLocal:boolean) {
+		console.log("start");
 		const canvas = document.getElementById("renderCanvas");
 		if (!(canvas instanceof HTMLCanvasElement)) {
 			throw new Error("Element with id 'renderCanvas' is not a canvas element.");
 		}
+		this.local = isLocal;
+		const gameType = canvas.getAttribute('canva-game');
 		this.engine = new Engine(canvas, true);
 		this.scene = this.CreateScene();
 		this.player1Score = 0;
@@ -37,20 +41,35 @@ class FirstPersonController {
 				const data = await response.json();
 				this.player1name = data.user.username as string;
 			})
-		const usernameElement = document.getElementById("username") as HTMLInputElement | null;
-		const player2 = usernameElement?.value;
-		this.player2name = player2 || "Player 2";
-		console.log("username2 = ", this.player2name);
+		if (isLocal === true)
+		{
+			const usernameElement = document.getElementById("username") as HTMLInputElement | null;
+			const player2 = usernameElement?.value;
+			this.player2name = player2 || "Player 2";
+		}
+		else{
+			this.player2name = "The machiavelic computer";
+		}
 		this.CreateMeshes();
 		this.createExplosionEffect();
+		if (this.local === false)
+		{
+			setInterval(() => {
+				this.predictBall()
+				//console.log ("predic = ", this.predictDir);
+			} , 1000);
+		}
 		this.engine.runRenderLoop(() => {
 			this.createGame();
 		});
+
+		// Exemple d'arrêt automatique lorsque l'utilisateur quitte la page
 	}
 
 	createGame(): void {
 		this.scene.render();
-
+		if (this.local === false)
+			this.playAI();
 		if (this.player1Score === WINPOINT && this.win == false) {
 			this.win = true;
 			console.log("player1 won");
@@ -287,7 +306,6 @@ class FirstPersonController {
 			this.paddle2.physicsImpostor!,
 			(collider, collidedAgainst, point) => {
 				this.handlePaddleCollision(collidedAgainst);
-				console.log("paddle2");
 			}
 		);
 
@@ -316,22 +334,25 @@ class FirstPersonController {
 
 	private handlePaddleCollision(paddle: PhysicsImpostor) {
 		const paddleMesh = paddle.object as AbstractMesh;
-		const impactFactor = 1 - ((this.ball.position.x - paddleMesh.position.x) * 2);
-		console.log("ball pos = %f and paddle pos = %f", this.ball.position.x, paddleMesh.position.x);
-		console.log("impact factor = ", impactFactor);
-		// Get current velocity
+		// Dimensions du paddle (supposons que le paddle s'étend sur l'axe Z)
+		const paddleHeight = paddleMesh.scaling.x;
+		// Position relative de la balle par rapport au centre du paddle (axe Z)
+		const hitPosition = (this.ball.position.x - paddleMesh.position.x) / (paddleHeight / 2);
+		// Facteur d'impact entre -1 (bas) et 1 (haut)
+		const impactFactor = Math.max(-1, Math.min(1, hitPosition));
+		console.log("impac ", impactFactor);
 		const currentVelocity = this.ball.physicsImpostor!.getLinearVelocity();
 		if (!currentVelocity) return;
-		console.log("current velocity = ", currentVelocity.x);
-		// Adjust direction based on paddle impact
+
+		// Conserver la direction X inverse et ajuster la direction Z
 		const newVelocity = new Vector3(
-			currentVelocity.x * impactFactor, // Add impact factor to X-axis
-			0,                               // Keep Y-axis constant for 2D
-			-currentVelocity.z               // Reverse Z-axis to bounce back
+			impactFactor * Math.abs(currentVelocity.x), 
+			0,
+			-currentVelocity.z, // Inverser l'axe X
 		);
 
-		// Normalize and scale to maintain consistent speed with a slight increase
-		const speed = currentVelocity.length() * 1.1; // Increase velocity magnitude by 10%
+		// Ajuster la vitesse globale
+		const speed = currentVelocity.length() * 1.1;
 		newVelocity.normalize().scaleInPlace(speed);
 
 		this.ball.physicsImpostor!.setLinearVelocity(newVelocity);
@@ -354,11 +375,14 @@ class FirstPersonController {
 				}
 
 				// Contrôles raquette 2
-				if (kbInfo.event.key === "ArrowUp") {
-					this.paddle2.position.x = Math.min(this.paddle2.position.x + 0.4, maxX);
-				}
-				if (kbInfo.event.key === "ArrowDown") {
-					this.paddle2.position.x = Math.max(this.paddle2.position.x - 0.4, minX);
+				if (this.local === true)
+				{
+					if (kbInfo.event.key === "ArrowUp") {
+						this.paddle2.position.x = Math.min(this.paddle2.position.x + 0.4, maxX);
+					}
+					if (kbInfo.event.key === "ArrowDown") {
+						this.paddle2.position.x = Math.max(this.paddle2.position.x - 0.4, minX);
+					}
 				}
 			}
 		});
@@ -467,6 +491,77 @@ class FirstPersonController {
 
 		advancedTexture.addControl(restartButton);
 	}
+
+	private predictBall():number{
+		let dirX = 0;
+		let dirZ = 0;
+		dirZ = this.ball.physicsImpostor!.getLinearVelocity()?.z || 0;
+		dirX = this.ball.position.x;
+/* 		console.log ("dir x = ", dirX);
+		console.log ("dirZ = ", dirZ); */
+		if (dirZ > 0)
+			dirX = 0;
+		this.predictDir = dirX;
+		return dirX;
+	}
+
+	private playAI():void
+	{
+		const minX = -3.75;
+		const maxX = 3.75;
+		const dirDiff = this.paddle2.position.x - this.predictDir;
+		if (dirDiff + 0.4 < 0) {
+			this.paddle2.position.x = Math.min(this.paddle2.position.x + 0.4, maxX);
+		}
+		else if (dirDiff - 0.4 > 0) {
+			this.paddle2.position.x = Math.max(this.paddle2.position.x - 0.4, minX);
+		}
+	}
+
+	stop(): void {
+		console.log("Arrêt du jeu");
+		// Arrêter la boucle de rendu
+		this.engine.stopRenderLoop();
+		// Libérer les ressources de la scène et du moteur
+		this.scene.dispose();
+		this.engine.dispose();
+	}
 }
 
-new FirstPersonController();
+let currentGameInstance: FirstPersonController | null = null;
+
+const gameElement = document.getElementById('game');
+if (gameElement) {
+    gameElement.addEventListener('stop', () => {
+        console.log("Stop event received");
+        if (currentGameInstance) {
+            currentGameInstance.stop();
+            currentGameInstance = null; // Nullify the instance after stopping
+        }
+    });
+}
+
+function createNewGame(isLocal:boolean): void {
+    // If there is an existing game instance, stop and delete it
+	console.log("going to script new");
+    if (currentGameInstance) {
+        currentGameInstance.stop();
+    }
+
+    // Create a new game instance
+    currentGameInstance = new FirstPersonController(isLocal);
+}
+
+document.addEventListener('click', (event) => {
+	const target = event.target as HTMLElement;
+	if (target && target.id === 'soloButton') {
+		createNewGame(false);
+	}
+});
+
+document.addEventListener('click', (event) => {
+	const target = event.target as HTMLElement;
+	if (target && target.id === 'buttonValidation') {
+		createNewGame(true);
+	}
+});
