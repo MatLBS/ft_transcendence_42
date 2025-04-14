@@ -262,3 +262,10 @@ export async function createLocalDb(players: Array<string>) {
 			throw new Error(`Failed to create a player for local party.`)
 	}
 }
+
+export async function updateUserLanguageDB(id: number, newLanguage: string) {
+	const userToUpdate = await prisma.user.update({
+		where: { id: id },
+		data: { language: newLanguage }
+	})
+}

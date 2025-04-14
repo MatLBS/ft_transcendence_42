@@ -26,6 +26,7 @@ export const authenticateUser = async (req) => {
 	}
 };
 
+
 export const refresh = async (req) => {
 	const refreshToken = req.cookies.refresh_token;
 	if (!refreshToken) {
