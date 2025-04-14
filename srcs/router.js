@@ -5,8 +5,8 @@ import ejs from 'ejs';
 import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
 import fastifyFormbody from '@fastify/formbody';
-import { checkUserBack } from './controllers/createUser.js';
-import { login } from './controllers/loginUser.js';
+import { checkUserBack, verifFormRegister } from './controllers/createUser.js';
+import { login, verifLogin } from './controllers/loginUser.js';
 import { getPost } from './controllers/getPost.js';
 import { getLanguage } from './controllers/getLanguage.js';
 import { getHome } from './controllers/getHome.js';
@@ -79,16 +79,21 @@ export default async function userRoutes(app) {
 	app.post('/url', getPost);
 	app.post('/languages', getLanguage);
 	app.post('/registerUser', checkUserBack);
+	app.post('/verifForm', verifFormRegister);
+
+	app.post('/login', login);
+	app.post('/verifLogin', verifLogin);
+
 	app.post('/updateUser', updateUser);
 	app.post('/updateUserGoogle', updateUserGoogle);
-	app.post('/loginUser', login);
+
 	app.post('/logout', logout);
 	app.post('/refresh', refresh);
-	app.post('/tournament', tournament)
-	app.post('/createTournament', createTournament)
-	app.post('/local', local)
-	app.post('/createLocal', createLocal)
-	app.post('/updateUserLanguage', updateUserLanguage)
-	app.get('/auth/google', googleAuth)
-	app.get('/auth/google/callback', googleCallback)
+	app.post('/tournament', tournament);
+	app.post('/createTournament', createTournament);
+	app.post('/local', local);
+	app.post('/createLocal', createLocal);
+	app.get('/auth/google', googleAuth);
+	app.get('/auth/google/callback', googleCallback);
+	app.post('/updateUserLanguage', updateUserLanguage);
 }

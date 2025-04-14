@@ -14,7 +14,6 @@ export const generateRefreshToken = (user, google) => {
 export const authenticateUser = async (req) => {
 	const token = req.cookies.access_token;
 	if (!token) {
-		console.log(token)
 		return { status: 401, user: null };
 	}
 
