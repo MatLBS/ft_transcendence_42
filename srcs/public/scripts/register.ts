@@ -25,6 +25,11 @@ if (appDiv) {
 		if (target.tagName === "BUTTON" && target.id === "register_button") {
 			registerUser();
 		}
+		if (target.tagName === "SPAN" && target.id === "close-modal") {
+			const modal = document.getElementById('modal');
+			if (modal)
+				modal.classList.add('hidden');
+		}
 	});
 }
 
@@ -38,6 +43,8 @@ function googleLogin() {
 
 function registerUser() {
 	const error_input = document.getElementById('error_input');
+	const error_mail = document.getElementById('error_mail');
+
 	const password = getInputValue('password');
 	const email = getInputValue('email');
 	const username = getInputValue('username');
@@ -46,7 +53,7 @@ function registerUser() {
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
 
-	if (!error_input)
+	if (!error_input || !error_mail)
 		return;
 
 	const formData = new FormData();
@@ -63,12 +70,16 @@ function registerUser() {
 	})
 	.then(async (response) => {
 		const data = await response.json();
-		console.log("data.message = ", data.message);
 		if (data.message !== "ok") {
-			error_input.innerHTML = `<p>` + data.message + `</p>`;
-			const modal = document.getElementById('modal');
-			if (modal)
-				modal.classList.add('hidden');
+			if (data.code === true) {
+				error_mail.innerHTML = data.message;
+			} else {
+				const modal = document.getElementById('modal');
+				if (modal && !modal.classList.contains('hidden'))
+					modal.classList.add('hidden');
+				error_input.innerHTML = `<p>` + data.message + `</p>`;
+			}
+			return;
 		} else {
 			recvContent('/profil');
 		}
@@ -80,6 +91,9 @@ function validateForm() {
 	const password = getInputValue('password');
 	const email = getInputValue('email');
 	const username = getInputValue('username');
+
+	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
+	const profile_picture = profile_pictureElement?.files?.[0];
 
 	if (!error_input)
 		return;
@@ -94,6 +108,9 @@ function validateForm() {
 	formData.append('username', username);
 	formData.append('email', email);
 	formData.append('password', password);
+	if (profile_picture) {
+		formData.append('profile_picture', profile_picture);
+	}
 	fetch('/verifForm', {
 		method: 'POST',
 		body: formData,

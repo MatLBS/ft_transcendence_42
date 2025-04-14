@@ -5,54 +5,48 @@ import path from 'path';
 import fs from 'fs';
 import { __dirname } from '../router.js';
 import { verifyForm } from '../dist/srcs/middleware/verify.js';
-import { sendEmail } from './email.js';
-import crypto from "crypto";
+import { sendEmail, generateCode, verifCode } from './email.js';
 
 export const verifFormRegister = async (req, reply) => {
 	const parts = req.parts();
 	let fields = {};
 	for await (const part of parts) {
-		fields[part.fieldname] = part.value;
+		if (part.file) {
+			if (!part.mimetype.startsWith('image/')) {
+				return reply.send({ message: 'Invalid file type. Only images are allowed.' });
+			}
+		}
+		else
+			fields[part.fieldname] = part.value;
 	}
-
-	const password = fields.password;
 	const email = fields.email;
 	const username = fields.username;
 
-	const formResponse = verifyForm(username, email, password);
+	const formResponse = verifyForm(username, email, fields.password);
 	if (formResponse.message !== "ok") {
 		return reply.send({ message: formResponse.message });
 	}
 
-	if (!global.codeId) {
-		global.codeId = new Map();
-	}
-	const code = "123456"//Math.floor(100000 + Math.random() * 900000).toString(); // le code que le user doit donner
-	const codeId = crypto.randomUUID();
-	global.codeId.set(codeId, {
-		code,
-		timestamp: Date.now(),
-	});
-
-	reply.setCookie("code_id", codeId, {
-		httpOnly: true,
-		secure: false,
-		sameSite: "lax",
-		path: "/",
-		maxAge: 90,
-	});
-
-	const response = await sendEmail(email, username, code);
+	const code = await generateCode(req, reply);
+	const response = await sendEmail(email, username, code.code);
 	if (response.message !== "ok") {
 		return reply.send({ message: response.message });
 	}
-	return reply.send({ message: "ok" });
+	return reply
+		.setCookie("code_id", code.codeId, {
+			httpOnly: true,
+			secure: false,
+			sameSite: "lax",
+			path: "/",
+			maxAge: 240,
+		})
+		.send({ message: "ok" });
 }
 
 export const checkUserBack = async (req, reply) => {
 
 	let fields = {};
-	let fileBuffer = null, originalExtension = null, fileName = null;
+	let fileBuffer = null, fileName = null;
 
 	try {
 		// Utiliser req.parts() pour traiter les fichiers et les champs
@@ -63,10 +57,7 @@ export const checkUserBack = async (req, reply) => {
 		const parts = req.parts();
 		for await (const part of parts) {
 			if (part.file) {
-				if (!part.mimetype.startsWith('image/')) {
-					return reply.send({ message: 'Invalid file type. Only images are allowed.' });
-				}
-				originalExtension = path.extname(part.filename);
+				const originalExtension = path.extname(part.filename);
 				fileName = `temp_${Date.now()}${originalExtension}`;
 				fileBuffer = await part.toBuffer();
 			} else {
@@ -75,23 +66,13 @@ export const checkUserBack = async (req, reply) => {
 			}
 		}
 
-		const codeId = req.cookies.code_id;
-		const code = global.codeId.get(codeId);
-		global.codeId.delete(codeId);
+		const response = await verifCode(req, reply, fields.verif_email);
+		if (response !== "ok") {
+			return reply.send({ message: response, code: true });
+		}
 
 		const password = fields.password;
 		const username = fields.username;
-		const verifCode = fields.verif_email;
-
-		console.log("code = ", code.code);
-		console.log("verifCode = ", verifCode);
-
-		if (!code || !code.code) {
-			return reply.send({ message: "Code expired" });
-		}
-		if (code.code !== verifCode) {
-			return reply.send({ message: "Code incorrect" });
-		}
 
 		if (!fileName) {
 			fileName = `temp_${Date.now()}.png`;

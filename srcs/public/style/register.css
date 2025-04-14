@@ -237,3 +237,9 @@
 	border-radius: 5px;
 	cursor: pointer;
 }
+
+.close-button {
+	color: black; /* Change la couleur du texte */
+	font-size: 1.5rem; /* Augmente la taille */
+	cursor: pointer; /* Change le curseur pour indiquer qu'il est cliquable */
+}

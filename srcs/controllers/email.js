@@ -1,4 +1,33 @@
 import nodemailer from 'nodemailer';
+import crypto from "crypto";
+
+export const generateCode = async (req, reply) => {
+	if (!global.codeId) {
+		global.codeId = new Map();
+	}
+	const code = "123456";//Math.floor(100000 + Math.random() * 900000).toString(); // le code que le user doit donner
+	const codeId = crypto.randomUUID();
+	global.codeId.set(codeId, {
+		code,
+		timestamp: Date.now(),
+	});
+	return {code, codeId};
+}
+
+export const verifCode = async (req, reply, verifEmail) => {
+	const codeId = req.cookies.code_id;
+	if (!codeId) {
+		return "Code ID missing";
+	}
+	const code = global.codeId.get(codeId);
+	if (!code || !code.code) {
+		return "Code expired";
+	}
+	if (code.code !== verifEmail) {
+		return "Code incorrect";
+	}
+	return "ok";
+}
 
 const transporter = nodemailer.createTransport({
 	service: 'gmail',
