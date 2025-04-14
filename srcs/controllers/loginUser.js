@@ -1,6 +1,38 @@
-import { findUser, findUserByEmail } from '../dist/prisma/seed.js';
+import { findUser, findUserByEmail, findUser2 } from '../dist/prisma/seed.js';
 import { app } from '../server.js';
 import { generateAccessToken, generateRefreshToken } from './tokens.js';
+import { sendEmail, generateCode, verifCode } from './email.js';
+
+export const verifLogin = async (req, reply) => {
+	const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+	const username = body.username;
+	const password = body.password;
+
+	const user = await findUser2(username);
+	if (!user) {
+		return reply.send({ message: "User not found" });
+	}
+
+	const validPassword = await app.bcrypt.compare(password, user.password);
+
+	if (!validPassword)
+		return reply.send({ message: `Invalid password for user '${user.username}'`});
+
+	const code = await generateCode(req, reply);
+	const response = await sendEmail(user.email, user.username, code.code);
+	if (response.message !== "ok") {
+		return reply.send({ message: response.message });
+	}
+	return reply
+		.setCookie("code_id", code.codeId, {
+			httpOnly: true,
+			secure: false,
+			sameSite: "lax",
+			path: "/",
+			maxAge: 240,
+		})
+		.send({ message: "ok" });
+}
 
 export const loginUser = async (req, reply, password, username) => {
 	let accessToken, refreshToken;
@@ -36,9 +68,12 @@ export const loginUser = async (req, reply, password, username) => {
 }
 
 export const login = async (req, reply) => {
-	const password = req.body.password;
-	const username = req.body.username;
-	return loginUser(req, reply, password, username);
+	const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+	const response = await verifCode(req, reply, body.verif_email);
+	if (response !== "ok") {
+		return reply.send({ message: response, code: true });
+	}
+	return loginUser(req, reply, body.password, body.username);
 };
 
 export const loginUserGoogle = async (req, reply, email) => {

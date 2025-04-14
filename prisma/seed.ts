@@ -257,3 +257,14 @@ export async function createLocalDb(players: Array<string>) {
 			throw new Error(`Failed to create a player for local party.`)
 	}
 }
+
+export async function findUser2(username: string) {
+	console.log(username)
+	const user = await prisma.user.findFirst({
+		where: {
+			username: username,
+		},
+	});
+	console.log(user)
+	return user;
+}
