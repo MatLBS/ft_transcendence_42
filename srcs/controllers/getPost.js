@@ -43,6 +43,7 @@ export const getPost = async (req, reply) => {
 			isConnected = true;
 			if (dontNeedLogin(file)) return getErrorPage(reply, response, 403);
 			user = await findUserById(response.user.id);
+			if (!user) return getErrorPage(reply, response, 403);
 			user.google = response.user.google;
 		}
 

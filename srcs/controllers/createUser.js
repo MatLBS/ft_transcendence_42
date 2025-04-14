@@ -1,5 +1,5 @@
 import { app } from '../server.js';
-import { createUser } from '../dist/prisma/seed.js';
+import { createUser, findUserByEmail, findUser } from '../dist/prisma/seed.js';
 import { loginUser } from './loginUser.js';
 import path from 'path';
 import fs from 'fs';
@@ -8,39 +8,58 @@ import { verifyForm } from '../dist/srcs/middleware/verify.js';
 import { sendEmail, generateCode, verifCode } from './email.js';
 
 export const verifFormRegister = async (req, reply) => {
-	const parts = req.parts();
-	let fields = {};
-	for await (const part of parts) {
-		if (part.file) {
-			if (!part.mimetype.startsWith('image/')) {
-				return reply.send({ message: 'Invalid file type. Only images are allowed.' });
+	try {
+		const parts = req.parts();
+		let fields = {};
+		for await (const part of parts) {
+			if (part.file) {
+				if (!part.mimetype.startsWith('image/')) {
+					part.file.resume();
+					return reply.send({ message: 'Invalid file type. Only images are allowed.' });
+				}
+				part.file.resume();
 			}
+			else
+				fields[part.fieldname] = part.value;
 		}
-		else
-			fields[part.fieldname] = part.value;
-	}
-	const email = fields.email;
-	const username = fields.username;
 
-	const formResponse = verifyForm(username, email, fields.password);
-	if (formResponse.message !== "ok") {
-		return reply.send({ message: formResponse.message });
-	}
+		const email = fields.email;
+		const username = fields.username;
 
-	const code = await generateCode(req, reply);
-	const response = await sendEmail(email, username, code.code);
-	if (response.message !== "ok") {
-		return reply.send({ message: response.message });
+		const formResponse = verifyForm(username, email, fields.password);
+		if (formResponse.message !== "ok") {
+			return reply.send({ message: formResponse.message });
+		}
+
+
+		const user = await findUser(username);
+		if (user) {
+			return reply.send({ message: "This username already exists." });
+		}
+		const userEmail = await findUserByEmail(email);
+		if (userEmail) {
+			return reply.send({ message: "This email already exists." });
+		}
+
+		const code = await generateCode(req, reply);
+		const response = await sendEmail(email, username, code.code);
+		if (response.message !== "ok") {
+			return reply.send({ message: response.message });
+		}
+
+		return reply
+			.setCookie("code_id", code.codeId, {
+				httpOnly: true,
+				secure: false,
+				sameSite: "lax",
+				path: "/",
+				maxAge: 240,
+			})
+			.send({ message: "ok" });
 	}
-	return reply
-		.setCookie("code_id", code.codeId, {
-			httpOnly: true,
-			secure: false,
-			sameSite: "lax",
-			path: "/",
-			maxAge: 240,
-		})
-		.send({ message: "ok" });
+	catch (error) {
+		return reply.send({ message: "Internal server error" });
+	}
 }
 
 export const checkUserBack = async (req, reply) => {
@@ -66,13 +85,23 @@ export const checkUserBack = async (req, reply) => {
 			}
 		}
 
+		const password = fields.password;
+		const username = fields.username;
+		const email = fields.email;
+
+		const user = await findUser(username);
+		if (user) {
+			return reply.send({ message: "This username already exists." });
+		}
+		const userEmail = await findUserByEmail(email);
+		if (userEmail) {
+			return reply.send({ message: "This email already exists." });
+		}
+
 		const response = await verifCode(req, reply, fields.verif_email);
 		if (response !== "ok") {
 			return reply.send({ message: response, code: true });
 		}
-
-		const password = fields.password;
-		const username = fields.username;
 
 		if (!fileName) {
 			fileName = `temp_${Date.now()}.png`;
@@ -84,7 +113,7 @@ export const checkUserBack = async (req, reply) => {
 		}
 
 		const hashedPassword = await app.bcrypt.hash(password);
-		await createUser(username, hashedPassword, fields.email, '/uploads/' + username + fileName); // faire verif sur le nom d'utilisateur et l'email avant verifFormRegister
+		await createUser(username, hashedPassword, email, '/uploads/' + username + fileName);
 		return loginUser(req, reply, password, username);
 	} catch (error) {
 		return reply.send({message: error.message});

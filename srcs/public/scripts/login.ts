@@ -59,7 +59,6 @@ function validateForm() {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
 			return;
 		} else {
-			console.log("test");
 			const modal = document.getElementById('modal');
 			if (modal) {
 				modal.classList.remove('hidden');

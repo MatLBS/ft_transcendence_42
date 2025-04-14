@@ -84,6 +84,10 @@ function registerUser() {
 			recvContent('/profil');
 		}
 	})
+	.catch((error) => {
+		console.error("Network error:", error);
+		error_input.innerHTML = `<p>Erreur réseau. Veuillez réessayer plus tard.</p>`;
+	});
 }
 
 function validateForm() {
@@ -120,16 +124,20 @@ function validateForm() {
 		if (data.message !== "ok") {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
 			return;
+		} else {
+			const modal = document.getElementById('modal');
+			if (modal) {
+				modal.classList.remove('hidden');
+				const modalButton = document.getElementById('modal_button');
+				if (modalButton)
+					modalButton.id = 'register_button';
+			}
 		}
 	})
-	const modal = document.getElementById('modal');
-	if (modal) {
-		modal.classList.remove('hidden');
-		const modalButton = document.getElementById('modal_button');
-		if (modalButton)
-			modalButton.id = 'register_button';
-	}
-	return;
+	.catch((error) => {
+		console.error("Network error:", error);
+		error_input.innerHTML = `<p>Erreur réseau. Veuillez réessayer plus tard.</p>`;
+	});
 }
 
 //function to change password to text

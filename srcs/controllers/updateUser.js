@@ -36,6 +36,9 @@ export const updateUser = async (req, reply) => {
 	const response = await authenticateUser(req);
 
 	const user = await findUserById(response.user.id);
+	if (response.status !== 200 || !user) {
+		return reply.send({message : "User not authenticated."});
+	}
 
 	if (prePassword === "")
 		return reply.send({message : "The previous password is required."});
@@ -108,6 +111,9 @@ export const updateUserGoogle = async (req, reply) => {
 	}
 
 	const user = await findUserById(response.user.id);
+	if (!user) {
+		return reply.send({message : "User not authenticated."});
+	}
 
 	if (username.length < 3 || username.length > 20)
 		return reply.send({message : "The username must be between 3 and 20 characters."});

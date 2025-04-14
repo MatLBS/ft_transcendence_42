@@ -1,4 +1,4 @@
-import { findUser, findUserByEmail, findUser2 } from '../dist/prisma/seed.js';
+import { findUserByEmail, findUser } from '../dist/prisma/seed.js';
 import { app } from '../server.js';
 import { generateAccessToken, generateRefreshToken } from './tokens.js';
 import { sendEmail, generateCode, verifCode } from './email.js';
@@ -8,7 +8,7 @@ export const verifLogin = async (req, reply) => {
 	const username = body.username;
 	const password = body.password;
 
-	const user = await findUser2(username);
+	const user = await findUser(username);
 	if (!user) {
 		return reply.send({ message: "User not found" });
 	}
@@ -40,7 +40,11 @@ export const loginUser = async (req, reply, password, username) => {
 		if (!username || !password) {
 			return reply.send({message: "Missing username or password"});
 		}
+
 		const user = await findUser(username);
+		if (!user) {
+			return reply.send({ message: "User not found" });
+		}
 
 		const validPassword = await app.bcrypt.compare(password, user.password);
 
@@ -80,6 +84,9 @@ export const loginUserGoogle = async (req, reply, email) => {
 	let accessToken, refreshToken;
 	try {
 		const user = await findUserByEmail(email);
+		if (!user) {
+			return reply.send({ message: "email not found" });
+		}
 
 		accessToken = generateAccessToken(user, 1);
 		refreshToken = generateRefreshToken(user, 1);
