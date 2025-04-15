@@ -5,14 +5,32 @@ export const generateCode = async (req, reply) => {
 	if (!global.codeId) {
 		global.codeId = new Map();
 	}
-	const code = Math.floor(100000 + Math.random() * 900000).toString(); // le code que le user doit donner
-	// const code = "123456";
+	// const code = Math.floor(100000 + Math.random() * 900000).toString(); // le code que le user doit donner
+	const code = "123456";
 	const codeId = crypto.randomUUID();
 	global.codeId.set(codeId, {
 		code,
 		timestamp: Date.now(),
 	});
 	return {code, codeId};
+}
+
+export const verifEmail = async (req, reply, email, username) => {
+	const code = await generateCode(req, reply);
+	const response = await sendEmail(email, username, code.code);
+	if (response.message !== "ok") {
+		return response.message;
+	}
+
+	reply
+		.setCookie("code_id", code.codeId, {
+			httpOnly: true,
+			secure: false,
+			sameSite: "lax",
+			path: "/",
+			maxAge: 240,
+		})
+	return ;
 }
 
 export const verifCode = async (req, reply, verifEmail) => {
@@ -47,7 +65,7 @@ export const sendEmail = async (email, username, code) => {
 		text: text,
 	};
 	try {
-		const info = await transporter.sendMail(mailOptions);
+		// const info = await transporter.sendMail(mailOptions);
 		return { message: 'ok'};
 	} catch (error) {
 		return { message: 'Error sending email', error };
