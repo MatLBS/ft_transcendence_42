@@ -28,7 +28,7 @@ export async function recvContent(url: string): Promise<void> {
 		.catch((error: unknown) => {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
-	
+
 	fetch('/url', {
 		method: 'POST',
 		credentials: 'include',
@@ -118,7 +118,7 @@ function handleLinks(): void {
 async function handleLanguage(e: Event): Promise<void> {
 	const target = e.target as HTMLElement;
 	const languageDefault = document.getElementById('language-default');
-	
+
 	if (!languageDefault) {
 		console.error('One or more elements for custom select are missing.');
 		return;
@@ -143,7 +143,7 @@ async function handleLanguage(e: Event): Promise<void> {
 function handleLogout(e: Event): void {
 	e.preventDefault();
 	fetch('/logout', {
-		method: 'POST',
+		method: 'GET',
 		credentials: 'include',
 	})
 		.then((response: Response) => response.json())
@@ -172,6 +172,17 @@ function start(): void {
 	handleLinks();
 	handlePopState();
 }
+
+// Gère l'événement de fermeture de la fenêtre
+window.addEventListener('beforeunload', (event: BeforeUnloadEvent) => {
+	fetch('/quit', {
+		method: 'GET',
+		credentials: 'include',
+	})
+		.catch((error: unknown) => {
+			console.error('Erreur lors de la déconnexion:', error);
+		});
+});
 
 // Lancement de l'application
 start();

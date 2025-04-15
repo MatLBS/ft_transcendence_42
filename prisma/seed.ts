@@ -27,6 +27,7 @@ export async function createUser (username: string, password: string, email: str
 			password: password,
 			email: email,
 			profilePicture: profilePicture || null,
+			isOnline: false,
 		},
 	})
 }
@@ -60,6 +61,7 @@ export async function createUserGoogle (username: string, email: string, profile
 			username: username,
 			email: email,
 			profilePicture: profilePicture,
+			isOnline: false,
 		},
 	})
 	return;
@@ -268,4 +270,14 @@ export async function updateUserLanguageDB(id: number, newLanguage: string) {
 		where: { id: id },
 		data: { language: newLanguage }
 	})
+}
+
+export async function logUser(id: number, isOnline: boolean) {
+	const user = await prisma.user.update({
+		where: {
+			id: id,
+		},
+		data: {isOnline: isOnline}
+	})
+	console.log("logUser", id, isOnline) // pour test
 }

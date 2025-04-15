@@ -11,7 +11,7 @@ import { getPost } from './controllers/getPost.js';
 import { getLanguage } from './controllers/getLanguage.js';
 import { getHome } from './controllers/getHome.js';
 import { getPage } from './controllers/getPage.js';
-import { logout } from './controllers/logout.js';
+import { logout, quit } from './controllers/logout.js';
 import { refresh } from './controllers/tokens.js';
 import { tournament } from './controllers/tournament.js';
 import { createTournament } from './controllers/createTournament.js';
@@ -89,7 +89,9 @@ export default async function userRoutes(app) {
 	app.post('/updateUserGoogle', updateUserGoogle);
 	app.post('/updateTwoFA', updateUserTwoFA);
 
-	app.post('/logout', logout);
+	app.get('/logout', logout);
+	app.get('/quit', quit);
+
 	app.post('/refresh', refresh);
 	app.post('/tournament', tournament);
 	app.post('/createTournament', createTournament);
