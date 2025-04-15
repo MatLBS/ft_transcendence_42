@@ -169,6 +169,12 @@ function handleSearch(): void {
 	if (searchInput) {
 		searchInput.addEventListener('input', (e: Event) => {
 			const searchValue = (e.target as HTMLInputElement).value;
+			const searchResults = document.getElementById('search-results');
+			if (!searchResults) return;
+			if (searchValue.length < 1) {
+				searchResults.innerHTML = '';
+				return;
+			}
 			fetch('/search', {
 				method: 'POST',
 				credentials: 'include',
@@ -177,21 +183,18 @@ function handleSearch(): void {
 			})
 				.then((response: Response) => response.json())
 				.then((data: { users: Array<{ profilePicture: string, username: string; }> }) => {
-					const searchResults = document.getElementById('search-results');
-					if (searchResults) {
-						searchResults.innerHTML = '';
-						data.users.forEach((user) => {
-							const userElement = document.createElement('div');
-							userElement.classList.add('user-result');
-							userElement.innerHTML = `
-								<a href="/users/${user.username}" class="user-link">
-									<img src="${user.profilePicture}" alt="${user.username}'s profile picture" class="profile-picture" />
-									<p>  ${user.username}</p>
-								</a>
-							`;
-							searchResults.appendChild(userElement);
-						});
-					}
+					searchResults.innerHTML = '';
+					data.users.forEach((user) => {
+						const userElement = document.createElement('div');
+						userElement.classList.add('user-result');
+						userElement.innerHTML = `
+							<a href="/users/${user.username}" class="user-link">
+								<img src="${user.profilePicture}" alt="${user.username}'s profile picture" class="profile-picture" />
+								<p>  ${user.username}</p>
+							</a>
+						`;
+						searchResults.appendChild(userElement);
+					});
 				})
 				.catch((error: unknown) => {
 					console.error('Erreur lors de la recherche:', error);
