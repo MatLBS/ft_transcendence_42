@@ -3,7 +3,7 @@ import "@babylonjs/loaders";
 import * as CANNON from "cannon";
 import * as GUI from "@babylonjs/gui";
 
-const WINPOINT = 11;
+const WINPOINT = 5;
 class FirstPersonController {
 	scene: Scene;
 	engine: Engine;
@@ -55,7 +55,9 @@ class FirstPersonController {
 		if (this.local === false)
 		{
 			setInterval(() => {
-				this.predictBall()
+				//this.predictBall()
+				console.log ("predic funct = ", this.predictBallXAtZ(-8))
+				this.predictDir = this.predictBallXAtZ(-8);
 				//console.log ("predic = ", this.predictDir);
 			} , 1000);
 		}
@@ -314,7 +316,7 @@ class FirstPersonController {
 			(collider, collidedAgainst, point) => {
 				const velocity = this.ball.physicsImpostor!.getLinearVelocity();
 				if (velocity) {
-					velocity.x *= -1; // Reverse the Z direction
+					velocity.x *= -1;
 					this.ball.physicsImpostor!.setLinearVelocity(velocity);
 				}
 			}
@@ -325,7 +327,7 @@ class FirstPersonController {
 			(collider, collidedAgainst, point) => {
 				const velocity = this.ball.physicsImpostor!.getLinearVelocity();
 				if (velocity) {
-					velocity.x *= -1; // Reverse the Z direction
+					velocity.x *= -1; 
 					this.ball.physicsImpostor!.setLinearVelocity(velocity);
 				}
 			}
@@ -334,25 +336,24 @@ class FirstPersonController {
 
 	private handlePaddleCollision(paddle: PhysicsImpostor) {
 		const paddleMesh = paddle.object as AbstractMesh;
-		// Dimensions du paddle (supposons que le paddle s'étend sur l'axe Z)
 		const paddleHeight = paddleMesh.scaling.x;
-		// Position relative de la balle par rapport au centre du paddle (axe Z)
 		const hitPosition = (this.ball.position.x - paddleMesh.position.x) / (paddleHeight / 2);
 		// Facteur d'impact entre -1 (bas) et 1 (haut)
 		const impactFactor = Math.max(-1, Math.min(1, hitPosition));
-		console.log("impac ", impactFactor);
 		const currentVelocity = this.ball.physicsImpostor!.getLinearVelocity();
 		if (!currentVelocity) return;
 
-		// Conserver la direction X inverse et ajuster la direction Z
 		const newVelocity = new Vector3(
-			impactFactor * Math.abs(currentVelocity.x), 
+			impactFactor * 2.5, 
 			0,
-			-currentVelocity.z, // Inverser l'axe X
+			-currentVelocity.z,
 		);
-
-		// Ajuster la vitesse globale
-		const speed = currentVelocity.length() * 1.1;
+		let speed = currentVelocity.length() * 1.1;
+		if (speed < 10)
+			speed = 10;
+		if (speed > 35)
+			speed = 35;
+		console.log("speed = ", speed);
 		newVelocity.normalize().scaleInPlace(speed);
 
 		this.ball.physicsImpostor!.setLinearVelocity(newVelocity);
@@ -497,12 +498,52 @@ class FirstPersonController {
 		let dirZ = 0;
 		dirZ = this.ball.physicsImpostor!.getLinearVelocity()?.z || 0;
 		dirX = this.ball.position.x;
-/* 		console.log ("dir x = ", dirX);
-		console.log ("dirZ = ", dirZ); */
 		if (dirZ > 0)
 			dirX = 0;
 		this.predictDir = dirX;
 		return dirX;
+	}
+
+	private predictBallXAtZ(targetZ: number): number {
+		const currentPos = this.ball.position.clone();
+		const velocity = this.ball.physicsImpostor!.getLinearVelocity();
+		
+		if (!velocity || velocity.z === 0) return currentPos.x;
+	
+		// Temps nécessaire pour atteindre la cible Z
+		const timeToTarget = (targetZ - currentPos.z) / velocity.z;
+		if (timeToTarget <= 0) return currentPos.x;
+	
+		let remainingTime = timeToTarget;
+		let predictedX = currentPos.x;
+		let currentVx = velocity.x;
+		const wallsX: [number, number] = [-5, 5]; // Murs gauche/droite
+	
+		while (remainingTime > 0 && currentVx !== 0) {
+			// Calcul du prochain mur à heurter
+			const [leftWall, rightWall] = wallsX;
+			const movingRight = currentVx > 0;
+			
+			// Distance jusqu'au mur et temps de collision
+			const distanceToWall = movingRight 
+				? rightWall - predictedX 
+				: leftWall - predictedX;
+				
+			const timeToWall = distanceToWall / currentVx;
+	
+			if (timeToWall > remainingTime) {
+				// Pas de collision avant la cible Z
+				predictedX += currentVx * remainingTime;
+				break;
+			} else {
+				// Collision avec le mur
+				predictedX += currentVx * timeToWall;
+				remainingTime -= timeToWall;
+				currentVx *= -1; // Inversion de la direction X
+			}
+		}
+	
+		return predictedX;
 	}
 
 	private playAI():void
