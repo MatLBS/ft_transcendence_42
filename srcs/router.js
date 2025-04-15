@@ -19,6 +19,8 @@ import { local } from './controllers/local.js';
 import { createLocal } from './controllers/createLocal.js';
 import { updateUserLanguage } from './controllers/updateUserLanguage.js';
 import { updateUser, updateUserGoogle, updateUserTwoFA } from './controllers/updateUser.js';
+import {getUser} from './controllers/getUser.js';
+import {solo} from './controllers/solo.js';
 import { googleAuth, googleCallback } from './controllers/google.js';
 
 // peut etre sauvegarder le content des fichier html.
@@ -98,4 +100,6 @@ export default async function userRoutes(app) {
 	app.get('/auth/google', googleAuth);
 	app.get('/auth/google/callback', googleCallback);
 	app.post('/updateUserLanguage', updateUserLanguage);
+	app.get('/getUser',getUser);
+	app.post('/solo',solo);
 }

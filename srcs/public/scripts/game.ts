@@ -5,25 +5,50 @@ const appDiv = document.getElementById("app");
 if (appDiv) {
 	appDiv.addEventListener('click', (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
-
 		// Gestion des liens dynamiques pour les éléments avec la classe "my"
 		applyLink(target, e);
 
 		// Gestion des clics sur le bouton "Tournament"
 		if (target.tagName === 'DIV' && target.id === 'tournament') {
+			const existingPongScript = document.getElementById('game');
+			if (existingPongScript) {
+				// Stop the script before removing it
+				const stopEvent = new Event('stop');
+				existingPongScript.dispatchEvent(stopEvent);
+
+				existingPongScript.remove();
+			}
 			tournamentClick();
 			return;
 		}
 
 		// Gestion des clics sur le bouton "Local"
 		if (target.tagName === 'DIV' && target.id === 'local') {
+			const existingPongScript = document.getElementById('game');
+			if (existingPongScript) {
+				// Stop the script before removing it
+				console.log("going to stop");
+				const stopEvent = new Event('stop');
+				existingPongScript.dispatchEvent(stopEvent);
+
+				existingPongScript.remove();
+			}
 			localClick();
 			return;
 		}
 
-		// Gestion des clics sur le bouton "Multiplayer"
-		if (target.tagName === 'DIV' && target.id === 'multiplayer') {
-			multiplayerClick();
+		// Gestion des clics sur le bouton "Solo"
+		if (target.tagName === 'DIV' && target.id === 'solo') {
+			const existingPongScript = document.getElementById('game');
+			if (existingPongScript) {
+				// Stop the script before removing it
+				console.log("going to stop");
+				const stopEvent = new Event('stop');
+				existingPongScript.dispatchEvent(stopEvent);
+
+				existingPongScript.remove();
+			}
+			soloClick();
 			return;
 		}
 
@@ -37,6 +62,11 @@ if (appDiv) {
 		// Gestion des clics sur le bouton "Validation"
 		if (target.tagName === 'BUTTON' && target.id === 'buttonValidation') {
 			validateLocalGame();
+			return;
+		}
+
+		if (target.tagName === 'BUTTON' && target.id === 'soloButton') {
+			validateSoloGame();
 			return;
 		}
 	});
@@ -78,6 +108,12 @@ function validateLocalGame() {
 		return;
 	}
 
+	/* const scriptElement = document.createElement('script');
+	scriptElement.type = 'module';
+	scriptElement.src = "dist/srcs/public/scripts/pong.js"
+	scriptElement.id = 'game';
+	document.body.appendChild(scriptElement); */
+
 	fetch('/createLocal', {
 		method: 'POST',
 		credentials: 'include',
@@ -86,8 +122,34 @@ function validateLocalGame() {
 	});
 }
 
-async function multiplayerClick() {
-	console.log('Multiplayer mode clicked');
+async function soloClick() {
+	await fetch('/solo', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(''),
+	})
+		.then(async (response) => {
+			const data = await response.json();
+			const gameSettings = document.getElementById('gameSettings');
+			if (gameSettings) gameSettings.innerHTML = data.content;
+
+			// Ajoute le fichier CSS pour le mode local
+			const linkElement = document.createElement('link');
+			linkElement.rel = 'stylesheet';
+			linkElement.href = 'public/style/local.css';
+			linkElement.id = 'css';
+			document.head.appendChild(linkElement);
+		});
+}
+
+function validateSoloGame() {
+	
+	/* const scriptElement = document.createElement('script');
+	scriptElement.type = 'module';
+	scriptElement.src = "dist/srcs/public/scripts/pong.js"
+	scriptElement.id ='game';
+	document.body.appendChild(scriptElement); */
 }
 
 
@@ -114,6 +176,7 @@ async function tournamentClick() {
 			initCustomSelect();
 		});
 }
+
 
 function initCustomSelect() {
 	const gameSettings = document.getElementById('gameSettings');
@@ -197,5 +260,6 @@ function initCustomSelect() {
 
 			divButton.appendChild(validateButton);
 		}
+	
 	});
 };
