@@ -15,6 +15,24 @@ export const generateCode = async (req, reply) => {
 	return {code, codeId};
 }
 
+export const verifEmail = async (req, reply, email, username) => {
+	const code = await generateCode(req, reply);
+	const response = await sendEmail(email, username, code.code);
+	if (response.message !== "ok") {
+		return response.message;
+	}
+
+	reply
+		.setCookie("code_id", code.codeId, {
+			httpOnly: true,
+			secure: false,
+			sameSite: "lax",
+			path: "/",
+			maxAge: 240,
+		})
+	return ;
+}
+
 export const verifCode = async (req, reply, verifEmail) => {
 	const codeId = req.cookies.code_id;
 	if (!codeId) {

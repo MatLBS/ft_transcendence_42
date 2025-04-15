@@ -5,6 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import { __dirname } from '../router.js';
 import { verifyForm } from '../dist/srcs/middleware/verify.js';
+import { parseRequestParts } from '../middleware/parseRequestParts.js';
 import { sendEmail, generateCode, verifCode } from './email.js';
 
 export const verifFormRegister = async (req, reply) => {
@@ -63,27 +64,14 @@ export const verifFormRegister = async (req, reply) => {
 }
 
 export const checkUserBack = async (req, reply) => {
-
-	let fields = {};
-	let fileBuffer = null, fileName = null;
-
 	try {
 		// Utiliser req.parts() pour traiter les fichiers et les champs
 		const uploadDir = path.join(__dirname, './uploads');
 		if (!fs.existsSync(uploadDir)) {
 			fs.mkdirSync(uploadDir, { recursive: true });
 		}
-		const parts = req.parts();
-		for await (const part of parts) {
-			if (part.file) {
-				const originalExtension = path.extname(part.filename);
-				fileName = `temp_${Date.now()}${originalExtension}`;
-				fileBuffer = await part.toBuffer();
-			} else {
-				// Si c'est un champ, l'ajouter à fields
-				fields[part.fieldname] = part.value;
-			}
-		}
+		let { fields, fileBuffer, fileName } = await parseRequestParts(req, reply);
+		if (!fields) return;
 
 		const password = fields.password;
 		const username = fields.username;
