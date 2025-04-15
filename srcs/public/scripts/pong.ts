@@ -30,6 +30,7 @@ class FirstPersonController {
 		const gameType = canvas.getAttribute('canva-game');
 		this.engine = new Engine(canvas, true);
 		this.scene = this.CreateScene();
+		this.scene.getPhysicsEngine()!.setTimeStep(1 / 60);
 		this.player1Score = 0;
 		this.player2Score = 0;
 
@@ -227,7 +228,11 @@ class FirstPersonController {
 		this.ball.physicsImpostor = new PhysicsImpostor(
 			this.ball,
 			PhysicsImpostor.SphereImpostor,
-			{ mass: 1, restitution: 1 }
+			{
+				mass: 1,
+				restitution: 1,
+				friction: 0,
+			}
 		);
 
 		this.scene.onBeforeStepObservable.add(() => {
