@@ -1,11 +1,11 @@
 :root {
 	--white-color: hsl(0,0%,100%);
 	--black-color: hsl(0, 0% , 0%);
-	--body-font:  "Poppins", sans-serif; 
+	--body-font:  "Poppins", sans-serif;
 	--h1-font-size: 1.75rem;
 	--normal-font-size: 1rem;
 	--small-font-size: .813rem;
-	 --font-medium: 500; 
+	 --font-medium: 500;
 	 }
 
 	 *{
@@ -14,15 +14,19 @@
 	   margin: 0;
 	 }
 
-	 body,
+	 /* body,
 	 input,
 	 button {
 	   font-size: var(--normal-font-size);
 	   font-family: var(--body-font);
-	 }
+	 } */
 
-	 body {
+	 /* body {
 	   color: var(--white-color);
+	 } */
+
+	 .login {
+		color: var(--white-color);
 	 }
 
 	 input,
@@ -98,7 +102,7 @@
 		.login__box-input {
 		position: relative;
 		}
-	 
+
 		.login__label {
 		position: absolute;
 		left: 0;
@@ -192,3 +196,54 @@
 			   font-size: 2rem;
 			}
 		   }
+
+.modal {
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.modal-content {
+	background-color: white;
+	padding: 20px;
+	border-radius: 10px;
+}
+
+.modal-content p {
+	margin: 0;
+	color: black;
+}
+
+#verif_email {
+	padding: 20px;
+	border-radius: 10px;
+	background-color: white;
+	color: black;
+	border: 1px solid black;
+}
+
+.hidden {
+	display: none;
+}
+
+.modal-content button{
+	background-color: #4CAF50;
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.close-button {
+	color: black; /* Change la couleur du texte */
+	font-size: 1.5rem; /* Augmente la taille */
+	cursor: pointer; /* Change le curseur pour indiquer qu'il est cliquable */
+}

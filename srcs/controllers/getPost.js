@@ -5,6 +5,7 @@ import { routes } from "../router.js";
 import { __dirname } from "../router.js";
 import { authenticateUser } from "./tokens.js";
 import { findUserById } from "../dist/prisma/seed.js";
+import { json } from 'stream/consumers';
 
 // Fonction pour charger une page d'erreur
 const getErrorPage = (reply, response, errorCode) => {
@@ -25,13 +26,15 @@ const getErrorPage = (reply, response, errorCode) => {
 };
 
 // Vérifie si une page nécessite une connexion
-const needLogin = (file) => ["admin", "profil", "game"].includes(file);
+const needLogin = (file) => ["admin", "profil", "game", "update"].includes(file);
 
 // Vérifie si une page nécessite que le user ne soit pas connecté
 const dontNeedLogin = (file) => ["login", "register"].includes(file);
 
 export const getPost = async (req, reply) => {
 	const file = req.body.url.split("/").pop() || "home";
+	const jsonLanguage = req.body.jsonLanguage;
+
 	let content = "", css = "", js = "", user = null, isConnected = false;
 
 	try {
@@ -43,13 +46,15 @@ export const getPost = async (req, reply) => {
 			isConnected = true;
 			if (dontNeedLogin(file)) return getErrorPage(reply, response, 403);
 			user = await findUserById(response.user.id);
+			if (!user) return getErrorPage(reply, response, 403);
+			user.google = response.user.google;
 		}
 
 		// Recherche de la route correspondante
 		const route = routes[file];
 		if (route) {
 			if (route.useEjs) {
-				content = await ejs.renderFile(path.join(route.dir, route.file), { user });
+				content = await ejs.renderFile(path.join(route.dir, route.file), { user, jsonLanguage });
 			} else {
 				content = fs.readFileSync(path.join(route.dir, route.file), 'utf8');
 			}

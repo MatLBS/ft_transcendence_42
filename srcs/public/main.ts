@@ -1,4 +1,7 @@
+import { json } from 'stream/consumers';
 import { applyLink } from './scripts/utils.js';
+
+export let language = "en"; // Langue par défaut
 
 // Définition du type pour la réponse serveur
 interface ResponseData {
@@ -10,12 +13,27 @@ interface ResponseData {
 }
 
 // Fait une requête au serveur pour récupérer le contenu de la page demandée (sans recharger la page)
-export function recvContent(url: string): void {
+export async function recvContent(url: string): Promise<void> {
+
+	let jsonLanguage;
+	await fetch('/languages', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ language }),
+	})
+		.then(async (response) => {
+			jsonLanguage = await response.json();
+		})
+		.catch((error: unknown) => {
+			console.error('Erreur lors de la récupération du contenu:', error);
+		});
+	
 	fetch('/url', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ url }),
+		body: JSON.stringify({ url, jsonLanguage }),
 	})
 		.then((response: Response) => response.json())
 		.then(updatePageContent)
@@ -23,6 +41,7 @@ export function recvContent(url: string): void {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
 	history.pushState({}, '', url);
+
 }
 
 // Met à jour le contenu de la page avec les données reçues du serveur
@@ -81,10 +100,44 @@ function handleLinks(): void {
 	nav.addEventListener('click', (e: MouseEvent) => {
 		const target = e.target as HTMLAnchorElement;
 		applyLink(target, e);
+
+
 		if (target.tagName === 'A' && target.classList.contains('logout')) {
 			handleLogout(e);
 		}
+		if (target.closest('#language-select'))  {
+			const languageOptions = document.getElementById('languages-options');
+			if (languageOptions)
+				languageOptions.classList.toggle('open');
+		}
+		if (target.tagName === 'LI' && target.id === 'language-options')
+			handleLanguage(e)
 	});
+}
+
+async function handleLanguage(e: Event): Promise<void> {
+	const target = e.target as HTMLElement;
+	const languageDefault = document.getElementById('language-default');
+	
+	if (!languageDefault) {
+		console.error('One or more elements for custom select are missing.');
+		return;
+	}
+	languageDefault.innerHTML = `
+	${target.textContent}
+	<span class="material-icons pl-2">expand_more</span>`;
+	language = target.getAttribute('data-value') || '';
+	await fetch('/updateUserLanguage', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ language }),
+	})
+		.catch((error: unknown) => {
+			console.error('Erreur lors de la récupération du contenu:', error);
+		});
+
+	recvContent(window.location.pathname);
 }
 
 function handleLogout(e: Event): void {
@@ -115,6 +168,7 @@ function handlePopState(): void {
 function start(): void {
 	console.log('Démarrage...');
 	recvContent(window.location.pathname);
+
 	handleLinks();
 	handlePopState();
 }

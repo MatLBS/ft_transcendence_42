@@ -19,7 +19,57 @@ if (appDiv) {
 		if (target.tagName === "SPAN" && (target.id === "new_password_eye" || target.id === "prev_password_eye")) {
 			showPassword(target.id)
 		}
+		if (target.tagName === "BUTTON" && target.id === "update_button_google") {
+			validateFormGoogle();
+		}
+		if (target.tagName === "BUTTON" && target.id === "modal_button") {
+			updateWithEmail();
+		}
+		if (target.tagName === "SPAN" && target.id === "close-modal") {
+			const modal = document.getElementById('modal');
+			if (modal)
+				modal.classList.add('hidden');
+		}
 	});
+}
+
+function updateWithEmail() {
+	const error_input = document.getElementById('error_input');
+	const error_mail = document.getElementById('error_mail');
+	if (!error_input || !error_mail)
+		return;
+
+	const previousPassword = getInputValue('prev_password');
+	const newPassword = getInputValue('new_password');
+	const email = getInputValue('email');
+	const username = getInputValue('username');
+	const verif_email = getInputValue('verif_email');
+	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
+	const profile_picture = profile_pictureElement?.files?.[0];
+
+	const formData = new FormData();
+	formData.append('username', username);
+	formData.append('email', email);
+	formData.append('previousPassword', previousPassword);
+	formData.append('newPassword', newPassword);
+	if (profile_picture) {
+		formData.append('profile_picture', profile_picture);
+	}
+	formData.append('verif_email', verif_email);
+
+	fetch('/updateTwoFA', {
+		method: 'POST',
+		credentials: 'include',
+		body: formData,
+	})
+	.then(async (response) => {
+		const data = await response.json();
+		if (data.message === "ok") {
+			recvContent("/profil");
+		} else {
+			error_mail.innerHTML = data.message;
+		}
+	})
 }
 
 function previewImage() {
@@ -44,12 +94,40 @@ function previewImage() {
 	}
 }
 
-// register_button?.addEventListener('click', () => {validateForm()});
+function validateFormGoogle() {
+	const error_input = document.getElementById('error_input');
+	if (!error_input)
+		return;
+
+	const username = getInputValue('username');
+	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
+	const profile_picture = profile_pictureElement?.files?.[0];
+
+	const formData = new FormData();
+	formData.append('username', username);
+	if (profile_picture) {
+		formData.append('profile_picture', profile_picture);
+	}
+
+	fetch('/updateUserGoogle', {
+		method: 'POST',
+		credentials: 'include',
+		body: formData,
+	})
+	.then(async (response) => {
+		const data = await response.json();
+		if (data.message === "ok") {
+			recvContent("/profil");
+		} else {
+			error_input.innerHTML = `<p>` + data.message + `</p>`;
+		}
+	})
+}
 
 function validateForm() {
 	const error_input = document.getElementById('error_input');
 	const previousPassword = getInputValue('prev_password');
-	let newPassword = getInputValue('new_password');
+	const newPassword = getInputValue('new_password');
 	const email = getInputValue('email');
 	const username = getInputValue('username');
 
@@ -59,17 +137,8 @@ function validateForm() {
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
 
-	if (newPassword === previousPassword && newPassword !== "" && error_input) {
-		error_input.innerHTML = `<p>The new password can't be the same as the previous.</p>`;
-		return;
-	}
-	
-	if (newPassword === '')
-		newPassword = previousPassword;
-
-
 	const formResponse = verifyForm(username, email, newPassword);
-	if (formResponse.message !== "ok") {
+	if (formResponse.message !== "ok" && !formResponse.password) {
 		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
 		return;
 	}
@@ -93,7 +162,13 @@ function validateForm() {
 		if (data.message === "ok") {
 			recvContent("/profil");
 		} else {
-			error_input.innerHTML = `<p>` + data.message + `</p>`;
+			if (data.email) {
+				const modal = document.getElementById('modal');
+				if (modal)
+					modal.classList.remove('hidden');
+			} else {
+				error_input.innerHTML = `<p>` + data.message + `</p>`;
+			}
 		}
 	})
 }
