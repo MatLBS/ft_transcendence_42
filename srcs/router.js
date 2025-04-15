@@ -21,6 +21,7 @@ import { updateUserLanguage } from './controllers/updateUserLanguage.js';
 import { updateUser, updateUserGoogle, updateUserTwoFA } from './controllers/updateUser.js';
 import { googleAuth, googleCallback } from './controllers/google.js';
 import { getErrorPage } from './controllers/errorPage.js';
+import { search } from './controllers/search.js';
 
 // peut etre sauvegarder le content des fichier html.
 
@@ -92,6 +93,8 @@ export default async function userRoutes(app) {
 
 	app.get('/logout', logout);
 	app.get('/quit', quit);
+
+	app.post('/search', search);
 
 	app.post('/refresh', refresh);
 	app.post('/tournament', tournament);

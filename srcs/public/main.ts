@@ -164,13 +164,49 @@ function handlePopState(): void {
 	});
 }
 
+function handleSearch(): void {
+	const searchInput = document.getElementById('search-input') as HTMLInputElement;
+	if (searchInput) {
+		searchInput.addEventListener('input', (e: Event) => {
+			const searchValue = (e.target as HTMLInputElement).value;
+			fetch('/search', {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ searchValue }),
+			})
+				.then((response: Response) => response.json())
+				.then((data: { users: Array<{ profilePicture: string, username: string; }> }) => {
+					const searchResults = document.getElementById('search-results');
+					if (searchResults) {
+						searchResults.innerHTML = '';
+						data.users.forEach((user) => {
+							const userElement = document.createElement('div');
+							userElement.classList.add('user-result');
+							userElement.innerHTML = `
+								<a href="/users/${user.username}" class="user-link">
+									<img src="${user.profilePicture}" alt="${user.username}'s profile picture" class="profile-picture" />
+									<p>  ${user.username}</p>
+								</a>
+							`;
+							searchResults.appendChild(userElement);
+						});
+					}
+				})
+				.catch((error: unknown) => {
+					console.error('Erreur lors de la recherche:', error);
+				});
+		});
+	}
+}
+
 // Initialise l'application
 function start(): void {
 	console.log('Démarrage...');
 	recvContent(window.location.pathname);
-
 	handleLinks();
 	handlePopState();
+	handleSearch();
 }
 
 // Gère l'événement de fermeture de la fenêtre

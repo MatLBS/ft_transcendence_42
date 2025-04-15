@@ -168,6 +168,17 @@ export async function getAllUsers() {
 	return users;
 }
 
+export async function searchUsername(username: string) {
+	const users = await prisma.user.findMany({
+		where: {
+			username: {
+				contains: username,
+			},
+		},
+	});
+	return users;
+}
+
 export async function isUserExist(username: string) {
 	const user = await prisma.user.findFirst({
 		where: {
