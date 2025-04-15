@@ -10,6 +10,8 @@ RUN npm install --save-dev webpack webpack-cli
 
 COPY . .
 
+RUN npx prisma db push
+
 RUN npx tsc
 
 EXPOSE 3000
