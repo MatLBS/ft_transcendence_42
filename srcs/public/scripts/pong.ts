@@ -367,7 +367,7 @@ class FirstPersonController {
 		this.ball.physicsImpostor!.setLinearVelocity(newVelocity);
 	}
 
-	CreateAction(): void {
+	/* CreateAction(): void {
 		// Configuration des entrées clavier
 		this.scene.onKeyboardObservable.add((kbInfo) => {
 			if (kbInfo.type === KeyboardEventTypes.KEYDOWN) {
@@ -391,6 +391,74 @@ class FirstPersonController {
 					if (kbInfo.event.key === "ArrowDown") {
 						this.paddle2.position.x = Math.max(this.paddle2.position.x - 0.4, minX);
 					}
+				}
+			}
+		});
+	} */
+
+	CreateAction(): void {
+		// Stocker les états des touches
+		const keys: { [key: string]: boolean } = {
+			w: false,
+			s: false,
+			arrowup: false,
+			arrowdown: false
+		};
+	
+		// Configurer les listeners pour les touches
+		this.scene.onKeyboardObservable.add((kbInfo) => {
+			const key = kbInfo.event.key.toLowerCase(); // Gérer la casse
+	
+			// Mettre à jour l'état des touches
+			if (kbInfo.type === KeyboardEventTypes.KEYDOWN) {
+				keys[key] = true;
+			} else if (kbInfo.type === KeyboardEventTypes.KEYUP) {
+				keys[key] = false;
+			}
+		});
+	
+		// Variables pour le delta time
+		let lastTime = performance.now();
+		const paddleSpeed = 0.3; // Ajustez cette valeur au besoin
+	
+		// Mouvement dans la boucle de rendu
+		this.scene.onBeforeRenderObservable.add(() => {
+			// Calculer le delta time
+			const now = performance.now();
+			const deltaTime = (now - lastTime) / 1000; // Convertir en secondes
+			lastTime = now;
+	
+			// Limites de déplacement
+			const minX = -3.75;
+			const maxX = 3.75;
+	
+			// Déplacement Paddle 1 (W/S)
+			if (keys["w"]) {
+				this.paddle1.position.x = Math.min(
+					this.paddle1.position.x + (paddleSpeed * deltaTime * 60), // ×60 pour normaliser à 60 FPS
+					maxX
+				);
+			}
+			if (keys["s"]) {
+				this.paddle1.position.x = Math.max(
+					this.paddle1.position.x - (paddleSpeed * deltaTime * 60),
+					minX
+				);
+			}
+	
+			// Déplacement Paddle 2 (Flèches Haut/Bas)
+			if (this.local) {
+				if (keys["arrowup"]) {
+					this.paddle2.position.x = Math.min(
+						this.paddle2.position.x + (paddleSpeed * deltaTime * 60),
+						maxX
+					);
+				}
+				if (keys["arrowdown"]) {
+					this.paddle2.position.x = Math.max(
+						this.paddle2.position.x - (paddleSpeed * deltaTime * 60),
+						minX
+					);
 				}
 			}
 		});
