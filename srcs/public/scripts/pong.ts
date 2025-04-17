@@ -65,7 +65,7 @@ class FirstPersonController {
 		this.engine.runRenderLoop(() => {
 			this.createGame();
 		});
-
+		canvas.focus();
 		// Exemple d'arrêt automatique lorsque l'utilisateur quitte la page
 	}
 
