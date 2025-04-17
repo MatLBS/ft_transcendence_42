@@ -65,7 +65,7 @@ export async function nextMatchTournament() {
 	try {
 		const id = await getMaxId("tournament");
 
-		const players = await findUsersTournament(tournamentId)
+		const players = await findUsersTournament(id);
 		const nextMatch = await createBrackets(players, id)
 		return nextMatch;
 	} catch (error) {
@@ -73,10 +73,14 @@ export async function nextMatchTournament() {
 	}
 }
 
-export async function setTournament(winner, loser, scoreWinner, scoreLoser) {
+export async function setTournament(req, reply) {
 	try {
+		const winner = req.body.winner;
+		const loser = req.body.loser;
+		const winnerScore = req.body.winnerScore;
+		const loserScore = req.body.loserScore;
 		const id = await getMaxId("tournament");
-		await fillTournamentDb(id, winner, loser, scoreWinner, scoreLoser);
+		await fillTournamentDb(id, winner, loser, winnerScore, loserScore);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}

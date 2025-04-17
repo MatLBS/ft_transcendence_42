@@ -3,27 +3,21 @@ import { authenticateUser } from "./tokens.js";
 
 
 export const createSolo = async (req, reply) => {
-
-    // let players = []
-
-    // const response = await authenticateUser(req);
-    // const player1 = await isUserExist(response.user.username);
-
-    // players.push(player1.username);
-    // players.push("AI");
-
     try {
         await createSoloDb()
     } catch (error) {
         return reply.send({message: error.message});
     }
-
 }
 
-export async function setSolo(winner, loser, scoreWinner, scoreLoser) {
+export async function setSolo(req, reply) {
     try {
+        const winner = req.body.winner;
+        const loser = req.body.loser;
+        const winnerScore = req.body.winnerScore;
+        const loserScore = req.body.loserScore;
         const id = await getMaxId("solo");
-        await fillSoloDb(id, winner, loser, scoreWinner, scoreLoser);
+        await fillSoloDb(id, winner, loser, winnerScore, loserScore);
     } catch (error) {
         return reply.send({message: error.message});
     }

@@ -286,7 +286,7 @@ export async function updateUserLanguageDB(id: number, newLanguage: string) {
 
 export async function getMaxId(model: string) {
 	switch (model) {
-		case 'locaL':
+		case 'local':
 			const latestLocal = await prisma.local.findFirst({
 				orderBy: {
 				  id: 'desc'
