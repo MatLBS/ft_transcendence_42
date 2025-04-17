@@ -263,9 +263,34 @@ export async function createLocalDb(players: Array<string>) {
 	}
 }
 
+export async function fillLocalDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number) {
+	const localParty = await prisma.local.update({
+		where: { id: id },
+		data:{
+			winner: winner,
+			loser: loser,
+			winnerScore: winnerScore,
+			loserScore: loserScore
+		}
+	});
+}
+
 export async function updateUserLanguageDB(id: number, newLanguage: string) {
 	const userToUpdate = await prisma.user.update({
 		where: { id: id },
 		data: { language: newLanguage }
 	})
 }
+
+export async function getMaxIdLocal() {
+	const latestRecord = await prisma.local.findFirst({
+		orderBy: {
+		  id: 'desc'
+		},
+		take: 1
+	  });
+	if (!latestRecord)
+		throw new Error(`No local party were found in the database.`)
+	return latestRecord.id;
+}
+

@@ -40,7 +40,9 @@ model Local {
   players LocalPlayers[]
 
   winner String?
-  score  String?
+  loser  String?
+  winnerScore  Int?
+  loserScore  Int?
 }
 
 model LocalPlayers {
@@ -51,7 +53,11 @@ model LocalPlayers {
   username String
 }
 
-// model Website {
-//   id      Int   @id @default(autoincrement())
-//   language String?
-// }
+model Solo {
+  id      Int            @id @default(autoincrement())
+
+  winner String?
+  loser  String?
+  scoreWinner  String?
+  scoreLoser  String?
+}
