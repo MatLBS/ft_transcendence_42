@@ -352,9 +352,7 @@ export async function fillTournamentDb(id: number, winner: string, loser: string
 	
 	await prisma.tournamentPlayers.update({
 		where: { id: winnerPlayer.id },
-		data: {
-		NbVictory: { increment: 1 }
-		}
+		data: { NbVictory: { increment: 1 }}
 	});
 	await prisma.tournament.update({
         where: { id: id },
@@ -362,10 +360,19 @@ export async function fillTournamentDb(id: number, winner: string, loser: string
             nbMatchesPlayed: { increment: 1 }
         }
     })
+	await prisma.tournamentMatches.create({
+		data: {
+			tournamentId: id,
+			winner: winner,
+			loser: loser,
+			winnerScore: winnerScore,
+			loserScore: loserScore
+		}
+	})
 	const tournament = await getTournamentById(id);
 	if (!tournament || !tournament.nbRounds || !tournament.currentRound)
 		throw new Error(`Tournament with id '${id}' do not exits in the database.`)
-	
+
 	const totalMatches = Math.pow(2, tournament.nbRounds - tournament.currentRound);
 	if (tournament.nbMatchesPlayed === totalMatches)
 		await prisma.tournament.update({

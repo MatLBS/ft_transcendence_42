@@ -1,4 +1,4 @@
-import { createTournamentDb } from '../dist/prisma/seed.js';
+import { createTournamentDb,  getMaxId, fillTournamentDb, getTournamentById } from '../dist/prisma/seed.js';
 import { findUsersTournament } from '../dist/prisma/seed.js';
 
 function getRandomNumber(playerIds) {
@@ -8,41 +8,20 @@ function getRandomNumber(playerIds) {
 	return randomNumber;
 }
 
-function createBrackets(players) {
+async function createBrackets(players, tournamentId) {
+	const tournament = await getTournamentById(tournamentId);
+	const remainingPlayers = players.filter(player => player.NbVictory = tournament.currentRound - 1);
+	const sortedPlayers = remainingPlayers.sort((a, b) => a.playerNumber - b.playerNumber);
+	const nextMatch = []
 
-	let rounds
-	switch(players.length) {
-		case 4: 
-			rounds = 2
-			break
-		case 8:
-			rounds = 3
-			break
-		default:
-			rounds = 4
-	}
-
-	let j = 0
-
-	for (; j < rounds; ++j) {
-
-		const remainingPlayers = players.filter(player => player.NbVictory >= j);
-
-		const sortedPlayers = remainingPlayers.sort((a, b) => a.playerNumber - b.playerNumber);
-
-		for (let i = 0; i < sortedPlayers.length; i++) {
-			let player = sortedPlayers[i]
-			let opponent = sortedPlayers[i + 1]
-
-			i++
-			if (i % 2 !== 0)
-				players[i].NbVictory++
+	for (let i = 0; i < sortedPlayers.length; ++i) {
+		if (sortedPlayers[i].playerNumber % 2 === 0) {
+			nextMatch.push(sortedPlayers[i].name);
+			nextMatch.push(sortedPlayers[i + 1].name);
+			break;
 		}
 	}
-	
-	const remainingPlayers = players.filter(player => player.NbVictory >= j);
-	console.log("The winner is " + remainingPlayers[0].name)
-
+	return nextMatch;
 }
 
 export const createTournament = async (req, reply) => {
@@ -62,23 +41,43 @@ export const createTournament = async (req, reply) => {
 		});
 	}
 
+	let nbRounds;
+
+	switch(req.body.playerData.length) {
+		case 4: 
+			nbRounds = 2
+			break
+		case 8:
+			nbRounds = 3
+			break
+		default:
+			nbRounds = 4
+	}
+
 	try {
-		
-		const tournamentId = await createTournamentDb(playersInfos)
-		
-		const players = await findUsersTournament(tournamentId)
-		
-		createBrackets(players)
+		await createTournamentDb(playersInfos, nbRounds)
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
-
-	//Si tout c'est bien passé, il faut maintenant créer les brackets et envoyer la data à jb
-
-	// Comme les joueurs ont un nombre aléatoire, je fais d'abord jouer 1 contre 2, puis 3 contre 4 ...
-	// Au tour suivant, je fais jouer le gagnant de 1 vs 2 contre le gagnant de 3 vs 4, donc si c'est 1 le premier gagnant, je le fais
-	// jouer contre le nombre le plus proche d'après, 3 ou 4
-
-	//Je vais ensuite boucler le nombre de rounds nécessaires (rounds = NBparticipants) / 2) et à la fin, le gagnant est le joueur avec le plus de victories
-
 };
+
+export async function nextMatchTournament() {
+	try {
+		const id = await getMaxId("tournament");
+
+		const players = await findUsersTournament(tournamentId)
+		const nextMatch = await createBrackets(players, id)
+		return nextMatch;
+	} catch (error) {
+		return reply.send({message: error.message});
+	}
+}
+
+export async function setTournament(winner, loser, scoreWinner, scoreLoser) {
+	try {
+		const id = await getMaxId("tournament");
+		await fillTournamentDb(id, winner, loser, scoreWinner, scoreLoser);
+	} catch (error) {
+		return reply.send({message: error.message});
+	}
+}
