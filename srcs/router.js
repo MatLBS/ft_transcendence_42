@@ -22,6 +22,8 @@ import { updateUser, updateUserGoogle, updateUserTwoFA } from './controllers/upd
 import {getUser} from './controllers/getUser.js';
 import {solo} from './controllers/solo.js';
 import { googleAuth, googleCallback } from './controllers/google.js';
+import { createSolo } from './controllers/createSolo.js';
+
 
 // peut etre sauvegarder le content des fichier html.
 
@@ -102,4 +104,5 @@ export default async function userRoutes(app) {
 	app.post('/updateUserLanguage', updateUserLanguage);
 	app.get('/getUser',getUser);
 	app.post('/solo',solo);
+	app.post('/createSolo',createSolo);
 }

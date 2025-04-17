@@ -282,15 +282,61 @@ export async function updateUserLanguageDB(id: number, newLanguage: string) {
 	})
 }
 
-export async function getMaxIdLocal() {
-	const latestRecord = await prisma.local.findFirst({
-		orderBy: {
-		  id: 'desc'
-		},
-		take: 1
-	  });
-	if (!latestRecord)
-		throw new Error(`No local party were found in the database.`)
-	return latestRecord.id;
+export async function getMaxId(model: string) {
+	switch (model) {
+		case 'locaL':
+			const latestLocal = await prisma.local.findFirst({
+				orderBy: {
+				  id: 'desc'
+				},
+				take: 1
+			  });
+			if (!latestLocal)
+				throw new Error(`No local party were found in the database.`)
+			return latestLocal.id;
+		case 'tournament':
+		case 'solo':
+			const latestSolo = await prisma.solo.findFirst({
+				orderBy: {
+				  id: 'desc'
+				},
+				take: 1
+			  });
+			if (!latestSolo)
+				throw new Error(`No local party were found in the database.`)
+			return latestSolo.id;
+	}
 }
 
+export async function createSoloDb() {
+
+	const soloParty = await prisma.solo.create({
+		data: {}
+	})
+
+	if (!soloParty)
+		throw new Error(`Failed to create a new local party.`)
+
+	// for (let player of players) {
+	// 	const playerDb = await prisma.localPlayers.create({
+	// 		data: {
+	// 			localId: soloParty.id,
+	// 			username: player
+	// 		}
+	// 	})
+	// 	if (!playerDb)
+	// 		throw new Error(`Failed to create a player for local party.`)
+	// }
+}
+
+export async function fillSoloDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number) {
+	const soloParty = await prisma.solo.update({
+		where: { id: id },
+		data:{
+			winner: winner,
+			loser: loser,
+			winnerScore: winnerScore,
+			loserScore: loserScore
+		}
+	});
+}

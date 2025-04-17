@@ -58,6 +58,6 @@ model Solo {
 
   winner String?
   loser  String?
-  scoreWinner  String?
-  scoreLoser  String?
+  winnerScore  Int?
+  loserScore  Int?
 }
