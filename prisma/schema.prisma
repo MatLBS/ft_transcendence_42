@@ -22,6 +22,11 @@ model User {
 model Tournament {
   id      Int                 @id @default(autoincrement())
   players TournamentPlayers[]
+  // matches  Match[]
+
+  nbRounds   Int?
+  currentRound Int?
+  nbMatchesPlayed Int?
 }
 
 model TournamentPlayers {
@@ -31,7 +36,6 @@ model TournamentPlayers {
 
   name         String
   NbVictory    Int
-  rank         Int
   playerNumber Int
 }
 
