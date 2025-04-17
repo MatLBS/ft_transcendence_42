@@ -16,7 +16,7 @@ import { refresh } from './controllers/tokens.js';
 import { tournament } from './controllers/tournament.js';
 import { createTournament } from './controllers/createTournament.js';
 import { local } from './controllers/local.js';
-import { createLocal } from './controllers/createLocal.js';
+import { createLocal, setLocal } from './controllers/createLocal.js';
 import { updateUserLanguage } from './controllers/updateUserLanguage.js';
 import { updateUser, updateUserGoogle, updateUserTwoFA } from './controllers/updateUser.js';
 import {getUser} from './controllers/getUser.js';
@@ -102,4 +102,5 @@ export default async function userRoutes(app) {
 	app.post('/updateUserLanguage', updateUserLanguage);
 	app.get('/getUser',getUser);
 	app.post('/solo',solo);
+	app.post('/postResultLocal', setLocal )
 }

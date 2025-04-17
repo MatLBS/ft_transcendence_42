@@ -3,7 +3,7 @@ import "@babylonjs/loaders";
 import * as CANNON from "cannon";
 import * as GUI from "@babylonjs/gui";
 
-const WINPOINT = 5;
+const WINPOINT = 2;
 class FirstPersonController {
 	scene: Scene;
 	engine: Engine;
@@ -56,17 +56,13 @@ class FirstPersonController {
 		if (this.local === false)
 		{
 			setInterval(() => {
-				//this.predictBall()
-				console.log ("predic funct = ", this.predictBallXAtZ(-8))
 				this.predictDir = this.predictBallXAtZ(-8);
-				//console.log ("predic = ", this.predictDir);
 			} , 1000);
 		}
 		this.engine.runRenderLoop(() => {
 			this.createGame();
 		});
-
-		// Exemple d'arrêt automatique lorsque l'utilisateur quitte la page
+		canvas.focus();
 	}
 
 	createGame(): void {
@@ -75,15 +71,35 @@ class FirstPersonController {
 			this.playAI();
 		if (this.player1Score === WINPOINT && this.win == false) {
 			this.win = true;
-			console.log("player1 won");
 			this.showWinScreen(this.player1name);
+			fetch('/postResultLocal', {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					winnerScore : this.player1Score,
+					loserScore: this.player2Score,
+					winner : this.player1name,
+					loser: this.player2name,
+				}),
+			});
 		}
 		if (this.player2Score === WINPOINT && this.win == false) {
 			this.win = true;
-			console.log("player2 won");
 			this.showWinScreen(this.player2name);
+			fetch('/postResultLocal', {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					winnerScore : this.player2Score,
+					loserScore: this.player1Score,
+					winner : this.player2name,
+					loser: this.player1name,
+				}),
+			});
 		}
-
+		
 	}
 
 	CreateScene(): Scene {
@@ -98,22 +114,15 @@ class FirstPersonController {
 		this.scoreText.fontSize = 48;
 		this.scoreText.top = -250;
 		advancedTexture.addControl(this.scoreText);
-
 		scene.enablePhysics(new Vector3(0, 0, 0), new CannonJSPlugin(true, 0, CANNON));
-
 		const camera = new ArcRotateCamera("camera", Math.PI, Math.PI / 4, 20, Vector3.Zero(), scene);
 		//camera.attachControl(this.canvas, true);
-
-		//const light = new PointLight("light", new Vector3(0, 5, 0), scene);
-
-		scene.collisionsEnabled = true; // To check if relevant here
+		scene.collisionsEnabled = true;
 		this.countDown();
-
 		return scene;
 	}
 
 	countDown(): void {
-		// Test du compte a rebour 
 		if (this.player1Score >= WINPOINT || this.player2Score >= WINPOINT)
 			return;
 		const advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
@@ -123,7 +132,6 @@ class FirstPersonController {
 		countdownText.fontSize = 128;
 		advancedTexture.addControl(countdownText);
 
-		// Fonction de compte à rebours
 		let count = 3;
 		const countdown = () => {
 			if (count > 0) {
@@ -143,9 +151,7 @@ class FirstPersonController {
 				this.ball.physicsImpostor!.setLinearVelocity(startDirection.scale(5));
 			}
 		};
-		// Démarrer le compte à rebours
 		setTimeout(countdown, 500);
-		// fin test
 	}
 
 	CreateMeshes(): void {
@@ -198,7 +204,7 @@ class FirstPersonController {
 			return goal;
 		};
 
-		const leftGoal = createGoal(10); // to double check 
+		const leftGoal = createGoal(10);
 		const rightGoal = createGoal(-10);
 
 		this.paddle1 = MeshBuilder.CreateBox("paddle1", { width: 2, height: 0.5, depth: 0.2 }, this.scene);
@@ -217,10 +223,9 @@ class FirstPersonController {
 			paddle.physicsImpostor = new PhysicsImpostor(
 				paddle,
 				PhysicsImpostor.BoxImpostor,
-				{ mass: 0, restitution: 1.2 } // Restitution >1 pour accélérer après impact
+				{ mass: 0, restitution: 1.2 }
 			);
 		});
-
 
 		this.ball = MeshBuilder.CreateSphere("sphere", { diameter: 0.8 });
 		this.ball.position = new Vector3(0, 0.5, 0);
@@ -246,8 +251,6 @@ class FirstPersonController {
 		//this.addBallTrail();
 		this.handleCollision(topWall, bottomWall);
 		this.handleGoalCollisions(leftGoal, rightGoal);
-
-
 	}
 
 	private handleGoalCollisions(leftGoal: AbstractMesh, rightGoal: AbstractMesh): void {
@@ -380,7 +383,6 @@ class FirstPersonController {
 					this.paddle1.position.x = Math.max(this.paddle1.position.x - 0.4, minX);
 				}
 
-				// Contrôles raquette 2
 				if (this.local === true)
 				{
 					if (kbInfo.event.key === "ArrowUp") {
@@ -547,7 +549,6 @@ class FirstPersonController {
 				currentVx *= -1; // Inversion de la direction X
 			}
 		}
-	
 		return predictedX;
 	}
 
@@ -578,24 +579,20 @@ let currentGameInstance: FirstPersonController | null = null;
 
 const gameElement = document.getElementById('game');
 if (gameElement) {
-    gameElement.addEventListener('stop', () => {
-        console.log("Stop event received");
-        if (currentGameInstance) {
-            currentGameInstance.stop();
-            currentGameInstance = null; // Nullify the instance after stopping
-        }
-    });
+	gameElement.addEventListener('stop', () => {
+		if (currentGameInstance) {
+			currentGameInstance.stop();
+			currentGameInstance = null; // Nullify the instance after stopping
+		}
+	});
 }
 
 function createNewGame(isLocal:boolean): void {
-    // If there is an existing game instance, stop and delete it
-	console.log("going to script new");
-    if (currentGameInstance) {
-        currentGameInstance.stop();
-    }
-
-    // Create a new game instance
-    currentGameInstance = new FirstPersonController(isLocal);
+	// If there is an existing game instance, stop and delete it
+	if (currentGameInstance) {
+		currentGameInstance.stop();
+	}
+	currentGameInstance = new FirstPersonController(isLocal);
 }
 
 document.addEventListener('click', (event) => {
