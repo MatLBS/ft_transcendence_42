@@ -10,7 +10,7 @@ i18next
 	  	  },
 	  	  "game": {
 	  		"local": "Local",
-	  		"multiplayer": "Multiplayer",
+	  		"solo": "Solo",
 	  		"tournament": "Tournament"
 	  	  },
 	  	  "home": {
@@ -53,6 +53,9 @@ i18next
 	  		"password": "Password",
 	  		"button": "Confirm"
 	  	  },
+		  "solo": {
+	  		"sentence": "You will be playing on the left side, the IA on the right ! Are you ready ?"
+	  	  },
 	  	  "tournament": {
 	  		"nbPlayers": "How many players will participate in the tournament ?"
 	  	  },
@@ -73,7 +76,7 @@ i18next
 	  	  },
 	  	  "game": {
 	  		"local": "Local",
-	  		"multiplayer": "Multijugador",
+			"solo": "Solo",
 	  		"tournament": "Torneo"
 	  	  },
 	  	  "home": {
@@ -116,6 +119,9 @@ i18next
 	  		"password": "Contraseña",
 	  		"button": "Confirmar"
 	  	  },
+		  "solo": {
+			"sentence": "Jugarás en el lado izquierdo, la IA en el derecho. ¿Estás listo?"
+		  },
 	  	  "tournament": {
 	  		"nbPlayers": "¿Cuántos jugadores participarán en el torneo?"
 	  	  },
@@ -136,7 +142,7 @@ i18next
 	  	  },
 	  	  "game": {
 	  		"local": "Local",
-	  		"multiplayer": "Multijogador",
+			"solo": "Solo",
 	  		"tournament": "Torneio"
 	  	  },
 	  	  "home": {
@@ -179,6 +185,9 @@ i18next
 	  		"password": "Senha",
 	  		"button": "Confirmar"
 	  	  },
+		  "solo": {
+			"sentence": "Você jogará no lado esquerdo, a IA no lado direito! Você está pronto?"
+		  },
 	  	  "tournament": {
 	  		"nbPlayers": "Quantos jogadores participarão do torneio?"
 	  	  },
@@ -199,7 +208,7 @@ i18next
 	  	  },
 	  	  "game": {
 	  		"local": "Local",
-	  		"multiplayer": "Multijoueur",
+			"solo": "Solo",
 	  		"tournament": "Tournoi"
 	  	  },
 	  	  "home": {
@@ -242,6 +251,9 @@ i18next
 	  		"password": "Mot de passe",
 	  		"button": "Confirmer"
 	  	  },
+		  "solo": {
+			"sentence": "Vous jouerez du côté gauche, l'IA du côté droit ! Êtes-vous prêt ?"
+		  },
 	  	  "tournament": {
 	  		"nbPlayers": "Combien de joueurs participeront au tournoi ?"
 	  	  },
