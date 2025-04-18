@@ -57,7 +57,8 @@ i18next
 	  		"sentence": "You will be playing on the left side, the IA on the right ! Are you ready ?"
 	  	  },
 	  	  "tournament": {
-	  		"nbPlayers": "How many players will participate in the tournament ?"
+	  		"nbPlayers": "How many players will participate in the tournament ?",
+			"nextMatch": "Next match",
 	  	  },
 	  	  "update": {
 	  		"title": "Update",

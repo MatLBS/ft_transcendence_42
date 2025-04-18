@@ -264,3 +264,14 @@ function initCustomSelect() {
 	
 	});
 };
+
+const divNextMatchButton = document.getElementById('divNextMatchButton');
+const buttonNextMatch = document.getElementById('buttonNextMatch');
+
+divNextMatchButton?.addEventListener('eventNextMatch', (e: Event) => {
+	divNextMatchButton.classList.toggle('open');
+});
+
+buttonNextMatch?.addEventListener('click', (e: MouseEvent) => {
+	divNextMatchButton?.classList.toggle('open');
+});
