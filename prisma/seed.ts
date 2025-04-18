@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 // import { app } from '../srcs/server.js';
 
-const prisma = new PrismaClient()
+export const prisma = new PrismaClient()
 
 export async function createUser (username: string, password: string, email: string, profilePicture?: string) {
 	const usernameAlreadyExist = await prisma.user.findFirst({
@@ -290,5 +290,4 @@ export async function logUser(id: number, isOnline: boolean) {
 		},
 		data: {isOnline: isOnline}
 	})
-	console.log("logUser", id, isOnline) // pour test
 }

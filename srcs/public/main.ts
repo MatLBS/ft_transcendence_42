@@ -14,7 +14,6 @@ interface ResponseData {
 
 // Fait une requête au serveur pour récupérer le contenu de la page demandée (sans recharger la page)
 export async function recvContent(url: string): Promise<void> {
-
 	let jsonLanguage;
 	await fetch('/languages', {
 		method: 'POST',
@@ -41,7 +40,6 @@ export async function recvContent(url: string): Promise<void> {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
 	history.pushState({}, '', url);
-
 }
 
 // Met à jour le contenu de la page avec les données reçues du serveur
@@ -97,22 +95,24 @@ function hideElements(isConnected: boolean): void {
 function handleLinks(): void {
 	const nav = document.querySelector('nav');
 	if (!nav) return;
-	nav.addEventListener('click', (e: MouseEvent) => {
-		const target = e.target as HTMLAnchorElement;
-		applyLink(target, e);
+	nav.removeEventListener('click', seeTarget);
+	nav.addEventListener('click', seeTarget);
+}
 
+function seeTarget(e: MouseEvent): void {
+	const target = e.target as HTMLAnchorElement;
+	applyLink(target, e);
+	if (target.tagName === 'A' && target.classList.contains('logout')) {
+		handleLogout(e);
+	}
+	if (target.closest('#language-select'))  {
+		const languageOptions = document.getElementById('languages-options');
+		if (languageOptions)
+			languageOptions.classList.toggle('open');
+	}
+	if (target.tagName === 'LI' && target.id === 'language-options')
+		handleLanguage(e);
 
-		if (target.tagName === 'A' && target.classList.contains('logout')) {
-			handleLogout(e);
-		}
-		if (target.closest('#language-select'))  {
-			const languageOptions = document.getElementById('languages-options');
-			if (languageOptions)
-				languageOptions.classList.toggle('open');
-		}
-		if (target.tagName === 'LI' && target.id === 'language-options')
-			handleLanguage(e)
-	});
 }
 
 async function handleLanguage(e: Event): Promise<void> {
@@ -184,17 +184,18 @@ function handleSearch(): void {
 				.then((response: Response) => response.json())
 				.then((data: { users: Array<{ profilePicture: string, username: string; }> }) => {
 					searchResults.innerHTML = '';
-					data.users.forEach((user) => {
+					data.users.slice(0, 3).forEach((user) => {
 						const userElement = document.createElement('div');
 						userElement.classList.add('user-result');
 						userElement.innerHTML = `
-							<a href="/users/${user.username}" class="user-link">
+							<a href="/users/${user.username}" class="user-link my">
 								<img src="${user.profilePicture}" alt="${user.username}'s profile picture" class="profile-picture" />
-								<p>  ${user.username}</p>
+								<p>${user.username}</p>
 							</a>
 						`;
 						searchResults.appendChild(userElement);
 					});
+					handleLinks();
 				})
 				.catch((error: unknown) => {
 					console.error('Erreur lors de la recherche:', error);
@@ -214,13 +215,9 @@ function start(): void {
 
 // Gère l'événement de fermeture de la fenêtre
 window.addEventListener('beforeunload', (event: BeforeUnloadEvent) => {
-	fetch('/quit', {
-		method: 'GET',
-		credentials: 'include',
-	})
-		.catch((error: unknown) => {
-			console.error('Erreur lors de la déconnexion:', error);
-		});
+	const token = document.cookie.split('; ').find(row => row.startsWith('access_token='));
+	const tokenValue = token ? token.split('=')[1] : '';
+	navigator.sendBeacon('/quit', JSON.stringify({ token: tokenValue }));
 });
 
 // Lancement de l'application

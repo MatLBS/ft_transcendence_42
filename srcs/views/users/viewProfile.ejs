@@ -13,6 +13,13 @@
 				<%= user.username %>
 			</h2>
 		</div>
+	<% if (isConnected && !himself) { %>
+		<% if (!friend) { %>
+	<button id="add-friends" class="text-black text-center">add friends</button>
+	<% } else { %>
+	<button id="delete-friends" class="text-black text-center">delete friends</button>
+		<% } %>
+	<% } %>
 	</div>
 	<h2 class="stats__title text-center"><%= jsonLanguage.profil.statistics %></h2>
 	<div class="stats flex justify-center align-center gap-16">
@@ -32,30 +39,3 @@
 		</div>
 	</div>
 </div>
-<a class="my" href="/update"><%= jsonLanguage.profil.update %></a>
-
-<% if (friends && friends.length > 0) { %>
-	<div class="friends__list">
-		<h2><%= jsonLanguage.profil.friends %></h2>
-		<ul>
-			<% friends.forEach(friend => { %>
-				<li>
-					<img
-						src="<%= friend.profilePicture %>"
-						alt="Photo de profil de <%= friend.username %>"
-						style="width: 50px; height: 50px; border-radius: 50%;"
-					/>
-					<span><%= friend.username %></span>
-					<button class="remove_friend" data-username="<%= friend.username %>">remove friend</button>
-					<% if (friend.isOnline) { %>
-						<p>online</p>
-					<% } else { %>
-						<p>offline</p>
-					<% } %>
-				</li>
-			<% }) %>
-		</ul>
-	</div>
-<% } else { %>
-	<p>moi j'ai pas d'amis</p>
-<% } %>

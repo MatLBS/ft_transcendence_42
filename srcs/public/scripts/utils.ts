@@ -7,9 +7,10 @@ import { recvContent } from '../main.js';
 /// @description Cette fonction empêche le comportement par défaut du lien et charge le contenu de la page cible
 /// en utilisant la fonction recvContent. Elle met également à jour l'URL de l'historique du navigateur.
 export function applyLink(target: HTMLElement, e: Event): void {
-	if (target.tagName === 'A' && target.classList.contains('my')) {
+	const link = target.closest('a.my') as HTMLAnchorElement | null;
+	if (link) {
 		e.preventDefault();
-		const url = target.getAttribute('href');
+		const url = link.getAttribute('href');
 		if (url) {
 			recvContent(url);
 		}

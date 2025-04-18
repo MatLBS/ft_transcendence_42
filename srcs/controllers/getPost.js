@@ -6,6 +6,8 @@ import { __dirname } from "../router.js";
 import { authenticateUser } from "./tokens.js";
 import { findUserById } from "../dist/prisma/seed.js";
 import { json } from 'stream/consumers';
+import { getUserProfile } from './getUserProfile.js';
+import { getFollowedUsers } from '../dist/prisma/friends.js';
 
 // Fonction pour charger une page d'erreur
 const getErrorPage = (reply, response, errorCode) => {
@@ -15,7 +17,7 @@ const getErrorPage = (reply, response, errorCode) => {
 	if (response.status === 200 && response.newAccessToken) {
 		return reply
 			.setCookie('access_token', response.newAccessToken, {
-				httpOnly: true,
+				httpOnly: false,
 				secure: false,
 				sameSite: 'Strict'
 			})
@@ -32,10 +34,14 @@ const needLogin = (file) => ["admin", "profil", "game", "update"].includes(file)
 const dontNeedLogin = (file) => ["login", "register"].includes(file);
 
 export const getPost = async (req, reply) => {
-	const file = req.body.url.split("/").pop() || "home";
+	let file = req.body.url.split("/");
+	if (file[1] === "users") {
+		return getUserProfile(req, reply, file[2]);
+	}
+	file = file.pop() || "home";
 	const jsonLanguage = req.body.jsonLanguage;
 
-	let content = "", css = "", js = "", user = null, isConnected = false;
+	let content = "", css = "", js = "", user = null, isConnected = false, response = "", friends = null;
 
 	try {
 		// Authentification de l'utilisateur
@@ -48,16 +54,13 @@ export const getPost = async (req, reply) => {
 			user = await findUserById(response.user.id);
 			if (!user) return getErrorPage(reply, response, 403);
 			user.google = response.user.google;
+			friends = await getFollowedUsers(user.id);
 		}
 
 		// Recherche de la route correspondante
 		const route = routes[file];
 		if (route) {
-			if (route.useEjs) {
-				content = await ejs.renderFile(path.join(route.dir, route.file), { user, jsonLanguage });
-			} else {
-				content = fs.readFileSync(path.join(route.dir, route.file), 'utf8');
-			}
+			content = await ejs.renderFile(path.join(route.dir, route.file), { user, jsonLanguage, friends });
 			css = route.css;
 			js = route.js;
 		} else {
@@ -68,7 +71,7 @@ export const getPost = async (req, reply) => {
 		if (response.status === 200 && response.newAccessToken) {
 			return reply
 				.setCookie('access_token', response.newAccessToken, {
-					httpOnly: true,
+					httpOnly: false,
 					secure: false,
 					sameSite: 'Strict'
 				})
