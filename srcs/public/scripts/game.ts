@@ -69,6 +69,11 @@ if (appDiv) {
 			validateSoloGame();
 			return;
 		}
+		if(target.tagName === 'BUTTON' && target.id ==='buttonNextMatch')
+		{
+			const divNextMatchButton = document.getElementById('divNextMatchButton');
+			divNextMatchButton?.classList.add('hidden');
+		}
 	});
 }
 
@@ -265,13 +270,15 @@ function initCustomSelect() {
 	});
 };
 
-const divNextMatchButton = document.getElementById('divNextMatchButton');
 const buttonNextMatch = document.getElementById('buttonNextMatch');
 
-divNextMatchButton?.addEventListener('eventNextMatch', (e: Event) => {
-	divNextMatchButton.classList.toggle('open');
+window.addEventListener('eventNextMatch', () => {
+	console.log ("receive event");
+	const divNextMatchButton = document.getElementById('divNextMatchButton');
+	divNextMatchButton?.classList.remove('hidden');
 });
 
-buttonNextMatch?.addEventListener('click', (e: MouseEvent) => {
+buttonNextMatch?.addEventListener('click', () => {
+	const divNextMatchButton = document.getElementById('divNextMatchButton');
 	divNextMatchButton?.classList.toggle('open');
 });

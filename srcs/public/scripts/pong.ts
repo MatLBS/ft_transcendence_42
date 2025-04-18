@@ -11,6 +11,7 @@ class FirstPersonController {
 	paddle2!: AbstractMesh;
 	ball!: AbstractMesh;
 	private local:boolean;
+	private tournament:boolean;
 	private neonMaterial!:StandardMaterial;
 	private predictDir = 0;
 	private player1Score: number;
@@ -22,12 +23,13 @@ class FirstPersonController {
 	private explosionEffect!: ParticleSystem;
 	private currentHue: number = 0;
 
-	constructor(isLocal:boolean) {
+	constructor(isLocal:boolean, isTournament:boolean) {
 		const canvas = document.getElementById("renderCanvas");
 		if (!(canvas instanceof HTMLCanvasElement)) {
 			throw new Error("Element with id 'renderCanvas' is not a canvas element.");
 		}
 		this.local = isLocal;
+		this.tournament = isTournament;
 		const gameType = canvas.getAttribute('canva-game');
 		this.engine = new Engine(canvas, true);
 		this.scene = this.CreateScene();
@@ -67,7 +69,7 @@ class FirstPersonController {
 	}
 
 	postResult(winner:string, loser:string, winnerScore:number, loserScore:number):void{
-		if (this.local === true)
+		if (this.local === true && this.tournament === false)
 		{
 			fetch('/postResultLocal', {
 				method: 'POST',
@@ -97,9 +99,9 @@ class FirstPersonController {
 			});
 		}
 
-		/* if (this.local === true)
+		if (this.tournament === true)
 		{
-			fetch('/postResultLocal', {
+			fetch('/postResultTournament', {
 				method: 'POST',
 				credentials: 'include',
 				headers: { 'Content-Type': 'application/json' },
@@ -110,7 +112,10 @@ class FirstPersonController {
 					loser: this.player2name,
 				}),
 			});
-		} */
+			const eventNextMatch = new Event('eventNextMatch');
+			console.log("send event");
+			window.dispatchEvent(eventNextMatch);
+		}
 
 	}
 
@@ -545,6 +550,8 @@ class FirstPersonController {
 
 
 		// Create a button to allow restarting the game
+		if (this.tournament === true)
+			return;
 		const restartButton = GUI.Button.CreateSimpleButton("restartButton", "Restart Game");
 		restartButton.width = "200px";
 		restartButton.height = "50px";
@@ -648,19 +655,19 @@ if (gameElement) {
 	});
 }
 
-function createNewGame(isLocal:boolean): void {
+function createNewGame(isLocal:boolean, isTournament:boolean): void {
 	// If there is an existing game instance, stop and delete it
 	if (currentGameInstance) {
 		currentGameInstance.stop();
 	}
-	currentGameInstance = new FirstPersonController(isLocal);
+	currentGameInstance = new FirstPersonController(isLocal,isTournament);
 }
 
 document.addEventListener('click', (event) => {
 	const target = event.target as HTMLElement;
 	if (target && target.id === 'soloButton') {
 		//Create an instance of solo game
-		createNewGame(false);
+		createNewGame(false,false);
 	}
 	if (target && target.id === 'buttonValidation') {
 		//Create an instance of local game
@@ -669,6 +676,10 @@ document.addEventListener('click', (event) => {
 		if (player2.trim() === "") {
 			return;
 		}
-		createNewGame(true);
+		createNewGame(true,false);
 	}
-});
+	if (target && target.id === 'submit-button' || target.id ==='buttonNextMatch') {
+		//Create an instance of solo game
+		createNewGame(true,true);
+	}
+});3
