@@ -45,6 +45,17 @@ class FirstPersonController {
 				const data = await response.json();
 				this.player1name = data.user.username as string;
 			})
+		if (this.tournament === true)
+		{
+			fetch('/getNextMatchTournament', {
+				method: 'GET',
+				credentials: 'include',
+			})
+				.then(async (response) => {
+					const data = await response.json();
+					console.log("data = ", data);
+				})
+		}
 		if (isLocal === true)
 		{
 			const usernameElement = document.getElementById("username") as HTMLInputElement | null;
@@ -101,7 +112,7 @@ class FirstPersonController {
 
 		if (this.tournament === true)
 		{
-			fetch('/postResultTournament', {
+			fetch('/postResulTournament', {
 				method: 'POST',
 				credentials: 'include',
 				headers: { 'Content-Type': 'application/json' },

@@ -61,13 +61,13 @@ async function createBrackets(players, tournamentId) {
 	return nextMatch;
 }
 
-export async function nextMatchTournament() {
+export async function nextMatchTournament(reply) {
 	try {
 		const id = await getMaxId("tournament");
 
 		const players = await findUsersTournament(id);
 		const nextMatch = await createBrackets(players, id)
-		return nextMatch;
+		reply.send({next :nextMatch});
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
