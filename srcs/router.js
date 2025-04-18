@@ -14,14 +14,16 @@ import { getPage } from './controllers/getPage.js';
 import { logout } from './controllers/logout.js';
 import { refresh } from './controllers/tokens.js';
 import { tournament } from './controllers/tournament.js';
-import { createTournament } from './controllers/createTournament.js';
+import { createTournament, nextMatchTournament, updateResultTournamentGame } from './controllers/createTournament.js';
 import { local } from './controllers/local.js';
-import { createLocal, setLocal } from './controllers/createLocal.js';
 import { updateUserLanguage } from './controllers/updateUserLanguage.js';
 import { updateUser, updateUserGoogle, updateUserTwoFA } from './controllers/updateUser.js';
 import {getUser} from './controllers/getUser.js';
-import {solo} from './controllers/solo.js';
 import { googleAuth, googleCallback } from './controllers/google.js';
+import {solo} from './controllers/solo.js';
+import { createSoloGame, updateResultSoloGame } from './controllers/createSolo.js';
+import { createLocalGame, updateResultLocalGame } from './controllers/createLocal.js';
+
 
 // peut etre sauvegarder le content des fichier html.
 
@@ -96,11 +98,15 @@ export default async function userRoutes(app) {
 	app.post('/tournament', tournament);
 	app.post('/createTournament', createTournament);
 	app.post('/local', local);
-	app.post('/createLocal', createLocal);
+	app.post('/createLocal', createLocalGame);
 	app.get('/auth/google', googleAuth);
 	app.get('/auth/google/callback', googleCallback);
 	app.post('/updateUserLanguage', updateUserLanguage);
 	app.get('/getUser',getUser);
 	app.post('/solo',solo);
-	app.post('/postResultLocal', setLocal )
+	app.post('/createSolo', createSoloGame);
+	app.post('/postResultLocal', updateResultLocalGame);
+	app.post('/postResultSolo', updateResultSoloGame);
+	app.post('/getNextMatchTournament', nextMatchTournament);
+	app.post('/postResulTournament', updateResultTournamentGame);
 }

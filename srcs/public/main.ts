@@ -16,6 +16,8 @@ interface ResponseData {
 export async function recvContent(url: string): Promise<void> {
 
 	let jsonLanguage;
+	console.log("ici");
+	console.log(language);
 	await fetch('/languages', {
 		method: 'POST',
 		credentials: 'include',

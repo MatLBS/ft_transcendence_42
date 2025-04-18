@@ -108,12 +108,6 @@ function validateLocalGame() {
 		return;
 	}
 
-	/* const scriptElement = document.createElement('script');
-	scriptElement.type = 'module';
-	scriptElement.src = "dist/srcs/public/scripts/pong.js"
-	scriptElement.id = 'game';
-	document.body.appendChild(scriptElement); */
-
 	fetch('/createLocal', {
 		method: 'POST',
 		credentials: 'include',
@@ -150,6 +144,13 @@ function validateSoloGame() {
 	scriptElement.src = "dist/srcs/public/scripts/pong.js"
 	scriptElement.id ='game';
 	document.body.appendChild(scriptElement); */
+
+	fetch('/createSolo', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({  }),
+	});
 }
 
 

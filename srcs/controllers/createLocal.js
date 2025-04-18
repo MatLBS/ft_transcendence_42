@@ -1,8 +1,8 @@
-import { createLocalDb, isUserExist, getMaxIdLocal, fillLocalDb} from '../dist/prisma/seed.js';
+import { createLocalDb, isUserExist, getMaxId, fillLocalDb } from '../dist/prisma/seed.js';
 import { authenticateUser } from "./tokens.js";
 
 
-export const createLocal = async (req, reply) => {
+export const createLocalGame = async (req, reply) => {
 
 	let players = []
 
@@ -17,18 +17,16 @@ export const createLocal = async (req, reply) => {
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
-
 }
 
-export async function setLocal(req, reply) {
+export async function updateResultLocalGame(req, reply) {
 	try {
-		const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-		const winner = body.winner;
-		const loser = body.loser;
-		const winnerScore = body.winnerScore;
-		const loserScore = body.loserScore;
-		const id = await getMaxIdLocal();
-		await fillLocalDb(id, winner, loser, winnerScore,loserScore);
+		const winner = req.body.winner;
+		const loser = req.body.loser;
+		const winnerScore = req.body.winnerScore;
+		const loserScore = req.body.loserScore;
+		const id = await getMaxId("local");
+		await fillLocalDb(id, winner, loser, winnerScore, loserScore);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
