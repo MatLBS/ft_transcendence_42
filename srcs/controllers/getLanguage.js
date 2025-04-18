@@ -23,12 +23,12 @@ export const getLanguage = async (req, reply) => {
 }
 
 export const getLanguageWithoutBody = async (language) => {
-
+	if (!language)
+		language = "en";
 	const supportedLanguages = ["fr", "en", "es", "pt"];
 	if (!supportedLanguages.includes(language)) {
 		return reply.status(400).send({ error: "Language not supported" });
 	}
-
 	const translations = i18next.getResourceBundle(language, 'translation');
 	return (translations);
 }

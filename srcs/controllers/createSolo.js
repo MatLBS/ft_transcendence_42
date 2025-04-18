@@ -2,7 +2,7 @@ import { createSoloDb, isUserExist, getMaxId, fillSoloDb } from '../dist/prisma/
 import { authenticateUser } from "./tokens.js";
 
 
-export const createSolo = async (req, reply) => {
+export const createSoloGame = async (req, reply) => {
     try {
         await createSoloDb()
     } catch (error) {
@@ -10,7 +10,7 @@ export const createSolo = async (req, reply) => {
     }
 }
 
-export async function setSolo(req, reply) {
+export async function updateResultSoloGame(req, reply) {
     try {
         const winner = req.body.winner;
         const loser = req.body.loser;

@@ -9,7 +9,7 @@ import { getLanguageWithoutBody } from "./getLanguage.js"
 export const local = async (req, reply) => {
 
 	const response = await authenticateUser(req);
-	let language = await findUserById(response.user.id)
+	let language = await findUserById(response.user.id);
 	language = language.language
 	const jsonLanguage = await getLanguageWithoutBody(language);
 

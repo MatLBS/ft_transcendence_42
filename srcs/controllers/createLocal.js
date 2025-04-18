@@ -2,7 +2,7 @@ import { createLocalDb, isUserExist, getMaxId, fillLocalDb } from '../dist/prism
 import { authenticateUser } from "./tokens.js";
 
 
-export const createLocal = async (req, reply) => {
+export const createLocalGame = async (req, reply) => {
 
 	let players = []
 
@@ -19,7 +19,7 @@ export const createLocal = async (req, reply) => {
 	}
 }
 
-export async function setLocal(req, reply) {
+export async function updateResultLocalGame(req, reply) {
 	try {
 		const winner = req.body.winner;
 		const loser = req.body.loser;

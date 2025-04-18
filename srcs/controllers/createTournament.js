@@ -8,22 +8,6 @@ function getRandomNumber(playerIds) {
 	return randomNumber;
 }
 
-async function createBrackets(players, tournamentId) {
-	const tournament = await getTournamentById(tournamentId);
-	const remainingPlayers = players.filter(player => player.NbVictory = tournament.currentRound - 1);
-	const sortedPlayers = remainingPlayers.sort((a, b) => a.playerNumber - b.playerNumber);
-	const nextMatch = []
-
-	for (let i = 0; i < sortedPlayers.length; ++i) {
-		if (sortedPlayers[i].playerNumber % 2 === 0) {
-			nextMatch.push(sortedPlayers[i].name);
-			nextMatch.push(sortedPlayers[i + 1].name);
-			break;
-		}
-	}
-	return nextMatch;
-}
-
 export const createTournament = async (req, reply) => {
 
 	let playerIds = [];
@@ -61,6 +45,22 @@ export const createTournament = async (req, reply) => {
 	}
 };
 
+async function createBrackets(players, tournamentId) {
+	const tournament = await getTournamentById(tournamentId);
+	const remainingPlayers = players.filter(player => player.NbVictory = tournament.currentRound - 1);
+	const sortedPlayers = remainingPlayers.sort((a, b) => a.playerNumber - b.playerNumber);
+	const nextMatch = []
+
+	for (let i = 0; i < sortedPlayers.length; ++i) {
+		if (sortedPlayers[i].playerNumber % 2 !== 0) {
+			nextMatch.push(sortedPlayers[i].name);
+			nextMatch.push(sortedPlayers[i + 1].name);
+			break;
+		}
+	}
+	return nextMatch;
+}
+
 export async function nextMatchTournament() {
 	try {
 		const id = await getMaxId("tournament");
@@ -73,7 +73,7 @@ export async function nextMatchTournament() {
 	}
 }
 
-export async function setTournament(req, reply) {
+export async function updateResultTournamentGame(req, reply) {
 	try {
 		const winner = req.body.winner;
 		const loser = req.body.loser;
