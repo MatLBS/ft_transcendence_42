@@ -107,6 +107,6 @@ export default async function userRoutes(app) {
 	app.post('/createSolo', createSoloGame);
 	app.post('/postResultLocal', updateResultLocalGame);
 	app.post('/postResultSolo', updateResultSoloGame);
-	app.post('/getNextMatchTournament', nextMatchTournament);
+	app.get('/getNextMatchTournament', nextMatchTournament);
 	app.post('/postResulTournament', updateResultTournamentGame);
 }

@@ -11,6 +11,7 @@ class FirstPersonController {
 	paddle2!: AbstractMesh;
 	ball!: AbstractMesh;
 	private local:boolean;
+	private neonMaterial!:StandardMaterial;
 	private predictDir = 0;
 	private player1Score: number;
 	private player2Score: number;
@@ -19,9 +20,9 @@ class FirstPersonController {
 	private win: boolean = false;
 	private scoreText!: GUI.TextBlock;
 	private explosionEffect!: ParticleSystem;
+	private currentHue: number = 0;
 
 	constructor(isLocal:boolean) {
-		console.log("start");
 		const canvas = document.getElementById("renderCanvas");
 		if (!(canvas instanceof HTMLCanvasElement)) {
 			throw new Error("Element with id 'renderCanvas' is not a canvas element.");
@@ -65,13 +66,39 @@ class FirstPersonController {
 		canvas.focus();
 	}
 
-	createGame(): void {
-		this.scene.render();
+	postResult(winner:string, loser:string, winnerScore:number, loserScore:number):void{
+		if (this.local === true)
+		{
+			fetch('/postResultLocal', {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					winnerScore : winnerScore,
+					loserScore: loserScore,
+					winner : winner,
+					loser: loser,
+				}),
+			});
+		}
+
 		if (this.local === false)
-			this.playAI();
-		if (this.player1Score === WINPOINT && this.win == false) {
-			this.win = true;
-			this.showWinScreen(this.player1name);
+		{
+			fetch('/postResultSolo', {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					winnerScore : winnerScore,
+					loserScore: loserScore,
+					winner : winner,
+					loser: loser,
+				}),
+			});
+		}
+
+		/* if (this.local === true)
+		{
 			fetch('/postResultLocal', {
 				method: 'POST',
 				credentials: 'include',
@@ -83,23 +110,33 @@ class FirstPersonController {
 					loser: this.player2name,
 				}),
 			});
+		} */
+
+	}
+
+	createGame(): void {
+		const deltaTime = this.scene.getEngine().getDeltaTime() / 1000; // Convert milliseconds to seconds
+		this.currentHue += deltaTime * 60; // 60 degrees per second - adjust this value to change speed
+		this.currentHue %= 360; // Keep hue in 0-360 range
+		// Convert HSV to RGB (using full saturation and value)
+		const newColor = Color3.FromHSV(this.currentHue , 1, 1);
+		
+		// Update material properties
+		this.neonMaterial.emissiveColor = newColor;
+		this.neonMaterial.diffuseColor = newColor;
+		this.scene.render();
+		if (this.local === false)
+			this.playAI();
+		if (this.player1Score === WINPOINT && this.win == false) {
+			this.win = true;
+			this.showWinScreen(this.player1name);
+			this.postResult(this.player1name, this.player2name, this.player1Score, this.player2Score);
 		}
 		if (this.player2Score === WINPOINT && this.win == false) {
 			this.win = true;
 			this.showWinScreen(this.player2name);
-			fetch('/postResultLocal', {
-				method: 'POST',
-				credentials: 'include',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					winnerScore : this.player2Score,
-					loserScore: this.player1Score,
-					winner : this.player2name,
-					loser: this.player1name,
-				}),
-			});
+			this.postResult(this.player2name, this.player1name, this.player2Score, this.player1Score);
 		}
-		
 	}
 
 	CreateScene(): Scene {
@@ -165,9 +202,9 @@ class FirstPersonController {
 		ground.material = blackMaterial;
 
 		// Matériau néon (émissif)
-		const neonMaterial = new StandardMaterial("neon", this.scene);
-		neonMaterial.emissiveColor = new Color3(0, 1, 1);  // Cyan néon
-		neonMaterial.diffuseColor = new Color3(0, 1, 1);
+		this.neonMaterial = new StandardMaterial("neon", this.scene);
+		this.neonMaterial.emissiveColor = new Color3(0, 1, 1);  // Cyan néon
+		this.neonMaterial.diffuseColor = new Color3(0, 1, 1);
 
 		const paddleMaterial = new StandardMaterial("paddle", this.scene);
 		paddleMaterial.emissiveColor = new Color3(1, 1, 1);  // Cyan néon
@@ -176,7 +213,7 @@ class FirstPersonController {
 		const createWall = (name: string, size: Vector3, position: Vector3) => {
 			const wall = MeshBuilder.CreateBox(name, { width: size.x, height: size.y, depth: size.z }, this.scene);
 			wall.position = position;
-			wall.material = neonMaterial;
+			wall.material = this.neonMaterial;
 			if (wall.name === "topWall" || wall.name === "bottomWall") {
 				wall.rotation = new Vector3(0, Math.PI / 2, 0);
 				wall.rotation.y = Math.PI / 2;
@@ -188,10 +225,10 @@ class FirstPersonController {
 			return wall;
 		};
 
-		const leftWall = createWall("leftWall", new Vector3(10, 0.5, 0.5), new Vector3(0, 0, 10));
-		const rightWall = createWall("rightWall", new Vector3(10, 0.5, 0.5), new Vector3(0, 0, -10));
-		const topWall = createWall("topWall", new Vector3(20, 0.5, 0.5), new Vector3(5, 0, 0));
-		const bottomWall = createWall("bottomWall", new Vector3(20, 0.5, 0.5), new Vector3(-5, 0, 0));
+		const leftWall = createWall("leftWall", new Vector3(11.5, 1, 1), new Vector3(0, 0, 10));
+		const rightWall = createWall("rightWall", new Vector3(11.5, 1, 1), new Vector3(0, 0, -10));
+		const topWall = createWall("topWall", new Vector3(20.5, 1,1), new Vector3(5.25, 0, 0));
+		const bottomWall = createWall("bottomWall", new Vector3(20.5, 1, 1), new Vector3(-5.25, 0, 0));
 
 		const createGoal = (zPosition: number) => {
 			const goal = MeshBuilder.CreateBox("goal", { width: 10, height: 10, depth: 1 }, this.scene);
@@ -246,7 +283,6 @@ class FirstPersonController {
 			velocity!.normalize().scaleInPlace(10); // Vitesse constante
 			this.ball.physicsImpostor!.setLinearVelocity(velocity);
 		});
-
 		this.CreateAction();
 		//this.addBallTrail();
 		this.handleCollision(topWall, bottomWall);
@@ -361,40 +397,10 @@ class FirstPersonController {
 			speed = 10;
 		if (speed > 35)
 			speed = 35;
-		console.log("speed = ", speed);
 		newVelocity.normalize().scaleInPlace(speed);
 
 		this.ball.physicsImpostor!.setLinearVelocity(newVelocity);
 	}
-
-	/* CreateAction(): void {
-		// Configuration des entrées clavier
-		this.scene.onKeyboardObservable.add((kbInfo) => {
-			if (kbInfo.type === KeyboardEventTypes.KEYDOWN) {
-				// Limites de déplacement pour les raquettes
-				const minX = -3.75;  // -5 + 1 (moitié de la largeur)
-				const maxX = 3.75;   // 5 - 1
-
-				// Contrôles raquette 1
-				if (kbInfo.event.key === "w" || kbInfo.event.key === "W") {
-					this.paddle1.position.x = Math.min(this.paddle1.position.x + 0.4, maxX);
-				}
-				if (kbInfo.event.key === "s" || kbInfo.event.key === "S") {
-					this.paddle1.position.x = Math.max(this.paddle1.position.x - 0.4, minX);
-				}
-
-				if (this.local === true)
-				{
-					if (kbInfo.event.key === "ArrowUp") {
-						this.paddle2.position.x = Math.min(this.paddle2.position.x + 0.4, maxX);
-					}
-					if (kbInfo.event.key === "ArrowDown") {
-						this.paddle2.position.x = Math.max(this.paddle2.position.x - 0.4, minX);
-					}
-				}
-			}
-		});
-	} */
 
 	CreateAction(): void {
 		// Stocker les états des touches
@@ -419,7 +425,7 @@ class FirstPersonController {
 	
 		// Variables pour le delta time
 		let lastTime = performance.now();
-		const paddleSpeed = 0.3; // Ajustez cette valeur au besoin
+		const paddleSpeed = 0.25; // Ajustez cette valeur au besoin
 	
 		// Mouvement dans la boucle de rendu
 		this.scene.onBeforeRenderObservable.add(() => {
@@ -555,28 +561,16 @@ class FirstPersonController {
 			advancedTexture.dispose();
 			this.player2Score = 0;
 			this.player1Score = 0;
+			this.scoreText.text = `${this.player1Score} - ${this.player2Score}`;
 			this.win = false;
 
 			// Reset ball and paddles
 			this.resetBall();
 			this.paddle1.position.x = 0;
 			this.paddle2.position.x = 0;
-
-			// to be redone 
 		});
 
 		advancedTexture.addControl(restartButton);
-	}
-
-	private predictBall():number{
-		let dirX = 0;
-		let dirZ = 0;
-		dirZ = this.ball.physicsImpostor!.getLinearVelocity()?.z || 0;
-		dirX = this.ball.position.x;
-		if (dirZ > 0)
-			dirX = 0;
-		this.predictDir = dirX;
-		return dirX;
 	}
 
 	private predictBallXAtZ(targetZ: number): number {
@@ -634,7 +628,6 @@ class FirstPersonController {
 	}
 
 	stop(): void {
-		console.log("Arrêt du jeu");
 		// Arrêter la boucle de rendu
 		this.engine.stopRenderLoop();
 		// Libérer les ressources de la scène et du moteur
@@ -666,13 +659,16 @@ function createNewGame(isLocal:boolean): void {
 document.addEventListener('click', (event) => {
 	const target = event.target as HTMLElement;
 	if (target && target.id === 'soloButton') {
+		//Create an instance of solo game
 		createNewGame(false);
 	}
-});
-
-document.addEventListener('click', (event) => {
-	const target = event.target as HTMLElement;
 	if (target && target.id === 'buttonValidation') {
+		//Create an instance of local game
+		const usernameElement = document.getElementById('username') as HTMLInputElement ;
+		const player2 = usernameElement.value;
+		if (player2.trim() === "") {
+			return;
+		}
 		createNewGame(true);
 	}
 });

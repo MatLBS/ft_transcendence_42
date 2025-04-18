@@ -103,11 +103,11 @@ function validateLocalGame() {
 
 	const player2 = usernameElement.value;
 
-	if (player2 === '') {
+	if (player2.trim() === '') {
 		alert(`Player has an empty name. Please fill in the field.`);
 		return;
 	}
-
+	
 	fetch('/createLocal', {
 		method: 'POST',
 		credentials: 'include',
