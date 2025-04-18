@@ -22,6 +22,11 @@ model User {
 model Tournament {
   id      Int                 @id @default(autoincrement())
   players TournamentPlayers[]
+  matches  TournamentMatches[]
+
+  nbRounds   Int?
+  currentRound Int?
+  nbMatchesPlayed Int?
 }
 
 model TournamentPlayers {
@@ -31,8 +36,18 @@ model TournamentPlayers {
 
   name         String
   NbVictory    Int
-  rank         Int
   playerNumber Int
+}
+
+model TournamentMatches {
+  id           Int        @id @default(autoincrement())
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  tournamentId Int
+
+  winner String?
+  loser  String?
+  winnerScore  Int?
+  loserScore  Int?
 }
 
 model Local {
@@ -58,6 +73,6 @@ model Solo {
 
   winner String?
   loser  String?
-  scoreWinner  String?
-  scoreLoser  String?
+  winnerScore  Int?
+  loserScore  Int?
 }
