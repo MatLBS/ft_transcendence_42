@@ -57,7 +57,8 @@ i18next
 	  		"sentence": "You will be playing on the left side, the IA on the right ! Are you ready ?"
 	  	  },
 	  	  "tournament": {
-	  		"nbPlayers": "How many players will participate in the tournament ?"
+	  		"nbPlayers": "How many players will participate in the tournament ?",
+			"nextMatch": "Next match",
 	  	  },
 	  	  "update": {
 	  		"title": "Update",
@@ -123,7 +124,8 @@ i18next
 			"sentence": "Jugarás en el lado izquierdo, la IA en el derecho. ¿Estás listo?"
 		  },
 	  	  "tournament": {
-	  		"nbPlayers": "¿Cuántos jugadores participarán en el torneo?"
+	  		"nbPlayers": "¿Cuántos jugadores participarán en el torneo?",
+			"nextMatch": "Próximo partido",
 	  	  },
 	  	  "update": {
 	  		"title": "Actualizar",
@@ -189,7 +191,8 @@ i18next
 			"sentence": "Você jogará no lado esquerdo, a IA no lado direito! Você está pronto?"
 		  },
 	  	  "tournament": {
-	  		"nbPlayers": "Quantos jogadores participarão do torneio?"
+	  		"nbPlayers": "Quantos jogadores participarão do torneio?",
+			"nextMatch": "Próxima partida",
 	  	  },
 	  	  "update": {
 	  		"title": "Atualizar",
@@ -255,7 +258,8 @@ i18next
 			"sentence": "Vous jouerez du côté gauche, l'IA du côté droit ! Êtes-vous prêt ?"
 		  },
 	  	  "tournament": {
-	  		"nbPlayers": "Combien de joueurs participeront au tournoi ?"
+	  		"nbPlayers": "Combien de joueurs participeront au tournoi ?",
+			"nextMatch": "Prochain match",
 	  	  },
 	  	  "update": {
 	  		"title": "Mettre à jour",

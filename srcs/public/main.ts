@@ -16,8 +16,6 @@ interface ResponseData {
 export async function recvContent(url: string): Promise<void> {
 
 	let jsonLanguage;
-	console.log("ici");
-	console.log(language);
 	await fetch('/languages', {
 		method: 'POST',
 		credentials: 'include',
@@ -102,7 +100,6 @@ function handleLinks(): void {
 	nav.addEventListener('click', (e: MouseEvent) => {
 		const target = e.target as HTMLAnchorElement;
 		applyLink(target, e);
-
 
 		if (target.tagName === 'A' && target.classList.contains('logout')) {
 			handleLogout(e);
