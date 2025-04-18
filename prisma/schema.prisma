@@ -48,6 +48,7 @@ model TournamentMatches {
   loser  String?
   winnerScore  Int?
   loserScore  Int?
+  matchDate     DateTime   @default(now())
 }
 
 model Local {
@@ -58,6 +59,7 @@ model Local {
   loser  String?
   winnerScore  Int?
   loserScore  Int?
+  matchDate     DateTime   @default(now())
 }
 
 model LocalPlayers {
@@ -75,4 +77,5 @@ model Solo {
   loser  String?
   winnerScore  Int?
   loserScore  Int?
+  matchDate     DateTime   @default(now())
 }

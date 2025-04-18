@@ -233,7 +233,7 @@ function initCustomSelect() {
 			validateButton.id = 'submit-button';
 			validateButton.className = 'bg-blue-500 text-white px-4 py-2 rounded-lg mt-4';
 
-			gameSettings.addEventListener('click', (e: MouseEvent) => {
+			gameSettings.addEventListener('click', async (e: MouseEvent) => {
 				const target = e.target as HTMLElement;
 				if (target.matches('#submit-button')) {
 					const playerInputs = playerNames.querySelectorAll('#playerName');
@@ -250,12 +250,20 @@ function initCustomSelect() {
 						}
 					}
 
-					fetch('/createTournament', {
+					await fetch('/createTournament', {
 						method: 'POST',
 						credentials: 'include',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({ playerData }),
 					});
+					// await fetch('/getNextMatchTournament', {
+					// 	method: 'GET',
+					// 	credentials: 'include',
+					// })
+					// 	.then(async (response) => {
+					// 		const data = await response.json();
+					// 		console.log("data = ", data);
+					// 	})
 				}
 			});
 
