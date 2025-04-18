@@ -228,10 +228,13 @@ export async function findUsersTournament(tournamentId: number) {
 	return players;
 }
 
-export async function createTournamentDb(playersData: Map<string, { name: string; NbVictory: number; rank: number; playerNumber: number }>) {
+export async function createTournamentDb(playersData: Map<string, { name: string; NbVictory: number; playerNumber: number }>, nbRounds: number) {
 
 	const tournament = await prisma.tournament.create({
-		data: {}
+		data: {
+			nbRounds: nbRounds,
+			currentRound: 1,
+		}
 	})
 
 	if (!tournament)
@@ -243,7 +246,6 @@ export async function createTournamentDb(playersData: Map<string, { name: string
 			data: {
 				name: value.name,
 				NbVictory: value.NbVictory,
-				rank: value.rank,
 				playerNumber: value.playerNumber,
 				tournamentId: tournament.id,
 			},
@@ -276,11 +278,133 @@ export async function createLocalDb(players: Array<string>) {
 	}
 }
 
+export async function fillLocalDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number) {
+	const localParty = await prisma.local.update({
+		where: { id: id },
+		data:{
+			winner: winner,
+			loser: loser,
+			winnerScore: winnerScore,
+			loserScore: loserScore
+		}
+	});
+}
+
 export async function updateUserLanguageDB(id: number, newLanguage: string) {
 	const userToUpdate = await prisma.user.update({
 		where: { id: id },
 		data: { language: newLanguage }
 	})
+}
+
+export async function getMaxId(model: string) {
+	switch (model) {
+		case 'local':
+			const latestLocal = await prisma.local.findFirst({
+				orderBy: {
+					id: 'desc'
+				},
+				take: 1
+			});
+			if (!latestLocal)
+				throw new Error(`No local party were found in the database.`)
+			return latestLocal.id;
+		case 'tournament':
+			const latestTournament = await prisma.tournament.findFirst({
+				orderBy: {
+					id: 'desc'
+				},
+				take: 1
+			});
+			if (!latestTournament)
+				throw new Error(`No local party were found in the database.`)
+			return latestTournament.id;
+		case 'solo':
+			const latestSolo = await prisma.solo.findFirst({
+				orderBy: {
+					id: 'desc'
+				},
+				take: 1
+			});
+			if (!latestSolo)
+				throw new Error(`No local party were found in the database.`)
+			return latestSolo.id;
+	}
+}
+
+export async function createSoloDb() {
+	const soloParty = await prisma.solo.create({
+		data: {}
+	})
+	if (!soloParty)
+		throw new Error(`Failed to create a new local party.`)
+}
+
+export async function fillSoloDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number) {
+	const soloParty = await prisma.solo.update({
+		where: { id: id },
+		data:{
+			winner: winner,
+			loser: loser,
+			winnerScore: winnerScore,
+			loserScore: loserScore
+		}
+	});
+}
+
+export async function fillTournamentDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number) {
+	const winnerPlayer = await prisma.tournamentPlayers.findFirst({
+		where: {
+			tournamentId: id,
+			name: winner
+		}
+	});
+
+	if (!winnerPlayer)
+		throw new Error(`Winner player not found in tournament with id '${id}'.`);
+
+	await prisma.tournamentPlayers.update({
+		where: { id: winnerPlayer.id },
+		data: { NbVictory: { increment: 1 }}
+	});
+	await prisma.tournament.update({
+		where: { id: id },
+		data: {
+			nbMatchesPlayed: { increment: 1 }
+		}
+	})
+	await prisma.tournamentMatches.create({
+		data: {
+			tournamentId: id,
+			winner: winner,
+			loser: loser,
+			winnerScore: winnerScore,
+			loserScore: loserScore
+		}
+	})
+	const tournament = await getTournamentById(id);
+	if (!tournament || !tournament.nbRounds || !tournament.currentRound)
+		throw new Error(`Tournament with id '${id}' do not exits in the database.`)
+
+	const totalMatches = Math.pow(2, tournament.nbRounds - tournament.currentRound);
+	if (tournament.nbMatchesPlayed === totalMatches)
+		await prisma.tournament.update({
+			where: { id: id },
+			data: {
+				currentRound: { increment: 1 }
+			}
+		});
+}
+
+export async function getTournamentById(id: number) {
+	const tournament = await prisma.tournament.findFirst({
+		where: {
+			id: id,
+		},
+	})
+	if (!tournament)
+		throw new Error(`Tournament with id '${id}' do not exits in the database.`)
+	return tournament;
 }
 
 export async function logUser(id: number, isOnline: boolean) {

@@ -36,6 +36,11 @@ model Follow {
 model Tournament {
   id      Int                 @id @default(autoincrement())
   players TournamentPlayers[]
+  matches  TournamentMatches[]
+
+  nbRounds   Int?
+  currentRound Int?
+  nbMatchesPlayed Int?
 }
 
 model TournamentPlayers {
@@ -45,8 +50,19 @@ model TournamentPlayers {
 
   name         String
   NbVictory    Int
-  rank         Int
   playerNumber Int
+}
+
+model TournamentMatches {
+  id           Int        @id @default(autoincrement())
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  tournamentId Int
+
+  winner String?
+  loser  String?
+  winnerScore  Int?
+  loserScore  Int?
+  matchDate     DateTime   @default(now())
 }
 
 model Local {
@@ -54,7 +70,10 @@ model Local {
   players LocalPlayers[]
 
   winner String?
-  score  String?
+  loser  String?
+  winnerScore  Int?
+  loserScore  Int?
+  matchDate     DateTime   @default(now())
 }
 
 model LocalPlayers {
@@ -65,7 +84,12 @@ model LocalPlayers {
   username String
 }
 
-// model Website {
-//   id      Int   @id @default(autoincrement())
-//   language String?
-// }
+model Solo {
+  id      Int            @id @default(autoincrement())
+
+  winner String?
+  loser  String?
+  winnerScore  Int?
+  loserScore  Int?
+  matchDate     DateTime   @default(now())
+}

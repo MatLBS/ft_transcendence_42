@@ -6,14 +6,15 @@ import { findUserById } from "../dist/prisma/seed.js";
 import { authenticateUser } from "./tokens.js";
 import { getLanguageWithoutBody } from "./getLanguage.js"
 
-export const local = async (req, reply) => {
+export const solo = async (req, reply) => {
 
 	const response = await authenticateUser(req);
-	let language = await findUserById(response.user.id);
+	let language = await findUserById(response.user.id)
 	language = language.language
 	const jsonLanguage = await getLanguageWithoutBody(language);
 
-	const route = routes["local"];
+	const route = routes["solo"];
 	const content = await ejs.renderFile(path.join(route.dir, route.file), {message: null, jsonLanguage});
+	
 	return (reply.send({ content }));
 }
