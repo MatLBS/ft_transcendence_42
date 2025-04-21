@@ -1,6 +1,3 @@
-// import Chart from '/node_modules/chart.js/dist/chart.js';
-// import Chart from '../../../../../node_modules/chart.js/dist/chart.js';
-
 async function displayMatches() {
     const match__history = document.getElementById('match__history') as HTMLInputElement | null;
     
@@ -151,6 +148,9 @@ async function displayGraphs() {
     const gamesWin = gamesWinSolo + gamesWinLocal + gamesWinTournament;
     const gamesLose = gamesLoseSolo + gamesLoseLocal + gamesLoseTournament;
 
+    if (gamesWin + gamesLose === 0)
+        return;
+
     const global = document.getElementById('globalChart') as HTMLCanvasElement | null;
     if (!global) {
         console.error('Canvas non trouvé !');
@@ -166,6 +166,9 @@ async function displayGraphs() {
         }]
         }
     });
+
+    if (gamesWinLocal + gamesLoseLocal === 0)
+        return;
 
     const local = document.getElementById('localChart') as HTMLCanvasElement | null;
     if (!local) {
@@ -183,6 +186,9 @@ async function displayGraphs() {
         }
     });
 
+    if (gamesWinSolo + gamesLoseSolo === 0)
+        return;
+
     const solo = document.getElementById('soloChart') as HTMLCanvasElement | null;
     if (!solo) {
         console.error('Canvas non trouvé !');
@@ -198,6 +204,9 @@ async function displayGraphs() {
         }]
         }
     });
+
+    if (gamesWinTournament + gamesLoseTournament === 0)
+        return;
 
     const tournament = document.getElementById('tournamentChart') as HTMLCanvasElement | null;
     if (!tournament) {
@@ -221,9 +230,6 @@ const appDiv = document.getElementById("app");
 if (appDiv) {
     appDiv.addEventListener('click', (e: MouseEvent) => {
         const target = e.target as HTMLElement;
-        console.log(target.tagName)
-        console.log(target.id)
-
 
         // Gestion des clics sur le bouton "Custom Select"
         if (target.closest('#custom-select'))  {

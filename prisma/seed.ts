@@ -149,10 +149,8 @@ export async function deleteUser (username: string) {
 		},
 	})
 
-	if (!user) {
-		console.log("error")
+	if (!user)
 		throw new Error(`User with name ${username} not found`)
-	}
 
 	const deletedUser = await prisma.user.delete({
 		where: {
