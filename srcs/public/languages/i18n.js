@@ -40,9 +40,10 @@ i18next
 	  	  "profil": {
 	  		"statistics": "Statistics",
 	  		"matchHistory": "Match History",
-	  		"result": "Result",
+	  		"type": "Type",
+	  		"winner": "Winner",
+	  		"loser": "Loser",
 	  		"score": "Score",
-	  		"opponent": "Opponent",
 	  		"graphics": "Graphics",
 	  		"update": "Update"
 	  	  },
