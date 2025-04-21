@@ -19,5 +19,4 @@ export const getMatchsResults = async (req, reply) => {
     } catch (error) {
 		return reply.send({message: error.message});
 	}
-
 }

@@ -1,5 +1,3 @@
-import { Chart } from 'chart.js';
-
 async function displayMatches() {
     const match__history = document.getElementById('match__history') as HTMLInputElement | null;
     
@@ -111,25 +109,143 @@ async function displayMatches() {
 }
 
 async function displayGraphs() {
-    const ctx = document.getElementById('global_graphs') as HTMLCanvasElement | null;
+
+    let gamesWinSolo = 0;
+    let gamesWinLocal = 0;
+    let gamesWinTournament = 0;
+    let gamesLoseSolo = 0;
+    let gamesLoseLocal = 0;
+    let gamesLoseTournament = 0;
+
+    let userName: string = '';
+
+    await fetch('/getUser', {
+        method: 'GET',
+        credentials: 'include',
+    })
+        .then(async (response) => {
+            const data = await response.json();
+            userName = data.user.username as string;
+        })
     
-    new Chart(ctx!, {
-    type: 'bar',
-    data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-        y: {
-            beginAtZero: true
-        }
-        }
+    await fetch('getMatchsResults', {
+        method: 'GET',
+        credentials: 'include',
+    })
+    .then(async (response) => {
+        const data = await response.json();
+        const localMatches = data.local;
+        const soloMatches = data.solo;
+        const tournamentMatches = data.tournament;
+        for (let i = 0; i < localMatches.length; i++)
+            localMatches[i].winner === userName ? gamesWinLocal++ : gamesLoseLocal++;
+        for (let i = 0; i < soloMatches.length; i++)
+            soloMatches[i].winner === userName ? gamesWinSolo++ : gamesLoseSolo++;
+        for (let i = 0; i < tournamentMatches.length; i++)
+            tournamentMatches[i].winner === userName ? gamesWinTournament++ : gamesLoseTournament++;
+    });
+
+    const gamesWin = gamesWinSolo + gamesWinLocal + gamesWinTournament;
+    const gamesLose = gamesLoseSolo + gamesLoseLocal + gamesLoseTournament;
+
+    const global = document.getElementById('globalChart');
+    if (!global) {
+        console.error('Canvas non trouvé !');
+        return;
     }
+    new Chart(global, {
+        type: 'doughnut',
+        data: {
+        labels: ['Win', 'Lose'],
+        datasets: [{
+            data: [gamesWin, gamesLose],
+            backgroundColor: ['red', 'blue']
+        }]
+        }
+    });
+
+    const local = document.getElementById('localChart');
+    if (!local) {
+        console.error('Canvas non trouvé !');
+        return;
+    }
+    new Chart(local, {
+        type: 'doughnut',
+        data: {
+        labels: ['Win', 'Lose'],
+        datasets: [{
+            data: [gamesWinLocal, gamesLoseLocal],
+            backgroundColor: ['red', 'blue']
+        }]
+        }
+    });
+
+    const solo = document.getElementById('soloChart');
+    if (!solo) {
+        console.error('Canvas non trouvé !');
+        return;
+    }
+    new Chart(solo, {
+        type: 'doughnut',
+        data: {
+        labels: ['Win', 'Lose'],
+        datasets: [{
+            data: [gamesWinSolo, gamesLoseSolo],
+            backgroundColor: ['red', 'blue']
+        }]
+        }
+    });
+
+    const tournament = document.getElementById('tournamentChart');
+    if (!tournament) {
+        console.error('Canvas non trouvé !');
+        return;
+    }
+    new Chart(tournament, {
+        type: 'doughnut',
+        data: {
+        labels: ['Win', 'Lose'],
+        datasets: [{
+            data: [gamesWinTournament, gamesLoseTournament],
+            backgroundColor: ['red', 'blue']
+        }]
+        }
+    });
+}
+
+// Ajoute un gestionnaire d'événements global pour la délégation
+const appDiv = document.getElementById("app");
+if (appDiv) {
+    appDiv.addEventListener('click', (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        console.log(target.tagName)
+        console.log(target.id)
+
+
+        // Gestion des clics sur le bouton "Custom Select"
+        if (target.closest('#custom-select'))  {
+            const customOptions = document.getElementById('custom-options');
+            if (customOptions) customOptions.classList.toggle('open');
+            return;
+        }
+
+        // Gestion des clics sur le bouton "Validation"
+        if (target.tagName === 'SPAN' && target.id === 'local') {
+            const divLocal = document.getElementById('divLocal');
+            if (divLocal) divLocal.classList.toggle('open');
+            return;
+        }
+        if (target.tagName === 'SPAN' && target.id === 'solo') {
+            const divSolo = document.getElementById('divSolo');
+            if (divSolo) divSolo.classList.toggle('open');
+            return;
+        }
+        if (target.tagName === 'SPAN' && target.id === 'tournament') {
+            const divTournament = document.getElementById('divTournament');
+            if (divTournament) divTournament.classList.toggle('open');
+            return;
+        }
+
     });
 }
 
