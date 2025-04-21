@@ -1,3 +1,6 @@
+// import Chart from '/node_modules/chart.js/dist/chart.js';
+// import Chart from '../../../../../node_modules/chart.js/dist/chart.js';
+
 async function displayMatches() {
     const match__history = document.getElementById('match__history') as HTMLInputElement | null;
     
@@ -148,7 +151,7 @@ async function displayGraphs() {
     const gamesWin = gamesWinSolo + gamesWinLocal + gamesWinTournament;
     const gamesLose = gamesLoseSolo + gamesLoseLocal + gamesLoseTournament;
 
-    const global = document.getElementById('globalChart');
+    const global = document.getElementById('globalChart') as HTMLCanvasElement | null;
     if (!global) {
         console.error('Canvas non trouvé !');
         return;
@@ -164,7 +167,7 @@ async function displayGraphs() {
         }
     });
 
-    const local = document.getElementById('localChart');
+    const local = document.getElementById('localChart') as HTMLCanvasElement | null;
     if (!local) {
         console.error('Canvas non trouvé !');
         return;
@@ -180,7 +183,7 @@ async function displayGraphs() {
         }
     });
 
-    const solo = document.getElementById('soloChart');
+    const solo = document.getElementById('soloChart') as HTMLCanvasElement | null;
     if (!solo) {
         console.error('Canvas non trouvé !');
         return;
@@ -196,7 +199,7 @@ async function displayGraphs() {
         }
     });
 
-    const tournament = document.getElementById('tournamentChart');
+    const tournament = document.getElementById('tournamentChart') as HTMLCanvasElement | null;
     if (!tournament) {
         console.error('Canvas non trouvé !');
         return;
