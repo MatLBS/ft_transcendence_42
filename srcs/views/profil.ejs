@@ -28,8 +28,13 @@
 		<div id="graphs" class="w-2/5 border-2 border-gray-300">
 			<h2 class="text-center p-5"><%= jsonLanguage.profil.graphics %></h2>
 			<div class="">
-				<div class="text-center m-5 underline"><%= jsonLanguage.profil.global %></div>
-				<canvas id="globalChart"></canvas>
+				<div>
+					<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
+						<div class="text-center m-5 underline"><%= jsonLanguage.profil.global %></div>
+						<span class="material-icons pl-5" id="global">expand_more</span>
+					</div>
+					<div class="" id="divGlobal"><canvas id="globalChart"></canvas></div>
+				</div>
 				<div>
 					<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
 						<p class="underline"><%= jsonLanguage.profil.local %></p>

@@ -230,6 +230,11 @@ if (appDiv) {
         }
 
         // Gestion des clics sur le bouton "Validation"
+        if (target.tagName === 'SPAN' && target.id === 'global') {
+            const divGlobal = document.getElementById('divGlobal');
+            if (divGlobal) divGlobal.classList.toggle('none');
+            return;
+        }
         if (target.tagName === 'SPAN' && target.id === 'local') {
             const divLocal = document.getElementById('divLocal');
             if (divLocal) divLocal.classList.toggle('open');

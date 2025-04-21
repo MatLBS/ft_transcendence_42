@@ -66,3 +66,7 @@ h2 {
 .open {
 	display: block !important;
 }
+
+.none {
+	display: none !important;
+}
