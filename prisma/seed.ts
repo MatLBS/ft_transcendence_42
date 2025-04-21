@@ -393,3 +393,57 @@ export async function getTournamentById(id: number) {
 		throw new Error(`Tournament with id '${id}' do not exits in the database.`)
 	return tournament;
 }
+
+export async function getLocalMatches(user: string) {
+	const localMatches = await prisma.local.findMany({
+		where: {
+			OR: [
+				{
+					winner: user,
+				},
+				{
+					loser: user,
+				},
+			],
+		},
+	});
+	if (!localMatches)
+		throw new Error(`No local matches were found in the database.`)
+	return localMatches;
+}
+
+export async function getSoloMatches(user: string) {
+	const soloMatches = await prisma.solo.findMany({
+		where: {
+			OR: [
+				{
+					winner: user,
+				},
+				{
+					loser: user,
+				},
+			],
+		},
+	});
+	if (!soloMatches)
+		throw new Error(`No local matches were found in the database.`)
+	return soloMatches;
+}
+
+export async function getTournamentMatches(user: string) {
+	const tournamentMatches = await prisma.tournamentMatches.findMany({
+		where: {
+			OR: [
+				{
+					winner: user,
+				},
+				{
+					loser: user,
+				},
+			],
+		},
+	});
+	if (!tournamentMatches)
+		throw new Error(`No local matches were found in the database.`)
+	return tournamentMatches;
+}
