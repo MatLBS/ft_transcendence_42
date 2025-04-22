@@ -5,7 +5,7 @@ export const generateCode = async (req, reply) => {
 	if (!global.codeId) {
 		global.codeId = new Map();
 	}
-	const code = Math.floor(100000 + Math.random() * 900000).toString(); // le code que le user doit donner
+	const code = Math.floor(100000 + Math.random() * 900000).toString();
 	// const code = "123456";
 	const codeId = crypto.randomUUID();
 	global.codeId.set(codeId, {

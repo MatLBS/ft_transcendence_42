@@ -62,11 +62,13 @@ if (appDiv) {
 		// Gestion des clics sur le bouton "Validation"
 		if (target.tagName === 'BUTTON' && target.id === 'buttonValidation') {
 			validateLocalGame();
+			hideDiv("divLocal", "buttonValidation");
 			return;
 		}
 
 		if (target.tagName === 'BUTTON' && target.id === 'soloButton') {
 			validateSoloGame();
+			hideDiv("divSolo", "soloButton");
 			return;
 		}
 		if(target.tagName === 'BUTTON' && target.id ==='buttonNextMatch')
@@ -75,6 +77,14 @@ if (appDiv) {
 			divNextMatchButton?.classList.add('hidden');
 		}
 	});
+}
+
+function hideDiv(divId: string, buttonId: string) {
+	const div = document.getElementById(divId);
+	const button = document.getElementById(buttonId);
+	if (div) div.classList.toggle('none');
+	if (button) button.classList.toggle('none');
+	return;
 }
 
 async function localClick() {

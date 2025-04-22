@@ -5,7 +5,7 @@ export const getHome = async (req, reply) => {
 	if (response.status === 200 && response.newAccessToken) {
 		return reply
 			.setCookie('access_token', response.newAccessToken, {
-				httpOnly: true,
+				httpOnly: false,
 				secure: false,
 				sameSite: 'Strict'
 			})

@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 // import { app } from '../srcs/server.js';
 
-const prisma = new PrismaClient()
+export const prisma = new PrismaClient()
 
 export async function createUser (username: string, password: string, email: string, profilePicture?: string) {
 	const usernameAlreadyExist = await prisma.user.findFirst({
@@ -27,6 +27,7 @@ export async function createUser (username: string, password: string, email: str
 			password: password,
 			email: email,
 			profilePicture: profilePicture || null,
+			isOnline: false,
 		},
 	})
 }
@@ -60,6 +61,7 @@ export async function createUserGoogle (username: string, email: string, profile
 			username: username,
 			email: email,
 			profilePicture: profilePicture,
+			isOnline: false,
 		},
 	})
 	return;
@@ -149,10 +151,8 @@ export async function deleteUser (username: string) {
 		},
 	})
 
-	if (!user) {
-		console.log("error")
+	if (!user)
 		throw new Error(`User with name ${username} not found`)
-	}
 
 	const deletedUser = await prisma.user.delete({
 		where: {
@@ -163,6 +163,17 @@ export async function deleteUser (username: string) {
 
 export async function getAllUsers() {
 	const users = await prisma.user.findMany();
+	return users;
+}
+
+export async function searchUsername(username: string) {
+	const users = await prisma.user.findMany({
+		where: {
+			username: {
+				contains: username,
+			},
+		},
+	});
 	return users;
 }
 
@@ -289,30 +300,30 @@ export async function getMaxId(model: string) {
 		case 'local':
 			const latestLocal = await prisma.local.findFirst({
 				orderBy: {
-				  id: 'desc'
+					id: 'desc'
 				},
 				take: 1
-			  });
+			});
 			if (!latestLocal)
 				throw new Error(`No local party were found in the database.`)
 			return latestLocal.id;
 		case 'tournament':
 			const latestTournament = await prisma.tournament.findFirst({
 				orderBy: {
-				  id: 'desc'
+					id: 'desc'
 				},
 				take: 1
-			  });
+			});
 			if (!latestTournament)
 				throw new Error(`No local party were found in the database.`)
 			return latestTournament.id;
 		case 'solo':
 			const latestSolo = await prisma.solo.findFirst({
 				orderBy: {
-				  id: 'desc'
+					id: 'desc'
 				},
 				take: 1
-			  });
+			});
 			if (!latestSolo)
 				throw new Error(`No local party were found in the database.`)
 			return latestSolo.id;
@@ -342,24 +353,24 @@ export async function fillSoloDb(id: number, winner: string, loser: string, winn
 export async function fillTournamentDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number) {
 	const winnerPlayer = await prisma.tournamentPlayers.findFirst({
 		where: {
-		  tournamentId: id,
-		  name: winner
+			tournamentId: id,
+			name: winner
 		}
-	  });
-	
+	});
+
 	if (!winnerPlayer)
 		throw new Error(`Winner player not found in tournament with id '${id}'.`);
-	
+
 	await prisma.tournamentPlayers.update({
 		where: { id: winnerPlayer.id },
 		data: { NbVictory: { increment: 1 }}
 	});
 	await prisma.tournament.update({
-        where: { id: id },
-        data: {
-            nbMatchesPlayed: { increment: 1 }
-        }
-    })
+		where: { id: id },
+		data: {
+			nbMatchesPlayed: { increment: 1 }
+		}
+	})
 	await prisma.tournamentMatches.create({
 		data: {
 			tournamentId: id,
@@ -392,4 +403,67 @@ export async function getTournamentById(id: number) {
 	if (!tournament)
 		throw new Error(`Tournament with id '${id}' do not exits in the database.`)
 	return tournament;
+}
+
+export async function logUser(id: number, isOnline: boolean) {
+	const user = await prisma.user.update({
+		where: {
+			id: id,
+		},
+		data: {isOnline: isOnline}
+	})
+}
+
+export async function getLocalMatches(user: string) {
+	const localMatches = await prisma.local.findMany({
+		where: {
+			OR: [
+				{
+					winner: user,
+				},
+				{
+					loser: user,
+				},
+			],
+		},
+	});
+	if (!localMatches)
+		throw new Error(`No local matches were found in the database.`)
+	return localMatches;
+}
+
+export async function getSoloMatches(user: string) {
+	const soloMatches = await prisma.solo.findMany({
+		where: {
+			OR: [
+				{
+					winner: user,
+				},
+				{
+					loser: user,
+				},
+			],
+		},
+	});
+	if (!soloMatches)
+		throw new Error(`No local matches were found in the database.`)
+	return soloMatches;
+}
+
+export async function getTournamentMatches(user: string) {
+	const tournamentMatches = await prisma.tournamentMatches.findMany({
+		where: {
+			OR: [
+				{
+					winner: user,
+				},
+				{
+					loser: user,
+				},
+			],
+		},
+	});
+	if (!tournamentMatches)
+		throw new Error(`No local matches were found in the database.`)
+	return tournamentMatches;
 }

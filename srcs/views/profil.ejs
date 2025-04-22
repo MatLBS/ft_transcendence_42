@@ -14,22 +14,76 @@
 			</h2>
 		</div>
 	</div>
-	<h2 class="stats__title text-center"><%= jsonLanguage.profil.statistics %></h2>
+	<h2 class="stats__title text-center pb-5"><%= jsonLanguage.profil.statistics %></h2>
 	<div class="stats flex justify-center align-center gap-16">
 		<div id="match__history" class="w-2/5 border-2 border-gray-300">
 			<h2 class="text-center p-5"><%= jsonLanguage.profil.matchHistory %></h2>
-			<div class="flex justify-around align-center">
-				<div id="match__results"><%= jsonLanguage.profil.result %></div>
-				<div id="match__scores"><%= jsonLanguage.profil.score %></div>
-				<div id="match__opponents"><%= jsonLanguage.profil.opponent %></div>
+			<div class="flex justify-around align-center text-center underline m-2">
+				<p class="w-1/6"><%= jsonLanguage.profil.type %></p>
+				<p class="w-2/6"><%= jsonLanguage.profil.winner %></p>
+				<p class="w-2/6"><%= jsonLanguage.profil.loser %></p>
+				<p class="w-1/6"><%= jsonLanguage.profil.score %></p>
 			</div>
 		</div>
 		<div id="graphs" class="w-2/5 border-2 border-gray-300">
 			<h2 class="text-center p-5"><%= jsonLanguage.profil.graphics %></h2>
-			<div class="flex justify-around align-center">
-				<div id="global_graphs"></div>
+			<div class="">
+				<div>
+					<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
+						<div class="text-center m-5 underline"><%= jsonLanguage.profil.global %></div>
+						<span class="material-icons pl-5" id="global">expand_more</span>
+					</div>
+					<div class="" id="divGlobal"><canvas id="globalChart"></canvas></div>
+				</div>
+				<div>
+					<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
+						<p class="underline"><%= jsonLanguage.profil.local %></p>
+						<span class="material-icons pl-5" id="local">expand_more</span>
+					</div>
+					<div class="hidden" id="divLocal"><canvas id="localChart"></canvas></div>
+				</div>
+				<div>
+					<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
+						<p class="text-center m-5 underline"><%= jsonLanguage.profil.solo %></p>
+						<span class="material-icons pl-5" id="solo">expand_more</span>
+					</div>
+					<div class="hidden" id="divSolo"><canvas id="soloChart"></canvas></div>
+				</div>
+				<div>
+					<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
+						<p class="text-center m-5 underline"><%= jsonLanguage.profil.tournament %></p>
+						<span class="material-icons pl-5" id="tournament">expand_more</span>
+					</div>
+					<div class="hidden" id="divTournament"><canvas id="tournamentChart"></canvas></div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 <a class="my" href="/update"><%= jsonLanguage.profil.update %></a>
+
+<% if (friends && friends.length > 0) { %>
+	<div class="friends__list">
+		<h2><%= jsonLanguage.profil.friends %></h2>
+		<ul>
+			<% friends.forEach(friend => { %>
+				<li>
+					<img
+						src="<%= friend.profilePicture %>"
+						alt="Photo de profil de <%= friend.username %>"
+						style="width: 50px; height: 50px; border-radius: 50%;"
+					/>
+					<span><%= friend.username %></span>
+					<button class="remove_friend" data-username="<%= friend.username %>">remove friend</button>
+					<% if (friend.isOnline) { %>
+						<p>online</p>
+					<% } else { %>
+						<p>offline</p>
+					<% } %>
+				</li>
+			<% }) %>
+		</ul>
+	</div>
+<% } else { %>
+	<p>moi j'ai pas d'amis</p>
+<% } %>
