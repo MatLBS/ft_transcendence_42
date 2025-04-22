@@ -16,4 +16,4 @@ RUN npx tsc
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npm run build:css && npm run build:client && npm run dev"]
+CMD ["npm", "run", "dev"]

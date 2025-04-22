@@ -71,6 +71,11 @@ if (appDiv) {
 			hideDiv("divSolo", "soloButton");
 			return;
 		}
+		if(target.tagName === 'BUTTON' && target.id ==='buttonNextMatch')
+		{
+			const divNextMatchButton = document.getElementById('divNextMatchButton');
+			divNextMatchButton?.classList.add('hidden');
+		}
 	});
 }
 
@@ -113,11 +118,11 @@ function validateLocalGame() {
 
 	const player2 = usernameElement.value;
 
-	if (player2 === '') {
+	if (player2.trim() === '') {
 		alert(`Player has an empty name. Please fill in the field.`);
 		return;
 	}
-
+	
 	fetch('/createLocal', {
 		method: 'POST',
 		credentials: 'include',
@@ -283,14 +288,15 @@ function initCustomSelect() {
 	});
 };
 
-const divNextMatchButton = document.getElementById('divNextMatchButton');
 const buttonNextMatch = document.getElementById('buttonNextMatch');
 
-divNextMatchButton?.addEventListener('eventNextMatch', (e: Event) => {
-	divNextMatchButton.classList.toggle('open');
-	//rajouter l'annonce du match et des joueurs qui vont s'affronter
+window.addEventListener('eventNextMatch', () => {
+	console.log ("receive event");
+	const divNextMatchButton = document.getElementById('divNextMatchButton');
+	divNextMatchButton?.classList.remove('hidden');
 });
 
-buttonNextMatch?.addEventListener('click', (e: MouseEvent) => {
+buttonNextMatch?.addEventListener('click', () => {
+	const divNextMatchButton = document.getElementById('divNextMatchButton');
 	divNextMatchButton?.classList.toggle('open');
 });
