@@ -41,6 +41,7 @@ model Tournament {
   nbRounds   Int?
   currentRound Int?
   nbMatchesPlayed Int?
+  nbMatchesPlayedRound Int?
 }
 
 model TournamentPlayers {

@@ -50,6 +50,7 @@ async function createBrackets(players, tournamentId) {
 	const tournament = await getTournamentById(tournamentId);
 	const remainingPlayers = players.filter(player => player.NbVictory === tournament.currentRound - 1);
 	const sortedPlayers = remainingPlayers.sort((a, b) => a.playerNumber - b.playerNumber);
+	console.log("sortedPlayers : ", sortedPlayers)
 	const nextMatch = []
 
 	for (let i = 0; i < sortedPlayers.length; ++i) {
