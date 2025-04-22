@@ -14,6 +14,12 @@ interface ResponseData {
 
 // Fait une requête au serveur pour récupérer le contenu de la page demandée (sans recharger la page)
 export async function recvContent(url: string): Promise<void> {
+	const searchInput = document.getElementById('search-input') as HTMLInputElement;
+	if (searchInput) {
+		searchInput.value = '';
+		const searchResults = document.getElementById('search-results');
+		if (searchResults) searchResults.innerHTML = '';
+	}
 	let jsonLanguage;
 	await fetch('/languages', {
 		method: 'POST',

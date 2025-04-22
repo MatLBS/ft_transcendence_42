@@ -1,4 +1,5 @@
 <div class="header__wrapper">
+	<button id="open-friends" class="btn-abs">Friends</button>
 	<header></header>
 	<div class="user__infos__container items-center">
 		<div class="user__infos">
@@ -62,28 +63,27 @@
 </div>
 <a class="my" href="/update"><%= jsonLanguage.profil.update %></a>
 
-<% if (friends && friends.length > 0) { %>
-	<div class="friends__list">
-		<h2><%= jsonLanguage.profil.friends %></h2>
-		<ul>
-			<% friends.forEach(friend => { %>
-				<li>
-					<img
-						src="<%= friend.profilePicture %>"
-						alt="Photo de profil de <%= friend.username %>"
-						style="width: 50px; height: 50px; border-radius: 50%;"
-					/>
-					<span><%= friend.username %></span>
-					<button class="remove_friend" data-username="<%= friend.username %>">remove friend</button>
-					<% if (friend.isOnline) { %>
-						<p>online</p>
-					<% } else { %>
-						<p>offline</p>
-					<% } %>
-				</li>
-			<% }) %>
-		</ul>
-	</div>
-<% } else { %>
-	<p>moi j'ai pas d'amis</p>
-<% } %>
+<div id="container">
+	<h1 id="friend-title">Ma Liste d’Amis</h1>
+	<button id="close-friends">X</button>
+	<ul class="friends-list">
+	<% friends.forEach(friend => { %>
+		<a class="my" href="/users/<%= friend.username %>">
+			<li class="friend-card">
+				<div class="avatar">
+					<img src="<%= friend.profilePicture %>" alt="Photo de profil de <%= friend.username %>">
+					<span class="status <%= friend.isOnline ? 'online' : 'offline' %>"></span>
+				</div>
+				<div class="info">
+					<h2><%= friend.username %></h2>
+					<p class="sub-text"><%= friend.isOnline ? 'En ligne' : 'Hors ligne' %></p>
+				</div>
+				<button class="btn remove-friend" data-username="<%= friend.username %>">
+					<svg width="16" height="16" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm2 4h14v2H5v-2zm2 4h10v2H7v-2z"/></svg>
+					Retirer
+				</button>
+			</li>
+		</a>
+	<% }); %>
+	</ul>
+</div>
