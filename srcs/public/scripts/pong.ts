@@ -741,7 +741,7 @@ document.addEventListener('click', (event) => {
 		}
 		createNewGame(true,false);
 	}
-	if (target && target.id === 'submit-button' || target.id ==='buttonNextMatch') {
+	if (target && target.id ==='buttonNextMatch') {
 		//Create an instance of solo game
 		createNewGame(true,true);
 	}
