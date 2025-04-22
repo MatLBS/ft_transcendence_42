@@ -57,7 +57,6 @@
 	},
 	"devDependencies": {
 		"@types/cannon": "^0.1.13",
-		"@types/chart.js": "^2.9.41",
 		"@types/node": "^22.13.5",
 		"autoprefixer": "^10.4.21",
 		"postcss": "^8.5.3",

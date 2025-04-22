@@ -12,7 +12,7 @@ import { getPost } from './controllers/getPost.js';
 import { getLanguage } from './controllers/getLanguage.js';
 import { getHome } from './controllers/getHome.js';
 import { getPage } from './controllers/getPage.js';
-import { logout } from './controllers/logout.js';
+import { logout, quit } from './controllers/logout.js';
 import { refresh } from './controllers/tokens.js';
 import { tournament } from './controllers/tournament.js';
 import { createTournament, nextMatchTournament, updateResultTournamentGame } from './controllers/createTournament.js';
@@ -26,6 +26,10 @@ import { createSoloGame, updateResultSoloGame } from './controllers/createSolo.j
 import { createLocalGame, updateResultLocalGame } from './controllers/createLocal.js';
 import { getMatchsResults } from './controllers/getMatchs.js';
 
+import { getErrorPage } from './controllers/errorPage.js';
+import { search } from './controllers/search.js';
+import { getUserProfile } from './controllers/getUserProfile.js';
+import { addFriends, deleteFriends } from './controllers/handleFriends.js';
 
 // peut etre sauvegarder le content des fichier html.
 
@@ -53,12 +57,7 @@ function loadRoutesFromDirectory(directory, useEjs) {
 	return routes;
 }
 
-// Charger les routes des répertoires 'public' et 'views'
-const publicRoutes = loadRoutesFromDirectory(path.join(__dirname, 'public'), false);
-const viewRoutes = loadRoutesFromDirectory(path.join(__dirname, 'views'), true);
-
-// Fusionner les deux ensembles de routes
-export const routes = { ...publicRoutes, ...viewRoutes };
+export const routes = loadRoutesFromDirectory(path.join(__dirname, 'views'), true);
 
 export default async function userRoutes(app) {
 	app.register(fastifyStatic, {
@@ -79,11 +78,13 @@ export default async function userRoutes(app) {
 
 	app.register(fastifyFormbody)
 
-
 	app.get('/', getHome);
 	app.get('/:page', getPage);
 	app.post('/url', getPost);
 	app.post('/languages', getLanguage);
+
+	// app.post('/users/:page', getUserProfile);
+	app.get('/users/:page', getPage);
 
 	app.post('/registerUser', checkUserBack);
 	app.post('/verifForm', verifFormRegister);
@@ -95,7 +96,15 @@ export default async function userRoutes(app) {
 	app.post('/updateUserGoogle', updateUserGoogle);
 	app.post('/updateTwoFA', updateUserTwoFA);
 
-	app.post('/logout', logout);
+	app.get('/addFriends/:page', addFriends);
+	app.get('/deleteFriends/:page', deleteFriends);
+
+	app.get('/logout', logout);
+	app.get('/quit', quit);
+	app.post('/quit', quit);
+
+	app.post('/search', search);
+
 	app.post('/refresh', refresh);
 	app.post('/tournament', tournament);
 	app.post('/createTournament', createTournament);
@@ -113,4 +122,5 @@ export default async function userRoutes(app) {
 	app.post('/postResulTournament', updateResultTournamentGame);
 	app.get('/getMatchsResults', getMatchsResults);
 
+	app.setNotFoundHandler(getErrorPage);
 }
