@@ -23,7 +23,7 @@ class FirstPersonController {
 	private explosionEffect!: ParticleSystem;
 	private currentHue: number = 0;
 
-	constructor(isLocal:boolean, isTournament:boolean) {
+	constructor(isLocal: boolean, isTournament: boolean) {
 		const canvas = document.getElementById("renderCanvas");
 		if (!(canvas instanceof HTMLCanvasElement)) {
 			throw new Error("Element with id 'renderCanvas' is not a canvas element.");
@@ -31,55 +31,64 @@ class FirstPersonController {
 		this.local = isLocal;
 		this.tournament = isTournament;
 		const gameType = canvas.getAttribute('canva-game');
-		this.engine = new Engine(canvas, true);
-		this.scene = this.CreateScene();
-		this.scene.getPhysicsEngine()!.setTimeStep(1 / 60);
 		this.player1Score = 0;
 		this.player2Score = 0;
-		if (this.tournament === false)
-		{
-			fetch('/getUser', {
+	
+		// Determine which fetch to perform
+		let fetchPromise: Promise<void>;
+	
+		if (this.tournament) {
+			fetchPromise = fetch('/getNextMatchTournament', {
 				method: 'GET',
 				credentials: 'include',
-			})
-				.then(async (response) => {
-					const data = await response.json();
-					this.player1name = data.user.username as string;
-				})
-		}
-		if (isLocal === true)
-			{
+			}).then(async (response) => {
+				const data = await response.json();
+				this.player1name = data[0];
+				this.player2name = data[1];
+			});
+		} else {
+			// Handle non-tournament case
+			if (isLocal) {
 				const usernameElement = document.getElementById("username") as HTMLInputElement | null;
 				const player2 = usernameElement?.value;
 				this.player2name = player2 || "Player 2";
-			}
-			else{
+			} else {
 				this.player2name = "The machiavelic computer";
 			}
-		if (this.tournament === true)
-		{
-			fetch('/getNextMatchTournament', {
+	
+			fetchPromise = fetch('/getUser', {
 				method: 'GET',
 				credentials: 'include',
+			}).then(async (response) => {
+				const data = await response.json();
+				this.player1name = data.user.username as string;
+			});
+		}
+	
+		// After fetch completes, initialize game components
+		fetchPromise
+			.then(() => {
+				this.engine = new Engine(canvas, true);
+				this.scene = this.CreateScene();
+				this.scene.getPhysicsEngine()!.setTimeStep(1 / 60);
+				this.CreateMeshes();
+				this.createExplosionEffect();
+	
+				if (this.local === false) {
+					setInterval(() => {
+						this.predictDir = this.predictBallXAtZ(-8);
+					}, 1000);
+				}
+	
+				this.engine.runRenderLoop(() => {
+					this.createGame();
+				});
+				canvas.focus();
 			})
-				.then(async (response) => {
-					const data = await response.json();
-					this.player1name = data[0];
-					this.player2name = data[1];
-				})
-		}
-		this.CreateMeshes();
-		this.createExplosionEffect();
-		if (this.local === false)
-		{
-			setInterval(() => {
-				this.predictDir = this.predictBallXAtZ(-8);
-			} , 1000);
-		}
-		this.engine.runRenderLoop(() => {
-			this.createGame();
-		});
-		canvas.focus();
+			.catch((error) => {
+				console.error("Failed to initialize game data:", error);
+				// Handle errors appropriately (e.g., show error message)
+			});
 	}
 
 	async postResult(winner:string, loser:string, winnerScore:number, loserScore:number):Promise<void>{
@@ -134,7 +143,6 @@ class FirstPersonController {
 				});
 				const data = await response.json();
 				Isfinished = data;
-				console.log("isfinished ? ", Isfinished);
 				if (Isfinished === false) {
 				const eventNextMatch = new Event('eventNextMatch');
 				window.dispatchEvent(eventNextMatch);
@@ -143,7 +151,6 @@ class FirstPersonController {
 				console.error('Error:', error);
 			}
 		}
-
 	}
 
 	createGame(): void {
@@ -183,6 +190,25 @@ class FirstPersonController {
 		this.scoreText.fontSize = 48;
 		this.scoreText.top = -250;
 		advancedTexture.addControl(this.scoreText);
+
+		const player1NameText = new GUI.TextBlock();
+		player1NameText.text = this.player1name ;
+		player1NameText.color = "white";
+		player1NameText.fontSize = 28;
+		player1NameText.left = -250;
+		player1NameText.top = -250;
+		player1NameText.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+		advancedTexture.addControl(player1NameText);
+
+		const player2NameText = new GUI.TextBlock();
+		player2NameText.text = this.player2name;
+		player2NameText.color = "white";
+		player2NameText.fontSize = 32;
+		player2NameText.left = 250;
+		player2NameText.top = -250;
+		player2NameText.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+		advancedTexture.addControl(player2NameText);
+
 		scene.enablePhysics(new Vector3(0, 0, 0), new CannonJSPlugin(true, 0, CANNON));
 		const camera = new ArcRotateCamera("camera", Math.PI, Math.PI / 4, 20, Vector3.Zero(), scene);
 		//camera.attachControl(this.canvas, true);
@@ -298,7 +324,7 @@ class FirstPersonController {
 
 		this.ball = MeshBuilder.CreateSphere("sphere", { diameter: 0.8 });
 		this.ball.position = new Vector3(0, 0.5, 0);
-
+		// Replace the while loop with a direct assignment
 		this.ball.physicsImpostor = new PhysicsImpostor(
 			this.ball,
 			PhysicsImpostor.SphereImpostor,
@@ -308,6 +334,7 @@ class FirstPersonController {
 				friction: 0,
 			}
 		);
+
 
 		this.scene.onBeforeStepObservable.add(() => {
 			const velocity = this.ball.physicsImpostor!.getLinearVelocity();
@@ -607,9 +634,12 @@ class FirstPersonController {
 		advancedTexture.addControl(restartButton);
 	}
 
+	// In predictBallXAtZ method, add null checks:
 	private predictBallXAtZ(targetZ: number): number {
+		if (!this.ball.physicsImpostor) return 0; // Or handle appropriately
+		
 		const currentPos = this.ball.position.clone();
-		const velocity = this.ball.physicsImpostor!.getLinearVelocity();
+		const velocity = this.ball.physicsImpostor.getLinearVelocity();
 		
 		if (!velocity || velocity.z === 0) return currentPos.x;
 	
@@ -715,4 +745,4 @@ document.addEventListener('click', (event) => {
 		//Create an instance of solo game
 		createNewGame(true,true);
 	}
-});3
+});
