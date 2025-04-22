@@ -61,8 +61,9 @@ if (appDiv) {
 
 		// Gestion des clics sur le bouton "Validation"
 		if (target.tagName === 'BUTTON' && target.id === 'buttonValidation') {
-			validateLocalGame();
-			hideDiv("divLocal", "buttonValidation");
+			const local = validateLocalGame();
+			if (local !== false)
+				hideDiv("divLocal", "buttonValidation");
 			return;
 		}
 
@@ -79,11 +80,13 @@ if (appDiv) {
 	});
 }
 
-function hideDiv(divId: string, buttonId: string) {
+function hideDiv(divId: string, buttonId: string, otherDivId?: string) {
 	const div = document.getElementById(divId);
 	const button = document.getElementById(buttonId);
+	const otherDiv = document.getElementById(otherDivId || '');
 	if (div) div.classList.toggle('none');
 	if (button) button.classList.toggle('none');
+	if (otherDiv) otherDiv.classList.toggle('none');
 	return;
 }
 
@@ -113,14 +116,14 @@ function validateLocalGame() {
 
 	if (!usernameElement) {
 		alert('Username input not found.');
-		return;
+		return false;
 	}
 
 	const player2 = usernameElement.value;
 
 	if (player2.trim() === '') {
 		alert(`Player has an empty name. Please fill in the field.`);
-		return;
+		return false;
 	}
 	
 	fetch('/createLocal', {
@@ -153,13 +156,6 @@ async function soloClick() {
 }
 
 function validateSoloGame() {
-	
-	/* const scriptElement = document.createElement('script');
-	scriptElement.type = 'module';
-	scriptElement.src = "dist/srcs/public/scripts/pong.js"
-	scriptElement.id ='game';
-	document.body.appendChild(scriptElement); */
-
 	fetch('/createSolo', {
 		method: 'POST',
 		credentials: 'include',
@@ -265,17 +261,14 @@ function initCustomSelect() {
 						credentials: 'include',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({ playerData }),
-					});
-					// await fetch('/getNextMatchTournament', {
-					// 	method: 'GET',
-					// 	credentials: 'include',
-					// })
-					// 	.then(async (response) => {
-					// 		const data = await response.json();
-					// 		console.log("data = ", data);
-					// 	})
+					})
+					.then(async (response) => {
+						hideDiv("custom-select", "divButton", "playerNames")
+						const event = new CustomEvent('eventNextMatch');
+						window.dispatchEvent(event);
+						})
 				}
-			});
+		});
 
 			const existingButton = divButton.querySelector('button');
 			if (existingButton) {
@@ -290,9 +283,24 @@ function initCustomSelect() {
 
 const buttonNextMatch = document.getElementById('buttonNextMatch');
 
-window.addEventListener('eventNextMatch', () => {
+window.addEventListener('eventNextMatch', async (event) => {
 	console.log ("receive event");
+	let data;
+	await fetch('/getNextMatchTournament', {
+		method: 'GET',
+		credentials: 'include',
+	})
+	.then(async (response) => {
+		data = await response.json();
+	})
+	
+	const divMessage = document.createElement('div');
+	divMessage.innerHTML = data?.[0] + " will play against " + data?.[1];
 	const divNextMatchButton = document.getElementById('divNextMatchButton');
+	if (divNextMatchButton?.firstChild)
+		divNextMatchButton.removeChild(divNextMatchButton.firstChild);
+	if (divNextMatchButton)
+		divNextMatchButton.insertBefore(divMessage, divNextMatchButton.firstChild);
 	divNextMatchButton?.classList.remove('hidden');
 });
 
