@@ -36,36 +36,38 @@ class FirstPersonController {
 		this.scene.getPhysicsEngine()!.setTimeStep(1 / 60);
 		this.player1Score = 0;
 		this.player2Score = 0;
-
-		fetch('/getUser', {
-			method: 'GET',
-			credentials: 'include',
-		})
-			.then(async (response) => {
-				const data = await response.json();
-				this.player1name = data.user.username as string;
+		if (this.tournament === false)
+		{
+			fetch('/getUser', {
+				method: 'GET',
+				credentials: 'include',
 			})
-			if (isLocal === true)
-				{
-					const usernameElement = document.getElementById("username") as HTMLInputElement | null;
-					const player2 = usernameElement?.value;
-					this.player2name = player2 || "Player 2";
-				}
-				else{
-					this.player2name = "The machiavelic computer";
-				}
-			if (this.tournament === true)
-			{
-				fetch('/getNextMatchTournament', {
-					method: 'GET',
-					credentials: 'include',
+				.then(async (response) => {
+					const data = await response.json();
+					this.player1name = data.user.username as string;
 				})
-					.then(async (response) => {
-						const data = await response.json();
-						this.player1name = data[0];
-						this.player2name = data[1];
-					})
+		}
+		if (isLocal === true)
+			{
+				const usernameElement = document.getElementById("username") as HTMLInputElement | null;
+				const player2 = usernameElement?.value;
+				this.player2name = player2 || "Player 2";
 			}
+			else{
+				this.player2name = "The machiavelic computer";
+			}
+		if (this.tournament === true)
+		{
+			fetch('/getNextMatchTournament', {
+				method: 'GET',
+				credentials: 'include',
+			})
+				.then(async (response) => {
+					const data = await response.json();
+					this.player1name = data[0];
+					this.player2name = data[1];
+				})
+		}
 		this.CreateMeshes();
 		this.createExplosionEffect();
 		if (this.local === false)
