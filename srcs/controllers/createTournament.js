@@ -45,10 +45,15 @@ export const createTournament = async (req, reply) => {
 	}
 };
 
+
 async function createBrackets(players, tournamentId) {
 	const tournament = await getTournamentById(tournamentId);
+	console.log("------------------------------------------------")
+	console.log("tournament", tournament);
 	const remainingPlayers = players.filter(player => player.NbVictory === tournament.currentRound - 1);
+	console.log("remainingPlayers", remainingPlayers);
 	const sortedPlayers = remainingPlayers.sort((a, b) => a.playerNumber - b.playerNumber);
+	console.log("sortedPlayers", sortedPlayers);
 	const nextMatch = []
 
 	for (let i = 0; i < sortedPlayers.length; ++i) {
@@ -80,6 +85,20 @@ export async function updateResultTournamentGame(req, reply) {
 		const loserScore = req.body.loserScore;
 		const id = await getMaxId("tournament");
 		await fillTournamentDb(id, winner, loser, winnerScore, loserScore);
+	} catch (error) {
+		return reply.send({message: error.message});
+	}
+}
+
+export async function getWinnerTournament(req, reply) {
+	try {
+		const id = await getMaxId("tournament");
+		const tournament = await getTournamentById(id);
+		const players = await findUsersTournament(id);
+		const winner = players.filter(player => player.NbVictory === tournament.nbRounds);
+		if (!winner)
+			return reply.send(false);
+		reply.send(true);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}

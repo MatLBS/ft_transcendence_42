@@ -232,6 +232,7 @@ export async function createTournamentDb(playersData: Map<string, { name: string
 		data: {
 			nbRounds: nbRounds,
 			currentRound: 1,
+			nbMatchesPlayed: 0,
 		}
 	})
 
