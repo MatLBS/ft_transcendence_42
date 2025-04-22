@@ -8,7 +8,8 @@
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
 		"outDir": "srcs/dist",
-		"allowSyntheticDefaultImports": true
+		"allowSyntheticDefaultImports": true,
+		"types": ["node", "chart.js"],
 	},
 	"include": ["./srcs/**/*.ts", "./srcs/public/**/*.ts", "srcs/public/scripts/login.ts", "prisma/**/*.ts"],
 	"exclude": ["node_modules", "./srcs/public/scripts/pong.ts"]

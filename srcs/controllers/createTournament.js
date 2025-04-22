@@ -47,7 +47,7 @@ export const createTournament = async (req, reply) => {
 
 async function createBrackets(players, tournamentId) {
 	const tournament = await getTournamentById(tournamentId);
-	const remainingPlayers = players.filter(player => player.NbVictory = tournament.currentRound - 1);
+	const remainingPlayers = players.filter(player => player.NbVictory === tournament.currentRound - 1);
 	const sortedPlayers = remainingPlayers.sort((a, b) => a.playerNumber - b.playerNumber);
 	const nextMatch = []
 
@@ -61,13 +61,12 @@ async function createBrackets(players, tournamentId) {
 	return nextMatch;
 }
 
-export async function nextMatchTournament() {
+export async function nextMatchTournament(req, reply) {
 	try {
 		const id = await getMaxId("tournament");
-
 		const players = await findUsersTournament(id);
 		const nextMatch = await createBrackets(players, id)
-		return nextMatch;
+		reply.send(nextMatch);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
