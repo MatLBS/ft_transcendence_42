@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import ejs from 'ejs';
 import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
+import Chart from 'chart.js/auto';
 import fastifyFormbody from '@fastify/formbody';
 import { checkUserBack, verifFormRegister } from './controllers/createUser.js';
 import { login, verifLogin } from './controllers/loginUser.js';
@@ -23,6 +24,7 @@ import { googleAuth, googleCallback } from './controllers/google.js';
 import {solo} from './controllers/solo.js';
 import { createSoloGame, updateResultSoloGame } from './controllers/createSolo.js';
 import { createLocalGame, updateResultLocalGame } from './controllers/createLocal.js';
+import { getMatchsResults } from './controllers/getMatchs.js';
 
 
 // peut etre sauvegarder le content des fichier html.
@@ -109,4 +111,6 @@ export default async function userRoutes(app) {
 	app.post('/postResultSolo', updateResultSoloGame);
 	app.get('/getNextMatchTournament', nextMatchTournament);
 	app.post('/postResulTournament', updateResultTournamentGame);
+	app.get('/getMatchsResults', getMatchsResults);
+
 }

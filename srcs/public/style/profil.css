@@ -62,3 +62,11 @@ h2 {
 .user__infos {
   margin: auto;
 }
+
+.open {
+	display: block !important;
+}
+
+.none {
+	display: none !important;
+}

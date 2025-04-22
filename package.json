@@ -35,6 +35,7 @@
 		"babylonjs": "^8.1.1",
 		"better-sqlite3": "^11.8.1",
 		"cannon": "^0.6.2",
+		"chart.js": "^4.4.9",
 		"cookie-parser": "^1.4.7",
 		"cors": "^2.8.5",
 		"dotenv": "^16.4.7",
@@ -56,6 +57,7 @@
 	},
 	"devDependencies": {
 		"@types/cannon": "^0.1.13",
+		"@types/chart.js": "^2.9.41",
 		"@types/node": "^22.13.5",
 		"autoprefixer": "^10.4.21",
 		"postcss": "^8.5.3",

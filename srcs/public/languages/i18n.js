@@ -40,10 +40,15 @@ i18next
 	  	  "profil": {
 	  		"statistics": "Statistics",
 	  		"matchHistory": "Match History",
-	  		"result": "Result",
+	  		"type": "Type",
+	  		"winner": "Winner",
+	  		"loser": "Loser",
 	  		"score": "Score",
-	  		"opponent": "Opponent",
 	  		"graphics": "Graphics",
+	  		"global": "Global Statistics",
+	  		"local": "Local Statistics",
+	  		"solo": "Solo Statistics",
+	  		"tournament": "Tournament Statistics",
 	  		"update": "Update"
 	  	  },
 	  	  "register": {
@@ -105,14 +110,19 @@ i18next
 	  		"register_a": "Registrarse"
 	  	  },
 	  	  "profil": {
-	  		"statistics": "Estadísticas",
-	  		"matchHistory": "Historial de partidas",
-	  		"result": "Resultado",
-	  		"score": "Puntuación",
-	  		"opponent": "Oponente",
-	  		"graphics": "Gráficos",
-	  		"update": "Actualizar"
-	  	  },
+            "statistics": "Estadísticas",
+            "matchHistory": "Historial de partidas",
+            "type": "Tipo",
+            "winner": "Ganador",
+            "loser": "Perdedor",
+            "score": "Puntuación",
+            "graphics": "Gráficos",
+            "global": "Estadísticas Globales",
+            "local": "Estadísticas Locales",
+            "solo": "Estadísticas Solo",
+            "tournament": "Estadísticas de Torneo",
+            "update": "Actualizar"
+          },
 	  	  "register": {
 	  		"title": "Registro",
 	  		"username": "Nombre de usuario",
@@ -172,14 +182,19 @@ i18next
 	  		"register_a": "Registrar"
 	  	  },
 	  	  "profil": {
-	  		"statistics": "Estatísticas",
-	  		"matchHistory": "Histórico de partidas",
-	  		"result": "Resultado",
-	  		"score": "Pontuação",
-	  		"opponent": "Adversário",
-	  		"graphics": "Gráficos",
-	  		"update": "Atualizar"
-	  	  },
+            "statistics": "Estatísticas",
+            "matchHistory": "Histórico de partidas",
+            "type": "Tipo",
+            "winner": "Vencedor",
+            "loser": "Perdedor",
+            "score": "Pontuação",
+            "graphics": "Gráficos",
+            "global": "Estatísticas Globais",
+            "local": "Estatísticas Locais",
+            "solo": "Estatísticas Solo",
+            "tournament": "Estatísticas de Torneio",
+            "update": "Atualizar"
+          },
 	  	  "register": {
 	  		"title": "Registro",
 	  		"username": "Nome de usuário",
@@ -239,14 +254,19 @@ i18next
 	  		"register_a": "S'inscrire"
 	  	  },
 	  	  "profil": {
-	  		"statistics": "Statistiques",
-	  		"matchHistory": "Historique des matchs",
-	  		"result": "Résultat",
-	  		"score": "Score",
-	  		"opponent": "Adversaire",
-	  		"graphics": "Graphiques",
-	  		"update": "Mettre à jour"
-	  	  },
+            "statistics": "Statistiques",
+            "matchHistory": "Historique des matchs",
+            "type": "Type",
+            "winner": "Gagnant",
+            "loser": "Perdant",
+            "score": "Score",
+            "graphics": "Graphiques",
+            "global": "Statistiques Globales",
+            "local": "Statistiques Locales",
+            "solo": "Statistiques Solo",
+            "tournament": "Statistiques de Tournoi",
+            "update": "Mettre à jour"
+          },
 	  	  "register": {
 	  		"title": "Inscription",
 	  		"username": "Nom d'utilisateur",
