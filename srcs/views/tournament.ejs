@@ -20,9 +20,10 @@
 	<div id="playerNames" class="flex flex-wrap justify-center w-[60%]"></div>
 </div>
 <div id="divButton" class="flex justify-center hover:scale-110"></div>
+<div id="divNextMatchButton" class="text-center hidden">
+	<div><button id="buttonNextMatch" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4"><%= jsonLanguage.tournament.nextMatch %></button></div>
+	<div id="divMessageNext"></div>
+</div>
 <div class="flex justify-center align-center">
 	<canvas id="renderCanvas" tabindex="1" width="900" height="600" canva-game="solo"></canvas>
-</div>
-<div id="divNextMatchButton" class="flex justify-center hover:scale-110 hidden">
-	<button id="buttonNextMatch" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4"><%= jsonLanguage.tournament.nextMatch %></button>
 </div>
