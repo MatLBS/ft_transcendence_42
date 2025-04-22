@@ -15,7 +15,7 @@ import { getPage } from './controllers/getPage.js';
 import { logout, quit } from './controllers/logout.js';
 import { refresh } from './controllers/tokens.js';
 import { tournament } from './controllers/tournament.js';
-import { createTournament, nextMatchTournament, updateResultTournamentGame } from './controllers/createTournament.js';
+import { createTournament, nextMatchTournament, updateResultTournamentGame, getWinnerTournament } from './controllers/createTournament.js';
 import { local } from './controllers/local.js';
 import { updateUserLanguage } from './controllers/updateUserLanguage.js';
 import { updateUser, updateUserGoogle, updateUserTwoFA } from './controllers/updateUser.js';
@@ -25,6 +25,7 @@ import {solo} from './controllers/solo.js';
 import { createSoloGame, updateResultSoloGame } from './controllers/createSolo.js';
 import { createLocalGame, updateResultLocalGame } from './controllers/createLocal.js';
 import { getMatchsResults } from './controllers/getMatchs.js';
+
 
 import { getErrorPage } from './controllers/errorPage.js';
 import { search } from './controllers/search.js';
@@ -121,6 +122,7 @@ export default async function userRoutes(app) {
 	app.get('/getNextMatchTournament', nextMatchTournament);
 	app.post('/postResulTournament', updateResultTournamentGame);
 	app.get('/getMatchsResults', getMatchsResults);
+	app.get('/getWinnerTournament', getWinnerTournament);
 
 	app.setNotFoundHandler(getErrorPage);
 }
