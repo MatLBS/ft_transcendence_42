@@ -96,7 +96,7 @@ export async function getWinnerTournament(req, reply) {
 		const tournament = await getTournamentById(id);
 		const players = await findUsersTournament(id);
 		const winner = players.filter(player => player.NbVictory === tournament.nbRounds);
-		if (!winner)
+		if (winner.length === 0)
 			return reply.send(false);
 		reply.send(true);
 	} catch (error) {

@@ -113,20 +113,37 @@ class FirstPersonController {
 
 		if (this.tournament === true)
 		{
-			fetch('/postResulTournament', {
-				method: 'POST',
+			(async () => {
+				await fetch('/postResulTournament', {
+					method: 'POST',
+					credentials: 'include',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						winnerScore : winnerScore,
+						loserScore: loserScore,
+						winner : winner,
+						loser: loser,
+					}),
+				});
+			})();
+			let Isfinished = false;
+			(async () => {
+			try {
+				const response = await fetch('/getWinnerTournament', {
+				method: 'GET',
 				credentials: 'include',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					winnerScore : this.player1Score,
-					loserScore: this.player2Score,
-					winner : this.player1name,
-					loser: this.player2name,
-				}),
-			});
-			const eventNextMatch = new Event('eventNextMatch');
-			console.log("send event");
-			window.dispatchEvent(eventNextMatch);
+				});
+				const data = await response.json();
+				Isfinished = data;
+				console.log("isfinished ? ", Isfinished);
+				if (Isfinished === false) {
+				const eventNextMatch = new Event('eventNextMatch');
+				window.dispatchEvent(eventNextMatch);
+				}
+			} catch (error) {
+				console.error('Error:', error);
+			}
+			})();
 		}
 
 	}
@@ -674,6 +691,12 @@ function createNewGame(isLocal:boolean, isTournament:boolean): void {
 	}
 	currentGameInstance = new FirstPersonController(isLocal,isTournament);
 }
+
+window.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.preventDefault();
+    }
+});
 
 document.addEventListener('click', (event) => {
 	const target = event.target as HTMLElement;
