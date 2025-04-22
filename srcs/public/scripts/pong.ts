@@ -80,7 +80,7 @@ class FirstPersonController {
 		canvas.focus();
 	}
 
-	postResult(winner:string, loser:string, winnerScore:number, loserScore:number):void{
+	async postResult(winner:string, loser:string, winnerScore:number, loserScore:number):Promise<void>{
 		if (this.local === true && this.tournament === false)
 		{
 			fetch('/postResultLocal', {
@@ -113,21 +113,18 @@ class FirstPersonController {
 
 		if (this.tournament === true)
 		{
-			(async () => {
-				await fetch('/postResulTournament', {
-					method: 'POST',
-					credentials: 'include',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						winnerScore : winnerScore,
-						loserScore: loserScore,
-						winner : winner,
-						loser: loser,
-					}),
-				});
-			})();
+			await fetch('/postResulTournament', {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					winnerScore : winnerScore,
+					loserScore: loserScore,
+					winner : winner,
+					loser: loser,
+				}),
+			});
 			let Isfinished = false;
-			(async () => {
 			try {
 				const response = await fetch('/getWinnerTournament', {
 				method: 'GET',
@@ -143,7 +140,6 @@ class FirstPersonController {
 			} catch (error) {
 				console.error('Error:', error);
 			}
-			})();
 		}
 
 	}
