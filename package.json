@@ -5,10 +5,10 @@
 	"type": "module",
 	"scripts": {
 		"start": "node srcs/server.js",
-		"dev": "npx prisma db push && concurrently \"tsc --watch\" \"nodemon srcs/server.js\" \"npx tailwindcss -i srcs/public/style/input.css -o srcs/public/style/tailwind.css --watch\"",
+		"dev": "npx prisma db push && concurrently \"tsc --watch\" \"nodemon srcs/server.js\" \"npx tailwindcss -i srcs/public/style/input.css -o srcs/public/style/tailwind.css --watch\" \"npm run build:client\"",
 		"build": "tsc",
 		"build:css": "npx tailwindcss -i srcs/public/style/input.css -o srcs/public/style/tailwind.css --watch",
-		"build:client": "webpack --config webpack.config.js"
+		"build:client": "webpack --config webpack.config.js --watch "
 	},
 	"repository": {
 		"type": "git",
