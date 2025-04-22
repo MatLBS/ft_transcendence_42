@@ -7,13 +7,13 @@ const appDiv = document.getElementById("app");
 if (appDiv) {
 	appDiv.addEventListener("click", (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
-		applyLink(target, e);
-		if (target.tagName === "BUTTON" && target.className === "remove_friend") {
+		if (target.closest("button.remove-friend")) {
 			const username = target.getAttribute("data-username");
 			if (username) {
-				handleFriends(username);
+				removeFriends(username);
 			}
 		}
+		applyLink(target, e);
 		if (target.closest('#custom-select'))  {
 			const customOptions = document.getElementById('custom-options');
 			if (customOptions) customOptions.classList.toggle('open');
@@ -40,10 +40,20 @@ if (appDiv) {
 			if (divTournament) divTournament.classList.toggle('open');
 			return;
 		}
+		if (target.tagName === 'BUTTON' && target.id === 'open-friends') {
+			const friends = document.getElementById('container');
+			if (friends) friends.classList.toggle('open-friends');
+			return;
+		}
+		if (target.tagName === 'BUTTON' && target.id === 'close-friends') {
+			const friends = document.getElementById('container');
+			if (friends) friends.classList.remove('open-friends');
+			return;
+		}
 	});
 }
 
-export async function handleFriends(username: string) {
+export async function removeFriends(username: string) {
 	const response = await fetch(`/deleteFriends/${username}`, {
 		method: "GET",
 		credentials: "include",
@@ -281,6 +291,19 @@ async function displayGraphs() {
 		}
 	});
 }
+
+window.addEventListener("scroll", () => {
+	const button = document.getElementById("open-friends");
+		if (!button) return;
+		const threshold = 120;
+	if (window.scrollY > threshold) {
+			button.classList.add("btn-fix");
+			button.classList.remove("btn-abs");
+		} else {
+			button.classList.remove("btn-fix");
+			button.classList.add("btn-abs");
+		}
+});
 
 displayMatches();
 displayGraphs();
