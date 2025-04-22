@@ -382,11 +382,14 @@ export async function fillTournamentDb(id: number, winner: string, loser: string
 		}
 	})
 	const tournament = await getTournamentById(id);
-	if (!tournament || !tournament.nbRounds || !tournament.currentRound)
+	if (!tournament || !tournament.nbRounds || !tournament.currentRound || !tournament.nbMatchesPlayed)
 		throw new Error(`Tournament with id '${id}' do not exits in the database.`)
 
 	const totalMatches = Math.pow(2, tournament.nbRounds - tournament.currentRound);
-	if (tournament.nbMatchesPlayed === totalMatches)
+	let totalMatchesPrevRound = 0;
+	if (tournament.currentRound !== 1)
+		totalMatchesPrevRound = Math.pow(2, tournament.nbRounds - (tournament.currentRound - 1));
+	if (tournament.nbMatchesPlayed - totalMatchesPrevRound === totalMatches)
 		await prisma.tournament.update({
 			where: { id: id },
 			data: {
@@ -467,4 +470,24 @@ export async function getTournamentMatches(user: string) {
 	if (!tournamentMatches)
 		throw new Error(`No local matches were found in the database.`)
 	return tournamentMatches;
+}
+
+export async function hasAlreadyLose(playerName: string, tournamentId: number) {
+	const matches = await prisma.tournamentMatches.findFirst({
+		where: {
+			AND: [
+				{
+					tournamentId: tournamentId,
+				},
+				{
+					loser: playerName,
+				},
+
+			]
+
+		}
+	})
+	if (matches)
+		return true;
+	return false;
 }

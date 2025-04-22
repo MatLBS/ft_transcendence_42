@@ -1,4 +1,4 @@
-import { createTournamentDb,  getMaxId, fillTournamentDb, getTournamentById } from '../dist/prisma/seed.js';
+import { createTournamentDb,  getMaxId, fillTournamentDb, getTournamentById, hasAlreadyLose } from '../dist/prisma/seed.js';
 import { findUsersTournament } from '../dist/prisma/seed.js';
 
 function getRandomNumber(playerIds) {
@@ -53,7 +53,8 @@ async function createBrackets(players, tournamentId) {
 	const nextMatch = []
 
 	for (let i = 0; i < sortedPlayers.length; ++i) {
-		if (sortedPlayers[i].playerNumber % 2 !== 0) {
+		const alreadyLose = await hasAlreadyLose(sortedPlayers[i].name, tournamentId);
+		if (alreadyLose === false) {
 			nextMatch.push(sortedPlayers[i].name);
 			nextMatch.push(sortedPlayers[i + 1].name);
 			break;
