@@ -726,17 +726,26 @@ window.addEventListener('keydown', function(e) {
     }
 });
 
-document.addEventListener('click', (event) => {
+document.addEventListener('click', async (event) => {
 	const target = event.target as HTMLElement;
 	if (target && target.id === 'soloButton') {
 		//Create an instance of solo game
 		createNewGame(false,false);
 	}
 	if (target && target.id === 'buttonValidation') {
+		let userLogIn: string | undefined;
+		await fetch('/getUser', {
+			method: 'GET',
+			credentials: 'include',
+		})
+			.then(async (response) => {
+				const data = await response.json();
+				userLogIn = data.user.username as string;
+			})
 		//Create an instance of local game
 		const usernameElement = document.getElementById('username') as HTMLInputElement ;
 		const player2 = usernameElement.value;
-		if (player2.trim() === "") {
+		if (player2.trim() === "" || player2.trim() === userLogIn) {
 			return;
 		}
 		createNewGame(true,false);
