@@ -15,13 +15,13 @@ export const createTournament = async (req, reply) => {
 	var playersInfos = new Map();
 
 	const userLogIn = await getUserBackend(req, reply);
-	for (let i = 1; i < req.body.playerData.length + 1; ++i) {
+	for (let i = 0; i < req.body.playerData.length; ++i) {
 		if (req.body.playerData[i].trim() === '' || req.body.playerData[i].trim() === userLogIn)
 			return;
 	}
 
-	const uniquePlayers = new Set(playerData.map(name => name.trim()));
-	if (uniquePlayers.size !== playerData.length)
+	const uniquePlayers = new Set(req.body.playerData.map(name => name.trim()));
+	if (uniquePlayers.size !== req.body.playerData.length)
 		return;
 
 	for (let i = 1; i < req.body.playerData.length + 1; ++i)
@@ -35,6 +35,8 @@ export const createTournament = async (req, reply) => {
 			playerNumber: getRandomNumber(playerIds),
 		});
 	}
+
+	console.log(playersInfos)
 
 	let nbRounds;
 
