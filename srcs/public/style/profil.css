@@ -266,3 +266,14 @@ h2 {
 #close-friends:active {
 	transform: scale(0.9);
 }
+
+.chart-wrapper {
+	width: 250px;
+	height: 250px;
+	margin: auto;
+	position: relative;
+  }
+canvas {
+	width: 100% !important;
+	height: 100% !important;
+}

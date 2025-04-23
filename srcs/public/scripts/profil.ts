@@ -1,5 +1,6 @@
 import { applyLink } from './utils.js';
 import { recvContent } from '../main.js';
+import { displayGlobal, displayMatches } from './stats.js';
 /** @global */
 declare var Chart: any;
 
@@ -65,7 +66,7 @@ export async function removeFriends(username: string) {
 	alert(data.message);
 	recvContent(`/profil`);
 }
-async function displayMatches() {
+/* async function displayMatches() {
 	const match__history = document.getElementById('match__history') as HTMLInputElement | null;
 
 
@@ -203,6 +204,7 @@ async function displayGraphs() {
 		const data = await response.json();
 		const localMatches = data.local;
 		const soloMatches = data.solo;
+		console.log ("data ", data.solo);
 		const tournamentMatches = data.tournament;
 		for (let i = 0; i < localMatches.length; i++)
 			localMatches[i].winner === userName ? gamesWinLocal++ : gamesLoseLocal++;
@@ -291,7 +293,7 @@ async function displayGraphs() {
 		}
 	});
 }
-
+ */
 window.addEventListener("scroll", () => {
 	const button = document.getElementById("open-friends");
 		if (!button) return;
@@ -306,4 +308,4 @@ window.addEventListener("scroll", () => {
 });
 
 displayMatches();
-displayGraphs();
+displayGlobal();
