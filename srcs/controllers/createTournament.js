@@ -16,7 +16,7 @@ export const createTournament = async (req, reply) => {
 
 	const userLogIn = await getUser(req, reply);
 	for (let i = 1; i < req.body.playerData.length + 1; ++i) {
-		if (req.bo.playerData[i].trim() === '' || req.body.playerData[i].trim() === userLogIn)
+		if (req.body.playerData[i].trim() === '' || req.body.playerData[i].trim() === userLogIn)
 			return;
 	}
 
