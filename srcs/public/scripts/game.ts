@@ -53,7 +53,7 @@ if (appDiv) {
 		}
 
 		// Gestion des clics sur le bouton "Custom Select"
-		if (target.closest('#custom-select'))  {
+		if (target.tagName === 'SPAN' && target.id === 'expandTournament')  {
 			const customOptions = document.getElementById('custom-options');
 			if (customOptions) customOptions.classList.toggle('open');
 			return;
@@ -198,13 +198,13 @@ function initCustomSelect() {
 		return;
 	}
 
-	gameSettings.addEventListener('click', (e: MouseEvent) => {
+	gameSettings.addEventListener('click', async (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
+		const customDefault = document.getElementById('custom-default');
+		const hiddenValue = document.getElementById('hiddenValue') as HTMLInputElement | null;
+		const playerNames = document.getElementById('playerNames');
+		const divButton = document.getElementById('divButton');
 		if (target.matches('#custom-options li')) {
-			const customDefault = document.getElementById('custom-default');
-			const hiddenValue = document.getElementById('hiddenValue') as HTMLInputElement | null;
-			const playerNames = document.getElementById('playerNames');
-			const divButton = document.getElementById('divButton');
 
 			if (!customDefault || !hiddenValue || !playerNames || !divButton) {
 				console.error('One or more elements for custom select are missing.');
@@ -237,54 +237,61 @@ function initCustomSelect() {
 			const validateButton = document.createElement('button');
 			validateButton.textContent = 'Validate';
 			validateButton.id = 'submit-button';
-			validateButton.className = 'bg-blue-500 text-white px-4 py-2 rounded-lg mt-4';
-
-			gameSettings.addEventListener('click', async (e: MouseEvent) => {
-				const target = e.target as HTMLElement;
-				if (target.matches('#submit-button')) {
-					const playerInputs = playerNames.querySelectorAll('#playerName');
-					const playerData: string[] = [];
-
-					playerInputs.forEach((input) => {
-						playerData.push((input as HTMLInputElement).value);
-					});
-
-					for (let i = 0; i < playerData.length; i++) {
-						if (playerData[i].trim() === '') {
-							alert(`Player ${i + 1} has an empty name. Please fill in all fields.`);
-							return;
-						}
-					}
-
-					await fetch('/createTournament', {
-						method: 'POST',
-						credentials: 'include',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ playerData }),
-					})
-					.then(async (response) => {
-						hideDiv("custom-select", "divButton", "playerNames")
-						const event = new CustomEvent('eventNextMatch');
-						window.dispatchEvent(event);
-						})
-				}
-		});
+			validateButton.className = 'bg-blue-500 text-white px-4 py-2 rounded-lg mt-4';				
 
 			const existingButton = divButton.querySelector('button');
-			if (existingButton) {
+			if (existingButton)
 				divButton.removeChild(existingButton);
-			}
 
 			divButton.appendChild(validateButton);
 		}
-	
+
+		if (target.matches('#submit-button')) {
+			if ((target as HTMLButtonElement).dataset.processing === 'true')
+				return; // Éviter le traitement multiple
+			
+			(target as HTMLButtonElement).dataset.processing = 'true';
+			const submitButton = target as HTMLButtonElement;
+			submitButton.disabled = true;
+			
+			const playerInputs = playerNames!.querySelectorAll('#playerName');
+			const playerData: string[] = [];
+			playerInputs.forEach((input) => {
+				playerData.push((input as HTMLInputElement).value);
+			});
+			
+			for (let i = 0; i < playerData.length; i++) {
+				if (playerData[i].trim() === '') {
+				alert(`Player ${i + 1} has an empty name. Please fill in all fields.`);
+				submitButton.disabled = false;
+				(target as HTMLButtonElement).dataset.processing = 'false';
+				return;
+				}
+			}
+			
+			fetch('/createTournament', {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ playerData }),
+			})
+			.then(async (response) => {
+				hideDiv("custom-select", "divButton", "playerNames");
+				const event = new CustomEvent('eventNextMatch');
+				window.dispatchEvent(event);
+			})
+			.finally(() => {
+				submitButton.disabled = false;
+				(target as HTMLButtonElement).dataset.processing = 'false';
+			});
+		}
+
 	});
 };
 
 const buttonNextMatch = document.getElementById('buttonNextMatch');
 
 window.addEventListener('eventNextMatch', async (event) => {
-	console.log ("receive event");
 	let data;
 	await fetch('/getNextMatchTournament', {
 		method: 'GET',

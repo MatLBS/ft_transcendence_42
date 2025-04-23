@@ -388,8 +388,6 @@ export async function fillTournamentDb(id: number, winner: string, loser: string
 		throw new Error(`Tournament with id '${id}' do not exits in the database.`)
 
 	const totalMatchesRound = Math.pow(2, tournament.nbRounds - tournament.currentRound);
-	console.log("totalMatchesRound", totalMatchesRound);
-	console.log("nbMatchesPlayedRound", tournament.nbMatchesPlayedRound);
 	if (tournament.nbMatchesPlayedRound === totalMatchesRound)
 		await prisma.tournament.update({
 			where: { id: id },
