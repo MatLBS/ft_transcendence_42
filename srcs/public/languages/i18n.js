@@ -23,7 +23,8 @@ i18next
 	  		"game": "game",
 	  		"profil": "profil",
 	  		"logout": "logout",
-	  		"login": "Login"
+	  		"login": "Login",
+			"flag": "🇬🇧",
 	  	  },
 	  	  "localParty": {
 	  		"label": "Enter a name for the second player...",
@@ -95,7 +96,8 @@ i18next
 	  		"game": "juego",
 	  		"profil": "perfil",
 	  		"logout": "cerrar sesión",
-	  		"login": "Iniciar sesión"
+	  		"login": "Iniciar sesión",
+			"flag": "🇪🇸",
 	  	  },
 	  	  "localParty": {
 	  		"label": "Introduce un nombre para el segundo jugador...",
@@ -167,7 +169,8 @@ i18next
 	  		"game": "jogo",
 	  		"profil": "perfil",
 	  		"logout": "sair",
-	  		"login": "Entrar"
+	  		"login": "Entrar",
+			"flag": "🇵🇹",
 	  	  },
 	  	  "localParty": {
 	  		"label": "Digite um nome para o segundo jogador...",
@@ -239,7 +242,8 @@ i18next
 	  		"game": "jeu",
 	  		"profil": "profil",
 	  		"logout": "déconnexion",
-	  		"login": "Connexion"
+	  		"login": "Connexion",
+			"flag": "🇫🇷",
 	  	  },
 	  	  "localParty": {
 	  		"label": "Entrez un nom pour le deuxième joueur...",

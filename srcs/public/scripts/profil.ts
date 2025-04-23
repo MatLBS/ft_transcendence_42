@@ -234,62 +234,61 @@ async function displayGraphs() {
 		}
 	});
 
-	if (gamesWinLocal + gamesLoseLocal === 0)
-		return;
-
-	const local = document.getElementById('localChart') as HTMLCanvasElement | null;
-	if (!local) {
-		console.error('Canvas non trouvé !');
-		return;
-	}
-	const myChart2 = new Chart(local, {
-		type: 'doughnut',
-		data: {
-		labels: ['Win', 'Lose'],
-		datasets: [{
-			data: [gamesWinLocal, gamesLoseLocal],
-			backgroundColor: ['red', 'blue']
-		}]
+	if (gamesWinLocal + gamesLoseLocal !== 0) {
+		const local = document.getElementById('localChart') as HTMLCanvasElement | null;
+		if (!local) {
+			console.error('Canvas non trouvé !');
+			return;
 		}
-	});
-
-	if (gamesWinSolo + gamesLoseSolo === 0)
-		return;
-
-	const solo = document.getElementById('soloChart') as HTMLCanvasElement | null;
-	if (!solo) {
-		console.error('Canvas non trouvé !');
-		return;
+		const myChart2 = new Chart(local, {
+			type: 'doughnut',
+			data: {
+			labels: ['Win', 'Lose'],
+			datasets: [{
+				data: [gamesWinLocal, gamesLoseLocal],
+				backgroundColor: ['red', 'blue']
+			}]
+			}
+		});
 	}
-	const myChart3 = new Chart(solo, {
-		type: 'doughnut',
-		data: {
-		labels: ['Win', 'Lose'],
-		datasets: [{
-			data: [gamesWinSolo, gamesLoseSolo],
-			backgroundColor: ['red', 'blue']
-		}]
+
+	if (gamesWinSolo + gamesLoseSolo !== 0) {
+		const solo = document.getElementById('soloChart') as HTMLCanvasElement | null;
+		if (!solo) {
+			console.error('Canvas non trouvé !');
+			return;
 		}
-	});
-
-	if (gamesWinTournament + gamesLoseTournament === 0)
-		return;
-
-	const tournament = document.getElementById('tournamentChart') as HTMLCanvasElement | null;
-	if (!tournament) {
-		console.error('Canvas non trouvé !');
-		return;
+		const myChart3 = new Chart(solo, {
+			type: 'doughnut',
+			data: {
+			labels: ['Win', 'Lose'],
+			datasets: [{
+				data: [gamesWinSolo, gamesLoseSolo],
+				backgroundColor: ['red', 'blue']
+			}]
+			}
+		});
 	}
-	const myChart4 = new Chart(tournament, {
-		type: 'doughnut',
-		data: {
-		labels: ['Win', 'Lose'],
-		datasets: [{
-			data: [gamesWinTournament, gamesLoseTournament],
-			backgroundColor: ['red', 'blue']
-		}]
+
+
+	if (gamesWinTournament + gamesLoseTournament !== 0) {
+		const tournament = document.getElementById('tournamentChart') as HTMLCanvasElement | null;
+		if (!tournament) {
+			console.error('Canvas non trouvé !');
+			return;
 		}
-	});
+		const myChart4 = new Chart(tournament, {
+			type: 'doughnut',
+			data: {
+			labels: ['Win', 'Lose'],
+			datasets: [{
+				data: [gamesWinTournament, gamesLoseTournament],
+				backgroundColor: ['red', 'blue']
+			}]
+			}
+		});
+	}
+
 }
 
 window.addEventListener("scroll", () => {
