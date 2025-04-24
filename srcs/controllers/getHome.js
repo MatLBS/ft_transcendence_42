@@ -1,9 +1,8 @@
 import { authenticateUser } from "./tokens.js";
 import { getLanguageWithoutBody } from "./getLanguage.js"
-// import { language } from "../dist/srcs/public/main.js"
+import { json } from "stream/consumers";
 
 export const getHome = async (req, reply) => {
-	console.log("ici")
 	let clientLanguage = req.cookies.userLanguage;
 	if (!clientLanguage)
 		clientLanguage = "en"
