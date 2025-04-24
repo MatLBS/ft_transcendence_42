@@ -1,4 +1,5 @@
 import { applyLink } from './utils.js';
+import { language } from '../main.js';
 
 // Ajoute un gestionnaire d'événements global pour la délégation
 const appDiv = document.getElementById("app");
@@ -217,6 +218,19 @@ function initCustomSelect() {
 		const hiddenValue = document.getElementById('hiddenValue') as HTMLInputElement | null;
 		const playerNames = document.getElementById('playerNames');
 		const divButton = document.getElementById('divButton');
+		let jsonLanguage;
+		await fetch('/languages', {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ language }),
+		})
+			.then(async (response) => {
+				jsonLanguage = await response.json();
+			})
+			.catch((error: unknown) => {
+				console.error('Erreur lors de la récupération du contenu:', error);
+			});
 		if (target.matches('#custom-options li')) {
 
 			if (!customDefault || !hiddenValue || !playerNames || !divButton) {
@@ -237,10 +251,10 @@ function initCustomSelect() {
 				const playerContainer = document.createElement('div');
 				playerContainer.className = 'flex flex-col my-5 mx-3 text-center w-[40%]';
 
-				playerContainer.innerHTML += `<span>Player ${i + 1}</span>`;
+				playerContainer.innerHTML += `<span>${jsonLanguage!.tournament.player} ${i + 1}</span>`;
 				const tempDiv = document.createElement('div');
 				tempDiv.className = 'flex justify-center align-center w-full';
-				tempDiv.innerHTML += `<input type="text" id="playerName" name="playerName" placeholder="enter a name..." class="border-2 border-gray-500 w-[50%] rounded-full">`;
+				tempDiv.innerHTML += `<input type="text" id="playerName" name="playerName" placeholder="${jsonLanguage!.tournament.enter}..." class="border-2 border-gray-500 w-[50%] rounded-full">`;
 				
 				playerContainer.appendChild(tempDiv);
 				playerNames.appendChild(playerContainer);
@@ -248,7 +262,7 @@ function initCustomSelect() {
 
 			// Ajouter un bouton de validation
 			const validateButton = document.createElement('button');
-			validateButton.textContent = 'Validate';
+			validateButton.textContent = jsonLanguage!.tournament.validate;
 			validateButton.id = 'submit-button';
 			validateButton.className = 'bg-blue-500 text-white px-4 py-2 rounded-lg mt-4';				
 

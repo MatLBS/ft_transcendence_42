@@ -28,7 +28,8 @@ i18next
 	  	  },
 	  	  "localParty": {
 	  		"label": "Enter a name for the second player...",
-	  		"button": "Validate"
+	  		"button": "Validate",
+			"username": "enter a name",
 	  	  },
 	  	  "login": {
 	  		"title": "Login",
@@ -60,11 +61,15 @@ i18next
 	  		"button": "Confirm"
 	  	  },
 		  "solo": {
-	  		"sentence": "You will be playing on the left side, the IA on the right ! Are you ready ?"
-	  	  },
+	  		"sentence": "You will be playing on the left side, the IA on the right ! Are you ready ?",
+			"button": "Ready !",
+		},
 	  	  "tournament": {
 	  		"nbPlayers": "How many players will participate in the tournament ?",
+			"player": "Player",
 			"nextMatch": "Next match",
+			"validate": "Validate",
+			"enter": "enter a name",
 	  	  },
 	  	  "update": {
 	  		"title": "Update",
@@ -100,9 +105,10 @@ i18next
 			"flag": "🇪🇸",
 	  	  },
 	  	  "localParty": {
-	  		"label": "Introduce un nombre para el segundo jugador...",
-	  		"button": "Validar"
-	  	  },
+			"label": "Introduce un nombre para el segundo jugador...",
+			"button": "Validar",
+			"username": "introduce un nombre"
+		  },
 	  	  "login": {
 	  		"title": "Iniciar sesión",
 	  		"username": "Nombre de usuario",
@@ -136,9 +142,12 @@ i18next
 			"sentence": "Jugarás en el lado izquierdo, la IA en el derecho. ¿Estás listo?"
 		  },
 	  	  "tournament": {
-	  		"nbPlayers": "¿Cuántos jugadores participarán en el torneo?",
+			"nbPlayers": "¿Cuántos jugadores participarán en el torneo?",
+			"player": "Jugador",
 			"nextMatch": "Próximo partido",
-	  	  },
+			"validate": "Validar",
+			"enter": "introduce un nombre"
+		  },
 	  	  "update": {
 	  		"title": "Actualizar",
 	  		"username": "Nombre de usuario",
@@ -172,10 +181,11 @@ i18next
 	  		"login": "Entrar",
 			"flag": "🇵🇹",
 	  	  },
-	  	  "localParty": {
-	  		"label": "Digite um nome para o segundo jogador...",
-	  		"button": "Validar"
-	  	  },
+	  	 "localParty": {
+			"label": "Digite um nome para o segundo jogador...",
+			"button": "Validar",
+			"username": "digite um nome"
+		  },
 	  	  "login": {
 	  		"title": "Entrar",
 	  		"username": "Nome de usuário",
@@ -209,9 +219,12 @@ i18next
 			"sentence": "Você jogará no lado esquerdo, a IA no lado direito! Você está pronto?"
 		  },
 	  	  "tournament": {
-	  		"nbPlayers": "Quantos jogadores participarão do torneio?",
+			"nbPlayers": "Quantos jogadores participarão do torneio?",
+			"player": "Jogador",
 			"nextMatch": "Próxima partida",
-	  	  },
+			"validate": "Validar",
+			"enter": "digite um nome"
+		  },
 	  	  "update": {
 	  		"title": "Atualizar",
 	  		"username": "Nome de usuário",
@@ -247,7 +260,8 @@ i18next
 	  	  },
 	  	  "localParty": {
 	  		"label": "Entrez un nom pour le deuxième joueur...",
-	  		"button": "Valider"
+	  		"button": "Valider",
+			"username": "entrez un nom",
 	  	  },
 	  	  "login": {
 	  		"title": "Connexion",
@@ -282,9 +296,12 @@ i18next
 			"sentence": "Vous jouerez du côté gauche, l'IA du côté droit ! Êtes-vous prêt ?"
 		  },
 	  	  "tournament": {
-	  		"nbPlayers": "Combien de joueurs participeront au tournoi ?",
+			"nbPlayers": "Combien de joueurs participeront au tournoi ?",
+			"player": "Joueur",
 			"nextMatch": "Prochain match",
-	  	  },
+			"validate": "Valider",
+			"enter": "entrez un nom",
+		  },
 	  	  "update": {
 	  		"title": "Mettre à jour",
 	  		"username": "Nom d'utilisateur",

@@ -1,11 +1,14 @@
 <div class="list-inside rounded-lg mt-10 text-center" id="divLocal">
 	<%= jsonLanguage.localParty.label %>
-	<div class="flex justify-center align-center mt-5">
-		<input type="text" id="username" name="username" placeholder="username" class="border-2 border-gray-500 w rounded-lg">
-	</div>
+		<div class="flex justify-center align-center mt-5">
+			<input type="text" id="username" name="username" placeholder="<%= jsonLanguage.localParty.username %>"
+				class="border-2 border-gray-500 w rounded-lg">
+		</div>
 </div>
 <div class="flex justify-center align-center">
-	<button id="buttonValidation" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:scale-110">Validate</button>	
+	<button id="buttonValidation" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:scale-110">
+		<%= jsonLanguage.localParty.button %>
+	</button>
 </div>
 <div class="flex justify-center align-center">
 	<canvas id="renderCanvas" tabindex="1" width="900" height="600" canva-game="solo"></canvas>
