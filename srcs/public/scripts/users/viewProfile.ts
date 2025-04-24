@@ -1,5 +1,6 @@
 import { recvContent } from '../../main.js';
 import { applyLink } from '../utils.js';
+import { displayGlobal, displayMatches, charts} from '../stats.js';
 
 const appDiv = document.getElementById("app");
 if (appDiv) {
@@ -12,6 +13,55 @@ if (appDiv) {
 		}
 		if (target.tagName === "BUTTON" && target.id === "delete-friends") {
 			handleFriends("deleteFriends");
+		}
+		if (target.tagName === 'SPAN' && target.id === 'global') {
+			const divGlobal = document.getElementById('divGlobal');
+			if (divGlobal)
+			{
+				divGlobal.classList.toggle('none');
+				charts.globalPieChart.reset();
+				charts.globalPieChart.update();
+				charts.barChart.reset()
+				charts.barChart.update();
+			}
+			return;
+		}
+		if (target.tagName === 'SPAN' && target.id === 'local') {
+			const divLocal = document.getElementById('divLocal');
+			if (divLocal)
+			{
+				divLocal.classList.toggle('open');
+				console.log("local");
+				charts.localBarChart.reset();
+				charts.localBarChart.update();
+				charts.localPieChart.reset();
+				charts.localPieChart.update();
+			}
+			return;
+		}
+		if (target.tagName === 'SPAN' && target.id === 'solo') {
+			const divSolo = document.getElementById('divSolo');
+			if (divSolo)
+			{
+				divSolo.classList.toggle('open');
+				charts.soloBarChart.reset();
+				charts.soloBarChart.update();
+				charts.soloPieChart.reset();
+				charts.soloPieChart.update();
+			}
+			return;
+		}
+		if (target.tagName === 'SPAN' && target.id === 'tournament') {
+			const divTournament = document.getElementById('divTournament');
+			if (divTournament)
+			{
+				divTournament.classList.toggle('open');
+				charts.tournamentBarChart.reset();
+				charts.tournamentBarChart.update();
+				charts.tournamentPieChart.reset();
+				charts.tournamentPieChart.update();
+			}
+			return;
 		}
 	});
 }
@@ -31,3 +81,8 @@ async function handleFriends(action: string) {
 	alert(data.message);
 	recvContent(`/users/${username}`);
 }
+
+const urlParts = window.location.pathname.split('/');
+const username = urlParts[urlParts.length - 1];
+displayMatches(`/getExternalMatchsResults/${username}`);
+displayGlobal(`/getExternalMatchsResults/${username}`);

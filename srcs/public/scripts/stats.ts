@@ -3,20 +3,31 @@ declare var Chart: any;
 
 
 
-const charts= {};
-export async function displayMatches() {
+export const charts: {
+	globalPieChart?: typeof Chart,
+	localPieChart?: typeof Chart,
+	soloPieChart?: typeof Chart,
+	tournamentPieChart?: typeof Chart,
+	barChart?: typeof Chart,
+	localBarChart?: typeof Chart,
+	soloBarChart?: typeof Chart,
+	tournamentBarChart?: typeof Chart
+} = {};
+
+
+export async function displayMatches(root:string) {
 	const match__history = document.getElementById('match__history') as HTMLInputElement | null;
 
 
-	await fetch('getMatchsResults', {
+	await fetch(root, {
 		method: 'GET',
 		credentials: 'include',
 	})
 	.then(async (response) => {
 		const data = await response.json();
-		const localMatches = data.local;
-		const soloMatches = data.solo;
-		const tournamentMatches = data.tournament;
+		const localMatches = data.matchs.local;
+		const soloMatches = data.matchs.solo;
+		const tournamentMatches = data.matchs.tournament;
 
 		for (let i = 0; i < localMatches.length; i++) {
 			const divLocal = document.createElement('div');
@@ -175,7 +186,7 @@ function getDailyWinLoss(localMatches: MatchData[], username: string): DailyResu
 	}));
 }
 
-export async function displayGlobal(){
+export async function displayGlobal(root:string){
 
 	let gamesWinSolo = 0;
 	let gamesWinLocal = 0;
@@ -185,27 +196,19 @@ export async function displayGlobal(){
 	let gamesLoseTournament = 0;
 
 	let userName: string = '';
-
-	await fetch('/getUser', {
-		method: 'GET',
-		credentials: 'include',
-	})
-		.then(async (response) => {
-			const data = await response.json();
-			userName = data.user.username as string;
-		})
 	let localMatches: {id : number, winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
 	let soloMatches: { id:number , winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
 	let tournamentMatches: { id:number , winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
-	await fetch('getMatchsResults', {
+	await fetch(root, {
 		method: 'GET',
 		credentials: 'include',
 	})
 	.then(async (response) => {
 		const data = await response.json();
-		localMatches = data.local;
-		soloMatches = data.solo;
-		tournamentMatches = data.tournament;
+		localMatches = data.matchs.local;
+		soloMatches = data.matchs.solo;
+		tournamentMatches = data.matchs.tournament;
+		userName = data.user;
 		for (let i = 0; i < localMatches.length; i++)
 			localMatches[i].winner === userName ? gamesWinLocal++ : gamesLoseLocal++;
 		for (let i = 0; i < soloMatches.length; i++)
@@ -247,7 +250,7 @@ export async function displayGlobal(){
 		return;
 	}
 
-	const barChart = new Chart(barChartCanvas, {
+	charts.barChart = new Chart(barChartCanvas, {
 		type: 'bar',
 		data: {
 			labels: last7Days,
@@ -295,7 +298,7 @@ export async function displayGlobal(){
 		console.error('Canvas non trouvé !');
 		return;
 	}
-	const globalPieChart = new Chart(global, {
+	charts.globalPieChart = new Chart(global, {
 		type: 'doughnut',
 		data: {
 		labels: ['Wins', 'Losses'],
@@ -332,7 +335,7 @@ export async function displayGlobal(){
 		return;
 	}
 
-	const localBarChart = new Chart(localBarChartCanvas, {
+	charts.localBarChart = new Chart(localBarChartCanvas, {
 		type: 'bar',
 		data: {
 			labels: last7Days,
@@ -379,12 +382,12 @@ export async function displayGlobal(){
 		console.error('Canvas non trouvé !');
 		return;
 	}
-	const localPieChart = new Chart(local, {
+	charts.localPieChart = new Chart(local, {
 		type: 'doughnut',
 		data: {
 		labels: ['Wins', 'Losses'],
 		datasets: [{
-			data: [gamesWin, gamesLose],
+			data: [gamesWinLocal, gamesLoseLocal],
 			backgroundColor: ['red', 'blue']
 		}],
 		},
@@ -416,7 +419,7 @@ export async function displayGlobal(){
 		return;
 	}
 
-	const soloBarChart = new Chart(soloBarChartCanvas, {
+	charts.soloBarChart = new Chart(soloBarChartCanvas, {
 		type: 'bar',
 		data: {
 			labels: last7Days,
@@ -463,12 +466,12 @@ export async function displayGlobal(){
 		console.error('Canvas non trouvé !');
 		return;
 	}
-	const soloPieChart = new Chart(solo, {
+	charts.soloPieChart = new Chart(solo, {
 		type: 'doughnut',
 		data: {
 		labels: ['Wins', 'Losses'],
 		datasets: [{
-			data: [gamesWin, gamesLose],
+			data: [gamesWinSolo, gamesLoseSolo],
 			backgroundColor: ['red', 'blue']
 		}],
 		},
@@ -500,7 +503,7 @@ export async function displayGlobal(){
 		return;
 	}
 
-	const tournamentBarChart = new Chart(tournamentBarChartCanvas, {
+	charts.tournamentBarChart = new Chart(tournamentBarChartCanvas, {
 		type: 'bar',
 		data: {
 			labels: last7Days,
@@ -547,12 +550,12 @@ export async function displayGlobal(){
 		console.error('Canvas non trouvé !');
 		return;
 	}
-	const tournamentPieChart = new Chart(tournament, {
+	charts.tournamentPieChart = new Chart(tournament, {
 		type: 'doughnut',
 		data: {
 		labels: ['Wins', 'Losses'],
 		datasets: [{
-			data: [gamesWin, gamesLose],
+			data: [gamesWinTournament, gamesLoseTournament],
 			backgroundColor: ['red', 'blue']
 		}],
 		},
