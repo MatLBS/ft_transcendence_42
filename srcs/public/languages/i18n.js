@@ -53,7 +53,10 @@ i18next
 	  		"local": "Local Statistics",
 	  		"solo": "Solo Statistics",
 	  		"tournament": "Tournament Statistics",
-	  		"update": "Update"
+	  		"update": "Update",
+			"friends": "Friends",
+			"listFriends": "List of friends",
+			"deleteFriends": "Remove"
 	  	  },
 	  	  "register": {
 	  		"title": "Register",
@@ -148,7 +151,10 @@ i18next
             "local": "Estadísticas Locales",
             "solo": "Estadísticas Solo",
             "tournament": "Estadísticas de Torneo",
-            "update": "Actualizar"
+            "update": "Actualizar",
+			"friends": "Amigos",
+			"listFriends": "Lista de amigos",
+			"deleteFriends": "Eliminar"
           },
 	  	  "register": {
 	  		"title": "Registro",
@@ -242,7 +248,10 @@ i18next
             "local": "Estatísticas Locais",
             "solo": "Estatísticas Solo",
             "tournament": "Estatísticas de Torneio",
-            "update": "Atualizar"
+            "update": "Atualizar",
+			"friends": "Amigos",
+			"listFriends": "Lista de amigos",
+			"deleteFriends": "Remover"
           },
 	  	  "register": {
 	  		"title": "Registro",
@@ -336,7 +345,10 @@ i18next
             "local": "Statistiques Locales",
             "solo": "Statistiques Solo",
             "tournament": "Statistiques de Tournoi",
-            "update": "Mettre à jour"
+            "update": "Mettre à jour",
+			"friends": "Amis",
+			"listFriends": "Liste d'amis",
+			"deleteFriends": "Supprimer"
           },
 	  	  "register": {
 	  		"title": "Inscription",
