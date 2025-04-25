@@ -8,6 +8,8 @@ RUN npm install && npm install -g nodemon && npm install --save-dev concurrently
 
 RUN npm install --save-dev webpack webpack-cli
 
+RUN npm install -g ngrok
+
 COPY . .
 
 RUN npx prisma db push
@@ -16,4 +18,4 @@ RUN npx tsc
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "ngrok config add-authtoken $NGROK_AUTHTOKEN && ngrok http $PORT --log=stdout > ngrok.log & sleep 2 && npm run dev"]

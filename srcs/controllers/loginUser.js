@@ -13,6 +13,9 @@ export const verifLogin = async (req, reply) => {
 		return reply.send({ message: "User not found" });
 	}
 
+	if (user.password === null) {
+		return reply.send({ message: "Please log in using Google." });
+	}
 	const validPassword = await app.bcrypt.compare(password, user.password);
 
 	if (!validPassword)
