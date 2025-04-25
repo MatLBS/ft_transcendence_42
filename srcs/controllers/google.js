@@ -1,8 +1,11 @@
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import path from 'path';
+import fs from 'fs';
 import {createUserGoogle} from '../dist/prisma/seed.js';
 import {loginUserGoogle} from './loginUser.js';
-
+import fetch from 'node-fetch';
+import { __dirname } from '../router.js';
 
 export const googleAuth = async (req, reply) => {
 	let port = "", protocol = "https";
@@ -82,6 +85,29 @@ async function exchangeCodeForTokens(req, code) {
 	};
 }
 
+async function uploadImageFromUrl(imageUrl, username) {
+	try {
+		const response = await fetch(imageUrl);
+
+		if (!response.ok) {
+			return imageUrl;
+		}
+
+		const fileName = username + `temp_${Date.now()}.png`;
+		const savePath = path.join(__dirname, './uploads', fileName);
+		const fileStream = fs.createWriteStream(savePath);
+		await new Promise((resolve, reject) => {
+			response.body.pipe(fileStream);
+			response.body.on('error', reject);
+			fileStream.on('finish', resolve);
+		});
+
+		return '/uploads/' + fileName;
+	} catch (error) {
+		console.error('Error uploading image:', error);
+	}
+}
+
 export const googleCallback = async (req, reply) => {
 	const returnedState = req.query.state;
 	const sessionId = req.cookies.session_id;
@@ -97,7 +123,9 @@ export const googleCallback = async (req, reply) => {
 		let tokens = await exchangeCodeForTokens(req, code);
 		if (tokens.id_token) {
 			const decoded = jwt.decode(tokens.id_token);
-			await createUserGoogle(decoded.given_name, decoded.email, decoded.picture);
+			const img = await uploadImageFromUrl(decoded.picture, decoded.given_name);
+			console.log("img", img);
+			await createUserGoogle(decoded.given_name, decoded.email, img);
 			return loginUserGoogle(req, reply, decoded.email);
 		}
 	} else {
