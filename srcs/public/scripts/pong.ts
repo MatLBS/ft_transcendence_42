@@ -5,14 +5,14 @@ import * as GUI from "@babylonjs/gui";
 
 const WINPOINT = 2;
 class FirstPersonController {
-	scene: Scene;
-	engine: Engine;
+	scene!: Scene;
+	engine!: Engine;
 	paddle1!: AbstractMesh;
 	paddle2!: AbstractMesh;
 	ball!: AbstractMesh;
-	private local:boolean;
-	private tournament:boolean;
-	private neonMaterial!:StandardMaterial;
+	private local: boolean;
+	private tournament: boolean;
+	private neonMaterial!: StandardMaterial;
 	private predictDir = 0;
 	private player1Score: number;
 	private player2Score: number;
@@ -33,10 +33,10 @@ class FirstPersonController {
 		const gameType = canvas.getAttribute('canva-game');
 		this.player1Score = 0;
 		this.player2Score = 0;
-	
+
 		// Determine which fetch to perform
 		let fetchPromise: Promise<void>;
-	
+
 		if (this.tournament) {
 			fetchPromise = fetch('/getNextMatchTournament', {
 				method: 'GET',
@@ -55,7 +55,7 @@ class FirstPersonController {
 			} else {
 				this.player2name = "The machiavelic computer";
 			}
-	
+
 			fetchPromise = fetch('/getUser', {
 				method: 'GET',
 				credentials: 'include',
@@ -64,7 +64,7 @@ class FirstPersonController {
 				this.player1name = data.user.username as string;
 			});
 		}
-	
+
 		// After fetch completes, initialize game components
 		fetchPromise
 			.then(() => {
@@ -73,14 +73,23 @@ class FirstPersonController {
 				this.scene.getPhysicsEngine()!.setTimeStep(1 / 60);
 				this.CreateMeshes();
 				this.createExplosionEffect();
-	
+
 				if (this.local === false) {
 					setInterval(() => {
 						this.predictDir = this.predictBallXAtZ(-8);
 					}, 1000);
 				}
-	
+
 				this.engine.runRenderLoop(() => {
+					if (this.ball.position.x < -5 || this.ball.position.x > 5) {
+						if (this.ball.position.z > -8 && this.ball.position.z < 8) {
+							const velocity = this.ball.physicsImpostor!.getLinearVelocity();
+							if (velocity) {
+								velocity.x *= -1;
+								this.ball.physicsImpostor!.setLinearVelocity(velocity);
+							}
+						} 
+					}
 					this.createGame();
 				});
 				canvas.focus();
@@ -91,61 +100,58 @@ class FirstPersonController {
 			});
 	}
 
-	async postResult(winner:string, loser:string, winnerScore:number, loserScore:number):Promise<void>{
-		if (this.local === true && this.tournament === false)
-		{
+	async postResult(winner: string, loser: string, winnerScore: number, loserScore: number): Promise<void> {
+		if (this.local === true && this.tournament === false) {
 			fetch('/postResultLocal', {
 				method: 'POST',
 				credentials: 'include',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					winnerScore : winnerScore,
+					winnerScore: winnerScore,
 					loserScore: loserScore,
-					winner : winner,
+					winner: winner,
 					loser: loser,
 				}),
 			});
 		}
 
-		if (this.local === false)
-		{
+		if (this.local === false) {
 			fetch('/postResultSolo', {
 				method: 'POST',
 				credentials: 'include',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					winnerScore : winnerScore,
+					winnerScore: winnerScore,
 					loserScore: loserScore,
-					winner : winner,
+					winner: winner,
 					loser: loser,
 				}),
 			});
 		}
 
-		if (this.tournament === true)
-		{
+		if (this.tournament === true) {
 			await fetch('/postResulTournament', {
 				method: 'POST',
 				credentials: 'include',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					winnerScore : winnerScore,
+					winnerScore: winnerScore,
 					loserScore: loserScore,
-					winner : winner,
+					winner: winner,
 					loser: loser,
 				}),
 			});
 			let Isfinished = false;
 			try {
 				const response = await fetch('/getWinnerTournament', {
-				method: 'GET',
-				credentials: 'include',
+					method: 'GET',
+					credentials: 'include',
 				});
 				const data = await response.json();
 				Isfinished = data;
 				if (Isfinished === false) {
-				const eventNextMatch = new Event('eventNextMatch');
-				window.dispatchEvent(eventNextMatch);
+					const eventNextMatch = new Event('eventNextMatch');
+					window.dispatchEvent(eventNextMatch);
 				}
 			} catch (error) {
 				console.error('Error:', error);
@@ -158,8 +164,8 @@ class FirstPersonController {
 		this.currentHue += deltaTime * 60; // 60 degrees per second - adjust this value to change speed
 		this.currentHue %= 360; // Keep hue in 0-360 range
 		// Convert HSV to RGB (using full saturation and value)
-		const newColor = Color3.FromHSV(this.currentHue , 1, 1);
-		
+		const newColor = Color3.FromHSV(this.currentHue, 1, 1);
+
 		// Update material properties
 		this.neonMaterial.emissiveColor = newColor;
 		this.neonMaterial.diffuseColor = newColor;
@@ -192,7 +198,7 @@ class FirstPersonController {
 		advancedTexture.addControl(this.scoreText);
 
 		const player1NameText = new GUI.TextBlock();
-		player1NameText.text = this.player1name ;
+		player1NameText.text = this.player1name;
 		player1NameText.color = "white";
 		player1NameText.fontSize = 28;
 		player1NameText.left = -250;
@@ -285,7 +291,7 @@ class FirstPersonController {
 
 		const leftWall = createWall("leftWall", new Vector3(11.5, 1, 1), new Vector3(0, 0, 10));
 		const rightWall = createWall("rightWall", new Vector3(11.5, 1, 1), new Vector3(0, 0, -10));
-		const topWall = createWall("topWall", new Vector3(20.5, 1,1), new Vector3(5.25, 0, 0));
+		const topWall = createWall("topWall", new Vector3(20.5, 1, 1), new Vector3(5.25, 0, 0));
 		const bottomWall = createWall("bottomWall", new Vector3(20.5, 1, 1), new Vector3(-5.25, 0, 0));
 
 		const createGoal = (zPosition: number) => {
@@ -430,7 +436,7 @@ class FirstPersonController {
 			(collider, collidedAgainst, point) => {
 				const velocity = this.ball.physicsImpostor!.getLinearVelocity();
 				if (velocity) {
-					velocity.x *= -1; 
+					velocity.x *= -1;
 					this.ball.physicsImpostor!.setLinearVelocity(velocity);
 				}
 			}
@@ -447,7 +453,7 @@ class FirstPersonController {
 		if (!currentVelocity) return;
 
 		const newVelocity = new Vector3(
-			impactFactor * 2.5, 
+			impactFactor * 2.5,
 			0,
 			-currentVelocity.z,
 		);
@@ -469,11 +475,11 @@ class FirstPersonController {
 			arrowup: false,
 			arrowdown: false
 		};
-	
+
 		// Configurer les listeners pour les touches
 		this.scene.onKeyboardObservable.add((kbInfo) => {
 			const key = kbInfo.event.key.toLowerCase(); // Gérer la casse
-	
+
 			// Mettre à jour l'état des touches
 			if (kbInfo.type === KeyboardEventTypes.KEYDOWN) {
 				keys[key] = true;
@@ -481,22 +487,22 @@ class FirstPersonController {
 				keys[key] = false;
 			}
 		});
-	
+
 		// Variables pour le delta time
 		let lastTime = performance.now();
 		const paddleSpeed = 0.25; // Ajustez cette valeur au besoin
-	
+
 		// Mouvement dans la boucle de rendu
 		this.scene.onBeforeRenderObservable.add(() => {
 			// Calculer le delta time
 			const now = performance.now();
 			const deltaTime = (now - lastTime) / 1000; // Convertir en secondes
 			lastTime = now;
-	
+
 			// Limites de déplacement
 			const minX = -3.75;
 			const maxX = 3.75;
-	
+
 			// Déplacement Paddle 1 (W/S)
 			if (keys["w"]) {
 				this.paddle1.position.x = Math.min(
@@ -510,7 +516,7 @@ class FirstPersonController {
 					minX
 				);
 			}
-	
+
 			// Déplacement Paddle 2 (Flèches Haut/Bas)
 			if (this.local) {
 				if (keys["arrowup"]) {
@@ -637,33 +643,33 @@ class FirstPersonController {
 	// In predictBallXAtZ method, add null checks:
 	private predictBallXAtZ(targetZ: number): number {
 		if (!this.ball.physicsImpostor) return 0; // Or handle appropriately
-		
+
 		const currentPos = this.ball.position.clone();
 		const velocity = this.ball.physicsImpostor.getLinearVelocity();
-		
+
 		if (!velocity || velocity.z === 0) return currentPos.x;
-	
+
 		// Temps nécessaire pour atteindre la cible Z
 		const timeToTarget = (targetZ - currentPos.z) / velocity.z;
 		if (timeToTarget <= 0) return currentPos.x;
-	
+
 		let remainingTime = timeToTarget;
 		let predictedX = currentPos.x;
 		let currentVx = velocity.x;
 		const wallsX: [number, number] = [-5, 5]; // Murs gauche/droite
-	
+
 		while (remainingTime > 0 && currentVx !== 0) {
 			// Calcul du prochain mur à heurter
 			const [leftWall, rightWall] = wallsX;
 			const movingRight = currentVx > 0;
-			
+
 			// Distance jusqu'au mur et temps de collision
-			const distanceToWall = movingRight 
-				? rightWall - predictedX 
+			const distanceToWall = movingRight
+				? rightWall - predictedX
 				: leftWall - predictedX;
-				
+
 			const timeToWall = distanceToWall / currentVx;
-	
+
 			if (timeToWall > remainingTime) {
 				// Pas de collision avant la cible Z
 				predictedX += currentVx * remainingTime;
@@ -678,8 +684,7 @@ class FirstPersonController {
 		return predictedX;
 	}
 
-	private playAI():void
-	{
+	private playAI(): void {
 		const minX = -3.75;
 		const maxX = 3.75;
 		const dirDiff = this.paddle2.position.x - this.predictDir;
@@ -712,25 +717,25 @@ if (gameElement) {
 	});
 }
 
-function createNewGame(isLocal:boolean, isTournament:boolean): void {
+function createNewGame(isLocal: boolean, isTournament: boolean): void {
 	// If there is an existing game instance, stop and delete it
 	if (currentGameInstance) {
 		currentGameInstance.stop();
 	}
-	currentGameInstance = new FirstPersonController(isLocal,isTournament);
+	currentGameInstance = new FirstPersonController(isLocal, isTournament);
 }
 
-window.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-        e.preventDefault();
-    }
+window.addEventListener('keydown', function (e) {
+	if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+		e.preventDefault();
+	}
 });
 
 document.addEventListener('click', async (event) => {
 	const target = event.target as HTMLElement;
 	if (target && target.id === 'soloButton') {
 		//Create an instance of solo game
-		createNewGame(false,false);
+		createNewGame(false, false);
 	}
 	if (target && target.id === 'buttonValidation') {
 		let userLogIn: string | undefined;
@@ -743,15 +748,15 @@ document.addEventListener('click', async (event) => {
 				userLogIn = data.user.username as string;
 			})
 		//Create an instance of local game
-		const usernameElement = document.getElementById('username') as HTMLInputElement ;
+		const usernameElement = document.getElementById('username') as HTMLInputElement;
 		const player2 = usernameElement.value;
 		if (player2.trim() === "" || player2.trim() === userLogIn) {
 			return;
 		}
-		createNewGame(true,false);
+		createNewGame(true, false);
 	}
-	if (target && target.id ==='buttonNextMatch') {
+	if (target && target.id === 'buttonNextMatch') {
 		//Create an instance of solo game
-		createNewGame(true,true);
+		createNewGame(true, true);
 	}
 });

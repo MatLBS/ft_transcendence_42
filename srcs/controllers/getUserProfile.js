@@ -18,6 +18,6 @@ export const getUserProfile = async (req, reply, username) => {
 	const friend = isConnected ? await isFriend(response.user.id, user.id) : false;
 
 	const content = await ejs.renderFile("/usr/src/app/srcs/views/users/viewProfile.ejs", { user, jsonLanguage, isConnected, friend, himself });
-	let css ="", js = "/dist/srcs/public/scripts/users/viewProfile.js";
+	let css ="/public/style/usrs/viewProfile.css", js = "/dist/srcs/public/scripts/users/viewProfile.js";
 	return reply.send({ content, css, js, isConnected });
 }
