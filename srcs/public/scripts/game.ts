@@ -3,7 +3,7 @@ import { applyLink } from './utils.js';
 // Ajoute un gestionnaire d'événements global pour la délégation
 const appDiv = document.getElementById("app");
 if (appDiv) {
-	appDiv.addEventListener('click', (e: MouseEvent) => {
+	appDiv.addEventListener('click', async (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
 		// Gestion des liens dynamiques pour les éléments avec la classe "my"
 		applyLink(target, e);
@@ -61,7 +61,7 @@ if (appDiv) {
 
 		// Gestion des clics sur le bouton "Validation"
 		if (target.tagName === 'BUTTON' && target.id === 'buttonValidation') {
-			const local = validateLocalGame();
+			const local = await validateLocalGame();
 			if (local !== false)
 				hideDiv("divLocal", "buttonValidation");
 			return;
@@ -111,22 +111,35 @@ async function localClick() {
 		});
 }
 
-function validateLocalGame() {
+async function validateLocalGame() {
 	const usernameElement = document.getElementById('username') as HTMLInputElement | null;
+	let userLogIn: string | undefined;
 
 	if (!usernameElement) {
 		alert('Username input not found.');
 		return false;
 	}
-
 	const player2 = usernameElement.value;
+
+	await fetch('/getUser', {
+		method: 'GET',
+		credentials: 'include',
+	})
+		.then(async (response) => {
+			const data = await response.json();
+			userLogIn = data.user.username as string;
+		})
 
 	if (player2.trim() === '') {
 		alert(`Player has an empty name. Please fill in the field.`);
 		return false;
 	}
+	else if (player2.trim() === userLogIn) {
+		alert(`Player 2 can't have the same username as the user log in.`);
+		return false;
+	}
 	
-	fetch('/createLocal', {
+	await fetch('/createLocal', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
@@ -259,14 +272,38 @@ function initCustomSelect() {
 			playerInputs.forEach((input) => {
 				playerData.push((input as HTMLInputElement).value);
 			});
+
+			let userLogIn :string | undefined;
+			await fetch('/getUser', {
+				method: 'GET',
+				credentials: 'include',
+			})
+				.then(async (response) => {
+					const data = await response.json();
+					userLogIn = data.user.username as string;
+				})
 			
 			for (let i = 0; i < playerData.length; i++) {
 				if (playerData[i].trim() === '') {
-				alert(`Player ${i + 1} has an empty name. Please fill in all fields.`);
+					alert(`Player ${i + 1} has an empty name. Please fill in all fields.`);
+					submitButton.disabled = false;
+					(target as HTMLButtonElement).dataset.processing = 'false';
+					return;
+				}
+				if (playerData[i].trim() === userLogIn) {
+					alert(`Player ${i + 1} can't have the same username as the user log in.`);
+					submitButton.disabled = false;
+					(target as HTMLButtonElement).dataset.processing = 'false';
+					return;
+				}
+			}
+
+			const uniquePlayers = new Set(playerData.map(name => name.trim()));
+			if (uniquePlayers.size !== playerData.length) {
+				alert('Duplicate player names are not allowed. Please ensure all names are unique.');
 				submitButton.disabled = false;
 				(target as HTMLButtonElement).dataset.processing = 'false';
 				return;
-				}
 			}
 			
 			fetch('/createTournament', {

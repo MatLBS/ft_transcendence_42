@@ -2,11 +2,11 @@ export function verifyForm(username: string, email: string, password: string) {
 	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
 	const emailRegex = /[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
 
-	if (username === '') {
+	if (username.trim() === '') {
 		return { message: "Username is required." };
 	}
 
-	if (email === '') {
+	if (email.trim() === '') {
 		return { message: "Email is required." };
 	}
 

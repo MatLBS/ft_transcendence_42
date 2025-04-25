@@ -3,9 +3,14 @@ import jwt from "jsonwebtoken";
 import {createUserGoogle} from '../dist/prisma/seed.js';
 import {loginUserGoogle} from './loginUser.js';
 
-const redirectUri = "http://localhost:3000/auth/google/callback";
 
 export const googleAuth = async (req, reply) => {
+	let port = "", protocol = "https";
+	if (req.hostname === "localhost") {
+		protocol = "http";
+		port = ":3000";
+	}
+	const redirectUri = `${protocol}://${req.hostname}${port}/auth/google/callback`;
 	if (!global.oauthStates) {
 		global.oauthStates = new Map();
 	}
@@ -40,7 +45,13 @@ export const googleAuth = async (req, reply) => {
 	reply.redirect(authUrl);
 }
 
-async function exchangeCodeForTokens(code) {
+async function exchangeCodeForTokens(req, code) {
+	let port = "", protocol = "https";
+	if (req.hostname === "localhost") {
+		protocol = "http";
+		port = ":3000";
+	}
+	const redirectUri = `${protocol}://${req.hostname}${port}/auth/google/callback`;
 	const params = new URLSearchParams();
 	params.append('code', code);
 	params.append('client_id', process.env.GOOGLE_CLIENT_ID);
@@ -83,7 +94,7 @@ export const googleCallback = async (req, reply) => {
 	}
 	const code = req.query.code;
 	if (code) {
-		let tokens = await exchangeCodeForTokens(code);
+		let tokens = await exchangeCodeForTokens(req, code);
 		if (tokens.id_token) {
 			const decoded = jwt.decode(tokens.id_token);
 			await createUserGoogle(decoded.given_name, decoded.email, decoded.picture);
