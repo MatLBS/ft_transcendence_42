@@ -60,7 +60,9 @@ model TournamentMatches {
   tournamentId Int
 
   winner String?
+  winnerId Int?
   loser  String?
+  loserId Int?
   winnerScore  Int?
   loserScore  Int?
   matchDate     DateTime   @default(now())
@@ -71,7 +73,9 @@ model Local {
   players LocalPlayers[]
 
   winner String?
+  winnerId Int?
   loser  String?
+  loserId Int?
   winnerScore  Int?
   loserScore  Int?
   matchDate     DateTime   @default(now())
@@ -89,7 +93,9 @@ model Solo {
   id      Int            @id @default(autoincrement())
 
   winner String?
+  winnerId Int?
   loser  String?
+  loserId Int?
   winnerScore  Int?
   loserScore  Int?
   matchDate     DateTime   @default(now())

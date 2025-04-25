@@ -87,12 +87,26 @@ export async function nextMatchTournament(req, reply) {
 
 export async function updateResultTournamentGame(req, reply) {
 	try {
-		const winner = req.body.winner;
-		const loser = req.body.loser;
+		let user, winnerId, loserId;
+		const response = await authenticateUser(req);
+		if (response.status === 200)
+			user = await findUserById(response.user.id);
+		const winner = req.body.winner.trim();
+		const loser = req.body.loser.trim();
 		const winnerScore = req.body.winnerScore;
 		const loserScore = req.body.loserScore;
+		if (user.username === winner) {
+			winnerId = user.id;
+			loserId = 0;
+		} else if (user.username === loser) {
+			winnerId = 0;
+			loserId = user.id;
+		} else {
+			winnerId = 0;
+			loserId = 0;
+		}
 		const id = await getMaxId("tournament");
-		await fillTournamentDb(id, winner, loser, winnerScore, loserScore);
+		await fillTournamentDb(id, winner, loser, winnerScore, loserScore, winnerId, loserId);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}

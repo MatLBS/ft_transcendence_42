@@ -278,14 +278,16 @@ export async function createLocalDb(players: Array<string>) {
 	}
 }
 
-export async function fillLocalDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number) {
+export async function fillLocalDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number, winnerId: number, loserId: number) {
 	const localParty = await prisma.local.update({
 		where: { id: id },
 		data:{
 			winner: winner,
 			loser: loser,
 			winnerScore: winnerScore,
-			loserScore: loserScore
+			loserScore: loserScore,
+			winnerId: winnerId,
+			loserId: loserId
 		}
 	});
 }
@@ -340,19 +342,21 @@ export async function createSoloDb() {
 		throw new Error(`Failed to create a new local party.`)
 }
 
-export async function fillSoloDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number) {
+export async function fillSoloDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number, winnerId: number, loserId: number) {
 	const soloParty = await prisma.solo.update({
 		where: { id: id },
 		data:{
 			winner: winner,
 			loser: loser,
 			winnerScore: winnerScore,
-			loserScore: loserScore
+			loserScore: loserScore,
+			winnerId: winnerId,
+			loserId: loserId
 		}
 	});
 }
 
-export async function fillTournamentDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number) {
+export async function fillTournamentDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number, winnerId: number, loserId: number) {
 	const winnerPlayer = await prisma.tournamentPlayers.findFirst({
 		where: {
 			tournamentId: id,
@@ -380,7 +384,9 @@ export async function fillTournamentDb(id: number, winner: string, loser: string
 			winner: winner,
 			loser: loser,
 			winnerScore: winnerScore,
-			loserScore: loserScore
+			loserScore: loserScore,
+			winnerId: winnerId,
+			loserId: loserId
 		}
 	})
 	const tournament = await getTournamentById(id);
