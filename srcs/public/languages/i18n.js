@@ -37,7 +37,9 @@ i18next
 	  		"password": "Password",
 	  		"button": "Login",
 	  		"register_p": "Don't have an account ?",
-	  		"register_a": "Register"
+	  		"register_a": "Register",
+			"usernameRequired": "Username is required",
+			"passwordRequired": "Password is required",
 	  	  },
 	  	  "profil": {
 	  		"statistics": "Statistics",
@@ -78,7 +80,16 @@ i18next
 	  		"prevPassword": "Previous Password",
 	  		"newPassword": "New Password",
 	  		"button": "Confirm"
-	  	  }
+	  	  },
+		  "verify": {
+			"regexEmail": "Email is required.",
+			"username": "Username is required.",
+			"minimumLengthUser": "Username must be between 3 and 20 characters long.",
+			"invalidEmail": "The email is not valid.",
+			"password": "Password is required.",
+			"regexPassword": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character."
+
+		  }
 	  	}
 	    },
 	    es: {
@@ -139,7 +150,8 @@ i18next
 	  		"button": "Confirmar"
 	  	  },
 		  "solo": {
-			"sentence": "Jugarás en el lado izquierdo, la IA en el derecho. ¿Estás listo?"
+			"sentence": "Jugarás en el lado izquierdo, la IA en el derecho. ¿Estás listo?",
+			"button": "¡Listo!"
 		  },
 	  	  "tournament": {
 			"nbPlayers": "¿Cuántos jugadores participarán en el torneo?",
@@ -155,7 +167,15 @@ i18next
 	  		"prevPassword": "Contraseña anterior",
 	  		"newPassword": "Nueva contraseña",
 	  		"button": "Confirmar"
-	  	  }
+	  	  },
+		  "verify": {
+			"regexEmail": "El correo electrónico es obligatorio.",
+			"username": "El nombre de usuario es obligatorio.",
+			"minimumLengthUser": "El nombre de usuario debe tener entre 3 y 20 caracteres.",
+			"invalidEmail": "El correo electrónico no es válido.",
+			"password": "La contraseña es obligatoria.",
+			"regexPassword": "La contraseña debe tener al menos 8 caracteres e incluir al menos una letra mayúscula, una letra minúscula y un carácter especial."
+		  }
 	  	}
 	    },
 	    pt: {
@@ -216,7 +236,8 @@ i18next
 	  		"button": "Confirmar"
 	  	  },
 		  "solo": {
-			"sentence": "Você jogará no lado esquerdo, a IA no lado direito! Você está pronto?"
+			"sentence": "Você jogará no lado esquerdo, a IA no lado direito! Você está pronto?",
+			"button": "Pronto!"
 		  },
 	  	  "tournament": {
 			"nbPlayers": "Quantos jogadores participarão do torneio?",
@@ -232,7 +253,15 @@ i18next
 	  		"prevPassword": "Senha anterior",
 	  		"newPassword": "Nova senha",
 	  		"button": "Confirmar"
-	  	  }
+	  	  },
+		  "verify": {
+			"regexEmail": "O e-mail é obrigatório.",
+			"username": "O nome de usuário é obrigatório.",
+			"minimumLengthUser": "O nome de usuário deve ter entre 3 e 20 caracteres.",
+			"invalidEmail": "O e-mail não é válido.",
+			"password": "A senha é obrigatória.",
+			"regexPassword": "A senha deve ter pelo menos 8 caracteres e conter pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial."
+		  }
 	  	}
 	    },
 	    fr: {
@@ -269,7 +298,9 @@ i18next
 	  		"password": "Mot de passe",
 	  		"button": "Se connecter",
 	  		"register_p": "Vous n'avez pas de compte ?",
-	  		"register_a": "S'inscrire"
+	  		"register_a": "S'inscrire",
+			"usernameRequired": "Le nom d'utilisateur est requis",
+			"passwordRequired": "Le mot de passe est requis"
 	  	  },
 	  	  "profil": {
             "statistics": "Statistiques",
@@ -293,7 +324,8 @@ i18next
 	  		"button": "Confirmer"
 	  	  },
 		  "solo": {
-			"sentence": "Vous jouerez du côté gauche, l'IA du côté droit ! Êtes-vous prêt ?"
+			"sentence": "Vous jouerez du côté gauche, l'IA du côté droit ! Êtes-vous prêt ?",
+			"button": "Prêt !"
 		  },
 	  	  "tournament": {
 			"nbPlayers": "Combien de joueurs participeront au tournoi ?",
@@ -309,7 +341,15 @@ i18next
 	  		"prevPassword": "Mot de passe précédent",
 	  		"newPassword": "Nouveau mot de passe",
 	  		"button": "Confirmer"
-	  	  }
+	  	  },
+		  "verify": {
+			"regexEmail": "L'email est requis.",
+			"username": "Le nom d'utilisateur est requis.",
+			"minimumLengthUser": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères.",
+			"invalidEmail": "L'email n'est pas valide.",
+			"password": "Le mot de passe est requis.",
+			"regexPassword": "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule et un caractère spécial."
+		  }
 	  	}
 	    }
 	},

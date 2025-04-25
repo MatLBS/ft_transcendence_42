@@ -1,6 +1,8 @@
 import { recvContent } from '../main.js';
 import { applyLink, getInputValue } from './utils.js';
 import { verifyForm } from '../../middleware/verify.js';
+import { language } from '../main.js';
+
 
 // const register_button = document.getElementById('register_button');
 
@@ -90,7 +92,7 @@ function registerUser() {
 	});
 }
 
-function validateForm() {
+async function validateForm() {
 	const error_input = document.getElementById('error_input');
 	const password = getInputValue('password');
 	const email = getInputValue('email');
@@ -102,7 +104,9 @@ function validateForm() {
 	if (!error_input)
 		return;
 
-	const formResponse = verifyForm(username, email, password);
+	const formResponse = await verifyForm(username, email, password, language);
+	console.log("ici")
+	console.log(formResponse)
 	if (formResponse.message !== "ok") {
 		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
 		return;

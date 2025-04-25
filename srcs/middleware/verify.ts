@@ -1,29 +1,46 @@
-export function verifyForm(username: string, email: string, password: string) {
+import { json } from "stream/consumers";
+
+export async function verifyForm(username: string, email: string, password: string, language: string) {
+	let jsonLanguage;
+	await fetch('/languages', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ language }),
+	})
+		.then(async (response) => {
+			jsonLanguage = await response.json();
+		})
+		.catch((error: unknown) => {
+			console.error('Erreur lors de la récupération du contenu:', error);
+		});
+	console.log(jsonLanguage);
+		
 	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
 	const emailRegex = /[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
 
 	if (username.trim() === '') {
-		return { message: "Username is required." };
+		return { message: jsonLanguage!.verify.username };
 	}
 
 	if (email.trim() === '') {
-		return { message: "Email is required." };
+		return { message: jsonLanguage!.verify.regexEmail };
 	}
 
 	if (username.length < 3 || username.length > 20) {
-		return { message: "Username must be between 3 and 20 characters long." };
+		return { message: jsonLanguage!.verify.minimumLengthUser };
 	}
 
 	if (email && !emailRegex.test(email)) {
-		return { message: "The email is not valid." };
+		return { message: jsonLanguage!.verify.invalidEmail };
 	}
 
 	if (password === '') {
-		return { message: "Password is required.", password: true };
+		return { message: jsonLanguage!.verify.password, password: true };
 	}
 
 	if (password && !passwordRegex.test(password)) {
-		return { message: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.", password: true };
+		return { message: jsonLanguage!.verify.regexPassword, password: true };
 	}
 
 	return { message: "ok" };

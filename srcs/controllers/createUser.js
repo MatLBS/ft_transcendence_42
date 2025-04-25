@@ -27,7 +27,7 @@ export const verifFormRegister = async (req, reply) => {
 		const email = fields.email;
 		const username = fields.username;
 
-		const formResponse = verifyForm(username, email, fields.password);
+		const formResponse = verifyForm(username, email, fields.password, "");
 		if (formResponse.message !== "ok") {
 			return reply.send({ message: formResponse.message });
 		}

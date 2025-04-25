@@ -1,6 +1,7 @@
 import { recvContent } from '../main.js';
 import { applyLink, getInputValue } from './utils.js';
 import { verifyForm } from '../../middleware/verify.js';
+import { language } from '../main.js';
 
 // const register_button = document.getElementById('register_button');
 
@@ -124,7 +125,7 @@ function validateFormGoogle() {
 	})
 }
 
-function validateForm() {
+async function validateForm() {
 	const error_input = document.getElementById('error_input');
 	const previousPassword = getInputValue('prev_password');
 	const newPassword = getInputValue('new_password');
@@ -137,7 +138,7 @@ function validateForm() {
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
 
-	const formResponse = verifyForm(username, email, newPassword);
+	const formResponse = await verifyForm(username, email, newPassword, language);
 	if (formResponse.message !== "ok" && !formResponse.password) {
 		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
 		return;
