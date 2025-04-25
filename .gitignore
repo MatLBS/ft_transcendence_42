@@ -35,6 +35,8 @@ Thumbs.db
 # Environment variables
 .env
 
+ngrok*
+
 # Fastify
 fastify.log
 
