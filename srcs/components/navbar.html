@@ -2,10 +2,10 @@
 	<ul class="flex gap-5 ml-3">
 		<li><a class="my" href="/"><%= jsonLanguage.index.home %></a></li>
 		<li><a class="my" href="/about"><%= jsonLanguage.index.about %></a></li>
-		<li><a class="my" href="/game"><%= jsonLanguage.index.game %></a></li>
-		<li><a class="my connected" href="/profil"><%= jsonLanguage.index.profil %></a></li>
-		<li><a class="logout connected" href="/login" ><%= jsonLanguage.index.logout %></a></li>
-		<li><a class="my disconnected" href="/login"><%= jsonLanguage.index.login %></a></li>
+		<li  class="connected"><a class="my" href="/game"><%= jsonLanguage.index.game %></a></li>
+		<li class="connected"><a class="my" href="/profil"><%= jsonLanguage.index.profil %></a></li>
+		<li class="connected"><a class="logout" href="/login" ><%= jsonLanguage.index.logout %></a></li>
+		<li class="disconnected"><a class="my" href="/login"><%= jsonLanguage.index.login %></a></li>
 	</ul>
 	<div class="search-container">
 		<input type="text" id="search-input" placeholder="Rechercher..." autocomplete="off" />

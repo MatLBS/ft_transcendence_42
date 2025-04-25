@@ -99,26 +99,30 @@ function hideElements(isConnected: boolean): void {
 
 // Gère les clics sur les liens dynamiques avec délégation d'événements
 function handleLinks(): void {
-	const nav = document.querySelector('nav');
-	if (!nav) return;
-	nav.removeEventListener('click', seeTarget);
-	nav.addEventListener('click', seeTarget);
+	const app = document.querySelector('#app');
+	if (!app) return;
+	app.removeEventListener('click', seeTarget as EventListener);
+	app.addEventListener('click', seeTarget as EventListener);
 }
 
 function seeTarget(e: MouseEvent): void {
 	const target = e.target as HTMLAnchorElement;
-	applyLink(target, e);
-	if (target.tagName === 'A' && target.classList.contains('logout')) {
-		handleLogout(e);
+	if (target.closest('nav')) {
+		applyLink(target, e);
+		if (target.tagName === 'A' && target.classList.contains('logout')) {
+			handleLogout(e);
+		}
+		if (target.closest('#language-select'))  {
+			const languageOptions = document.getElementById('languages-options');
+			if (languageOptions)
+				languageOptions.classList.toggle('open');
+		}
+		if (target.tagName === 'LI' && target.id === 'language-options')
+			handleLanguage(e);
+		if (target.matches('#search-input')) {
+			handleSearch();
+		}
 	}
-	if (target.closest('#language-select'))  {
-		const languageOptions = document.getElementById('languages-options');
-		if (languageOptions)
-			languageOptions.classList.toggle('open');
-	}
-	if (target.tagName === 'LI' && target.id === 'language-options')
-		handleLanguage(e);
-
 }
 
 async function handleLanguage(e: Event): Promise<void> {
@@ -216,7 +220,6 @@ function start(): void {
 	recvContent(window.location.pathname);
 	handleLinks();
 	handlePopState();
-	handleSearch();
 }
 
 // Gère l'événement de fermeture de la fenêtre
