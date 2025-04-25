@@ -1,4 +1,28 @@
-<div>
+<!-- <div>
 	<h1><%= jsonLanguage.home.title %></h1>
 	<p><%= jsonLanguage.home.subtitle %></p>
+</div> -->
+
+<div id="pong-homepage">
+	<div id="welcome-div" class="justify-center">
+	  <h1>Welcome, <span id="username">Player</span>!</h1>
+	</div>
+	<div class="flex justify-center items-center">
+		<div id="rules-div">
+			<h2>How to Play</h2>
+			<ul>
+				<li>First to 10 points wins.</li>
+				<li>Ball speed increases over time.</li>
+				<li>Angle depends on where you hit the ball.</li>
+				<li>No power-ups—pure Pong skill!</li>
+			</ul>
+		</div>
+		
+		<div id="stats-div">
+			<h2>Your Stats</h2>
+			<div>
+				<canvas id="homeStats" width="400" height="300"></canvas>
+			</div>
+		</div>
+	</div>
 </div>

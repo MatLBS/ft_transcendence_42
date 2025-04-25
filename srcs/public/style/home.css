@@ -1,0 +1,15 @@
+#pong-homepage {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 1rem;
+	font-family: sans-serif;
+  }
+  #welcome-section h1 {
+	text-align: center;
+  }
+  #rules-section, #stats-section {
+	margin-top: 2rem;
+  }
+  #rules-section ul {
+	list-style: disc inside;
+  }
