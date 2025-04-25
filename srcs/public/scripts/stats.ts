@@ -196,6 +196,7 @@ export async function displayGlobal(root:string){
 	let gamesLoseTournament = 0;
 
 	let userName: string = '';
+	let userId : number;
 	let localMatches: {id : number, winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
 	let soloMatches: { id:number , winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
 	let tournamentMatches: { id:number , winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
@@ -209,6 +210,8 @@ export async function displayGlobal(root:string){
 		soloMatches = data.matchs.solo;
 		tournamentMatches = data.matchs.tournament;
 		userName = data.user;
+		userId = data.userId
+		console.log("userid = ", userId);
 		for (let i = 0; i < localMatches.length; i++)
 			localMatches[i].winner === userName ? gamesWinLocal++ : gamesLoseLocal++;
 		for (let i = 0; i < soloMatches.length; i++)
