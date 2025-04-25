@@ -1,5 +1,5 @@
 <div class="header__wrapper">
-	<button id="open-friends" class="btn-abs">Friends</button>
+	<button id="open-friends" class="btn-abs"><%= jsonLanguage.profil.friends %></button>
 	<header></header>
 	<div class="user__infos__container items-center">
 		<div class="user__infos">
@@ -92,7 +92,7 @@
 <a class="my" href="/update"><%= jsonLanguage.profil.update %></a>
 
 <div id="container">
-	<h1 id="friend-title">Ma Liste d’Amis</h1>
+	<h1 id="friend-title"><%= jsonLanguage.profil.listFriends %></h1>
 	<button id="close-friends">X</button>
 	<ul class="friends-list">
 	<% friends.forEach(friend => { %>
@@ -108,7 +108,7 @@
 				</div>
 				<button class="btn remove-friend" data-username="<%= friend.username %>">
 					<svg width="16" height="16" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm2 4h14v2H5v-2zm2 4h10v2H7v-2z"/></svg>
-					Retirer
+					<%= jsonLanguage.profil.deleteFriends %>
 				</button>
 			</li>
 		</a>

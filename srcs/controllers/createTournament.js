@@ -36,8 +36,6 @@ export const createTournament = async (req, reply) => {
 		});
 	}
 
-	console.log(playersInfos)
-
 	let nbRounds;
 
 	switch(req.body.playerData.length) {
