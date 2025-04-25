@@ -210,7 +210,7 @@ export async function displayGlobal(root:string){
 		soloMatches = data.matchs.solo;
 		tournamentMatches = data.matchs.tournament;
 		userName = data.user;
-		userId = data.userId
+		userId = data.userId;
 		console.log("userid = ", userId);
 		for (let i = 0; i < localMatches.length; i++)
 			localMatches[i].winner === userName ? gamesWinLocal++ : gamesLoseLocal++;

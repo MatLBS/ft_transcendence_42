@@ -23,11 +23,13 @@ i18next
 	  		"game": "game",
 	  		"profil": "profil",
 	  		"logout": "logout",
-	  		"login": "Login"
+	  		"login": "Login",
+			"flag": "🇬🇧",
 	  	  },
 	  	  "localParty": {
 	  		"label": "Enter a name for the second player...",
-	  		"button": "Validate"
+	  		"button": "Validate",
+			"username": "enter a name",
 	  	  },
 	  	  "login": {
 	  		"title": "Login",
@@ -35,7 +37,9 @@ i18next
 	  		"password": "Password",
 	  		"button": "Login",
 	  		"register_p": "Don't have an account ?",
-	  		"register_a": "Register"
+	  		"register_a": "Register",
+			"usernameRequired": "Username is required",
+			"passwordRequired": "Password is required",
 	  	  },
 	  	  "profil": {
 	  		"statistics": "Statistics",
@@ -49,7 +53,10 @@ i18next
 	  		"local": "Local Statistics",
 	  		"solo": "Solo Statistics",
 	  		"tournament": "Tournament Statistics",
-	  		"update": "Update"
+	  		"update": "Update",
+			"friends": "Friends",
+			"listFriends": "List of friends",
+			"deleteFriends": "Remove"
 	  	  },
 	  	  "register": {
 	  		"title": "Register",
@@ -59,11 +66,15 @@ i18next
 	  		"button": "Confirm"
 	  	  },
 		  "solo": {
-	  		"sentence": "You will be playing on the left side, the IA on the right ! Are you ready ?"
-	  	  },
+	  		"sentence": "You will be playing on the left side, the IA on the right ! Are you ready ?",
+			"button": "Ready !",
+		},
 	  	  "tournament": {
 	  		"nbPlayers": "How many players will participate in the tournament ?",
+			"player": "Player",
 			"nextMatch": "Next match",
+			"validate": "Validate",
+			"enter": "enter a name",
 	  	  },
 	  	  "update": {
 	  		"title": "Update",
@@ -72,7 +83,22 @@ i18next
 	  		"prevPassword": "Previous Password",
 	  		"newPassword": "New Password",
 	  		"button": "Confirm"
-	  	  }
+	  	  },
+		  "verify": {
+			"regexEmail": "Email is required.",
+			"username": "Username is required.",
+			"minimumLengthUser": "Username must be between 3 and 20 characters long.",
+			"invalidEmail": "The email is not valid.",
+			"password": "Password is required.",
+			"regexPassword": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.",
+			"invalidFormat": "Invalid file type. Only images are allowed.",
+			"usernameAlreadyExists": "This username already exists.",
+			"emailAlreadyExists": "This email already exists.",
+			"prevPassword": "The previous password is required.",
+			"wrongPrevPassword": "The previous password is incorrect.",
+			"diffPassword": "The new password must be different from the previous one.",
+
+		  }
 	  	}
 	    },
 	    es: {
@@ -95,19 +121,23 @@ i18next
 	  		"game": "juego",
 	  		"profil": "perfil",
 	  		"logout": "cerrar sesión",
-	  		"login": "Iniciar sesión"
+	  		"login": "Iniciar sesión",
+			"flag": "🇪🇸",
 	  	  },
 	  	  "localParty": {
-	  		"label": "Introduce un nombre para el segundo jugador...",
-	  		"button": "Validar"
-	  	  },
+			"label": "Introduce un nombre para el segundo jugador...",
+			"button": "Validar",
+			"username": "introduce un nombre"
+		  },
 	  	  "login": {
 	  		"title": "Iniciar sesión",
 	  		"username": "Nombre de usuario",
 	  		"password": "Contraseña",
 	  		"button": "Iniciar sesión",
 	  		"register_p": "¿No tienes una cuenta?",
-	  		"register_a": "Registrarse"
+	  		"register_a": "Registrarse",
+			"usernameRequired": "Nombre de usuario es obligatorio",
+        	"passwordRequired": "Contraseña es obligatoria"
 	  	  },
 	  	  "profil": {
             "statistics": "Estadísticas",
@@ -121,7 +151,10 @@ i18next
             "local": "Estadísticas Locales",
             "solo": "Estadísticas Solo",
             "tournament": "Estadísticas de Torneo",
-            "update": "Actualizar"
+            "update": "Actualizar",
+			"friends": "Amigos",
+			"listFriends": "Lista de amigos",
+			"deleteFriends": "Eliminar"
           },
 	  	  "register": {
 	  		"title": "Registro",
@@ -131,12 +164,16 @@ i18next
 	  		"button": "Confirmar"
 	  	  },
 		  "solo": {
-			"sentence": "Jugarás en el lado izquierdo, la IA en el derecho. ¿Estás listo?"
+			"sentence": "Jugarás en el lado izquierdo, la IA en el derecho. ¿Estás listo?",
+			"button": "¡Listo!"
 		  },
 	  	  "tournament": {
-	  		"nbPlayers": "¿Cuántos jugadores participarán en el torneo?",
+			"nbPlayers": "¿Cuántos jugadores participarán en el torneo?",
+			"player": "Jugador",
 			"nextMatch": "Próximo partido",
-	  	  },
+			"validate": "Validar",
+			"enter": "introduce un nombre"
+		  },
 	  	  "update": {
 	  		"title": "Actualizar",
 	  		"username": "Nombre de usuario",
@@ -144,7 +181,21 @@ i18next
 	  		"prevPassword": "Contraseña anterior",
 	  		"newPassword": "Nueva contraseña",
 	  		"button": "Confirmar"
-	  	  }
+	  	  },
+		  "verify": {
+			"regexEmail": "El correo electrónico es obligatorio.",
+			"username": "El nombre de usuario es obligatorio.",
+			"minimumLengthUser": "El nombre de usuario debe tener entre 3 y 20 caracteres.",
+			"invalidEmail": "El correo electrónico no es válido.",
+			"password": "La contraseña es obligatoria.",
+			"regexPassword": "La contraseña debe tener al menos 8 caracteres e incluir al menos una letra mayúscula, una letra minúscula y un carácter especial.",
+			"invalidFormat": "Tipo de archivo no válido. Solo se permiten imágenes.",
+			"usernameAlreadyExists": "Este nombre de usuario ya existe.",
+			"emailAlreadyExists": "Este correo electrónico ya existe.",
+			"prevPassword": "Se requiere la contraseña anterior.",
+			"wrongPrevPassword": "La contraseña anterior es incorrecta.",
+			"diffPassword": "La nueva contraseña debe ser diferente de la anterior."
+		  }
 	  	}
 	    },
 	    pt: {
@@ -167,19 +218,23 @@ i18next
 	  		"game": "jogo",
 	  		"profil": "perfil",
 	  		"logout": "sair",
-	  		"login": "Entrar"
+	  		"login": "Entrar",
+			"flag": "🇵🇹",
 	  	  },
-	  	  "localParty": {
-	  		"label": "Digite um nome para o segundo jogador...",
-	  		"button": "Validar"
-	  	  },
+	  	 "localParty": {
+			"label": "Digite um nome para o segundo jogador...",
+			"button": "Validar",
+			"username": "digite um nome"
+		  },
 	  	  "login": {
 	  		"title": "Entrar",
 	  		"username": "Nome de usuário",
 	  		"password": "Senha",
 	  		"button": "Entrar",
 	  		"register_p": "Não tem uma conta?",
-	  		"register_a": "Registrar"
+	  		"register_a": "Registrar",
+			"usernameRequired": "Nome de usuário é obrigatório",
+        	"passwordRequired": "Senha é obrigatória"
 	  	  },
 	  	  "profil": {
             "statistics": "Estatísticas",
@@ -193,7 +248,10 @@ i18next
             "local": "Estatísticas Locais",
             "solo": "Estatísticas Solo",
             "tournament": "Estatísticas de Torneio",
-            "update": "Atualizar"
+            "update": "Atualizar",
+			"friends": "Amigos",
+			"listFriends": "Lista de amigos",
+			"deleteFriends": "Remover"
           },
 	  	  "register": {
 	  		"title": "Registro",
@@ -203,12 +261,16 @@ i18next
 	  		"button": "Confirmar"
 	  	  },
 		  "solo": {
-			"sentence": "Você jogará no lado esquerdo, a IA no lado direito! Você está pronto?"
+			"sentence": "Você jogará no lado esquerdo, a IA no lado direito! Você está pronto?",
+			"button": "Pronto!"
 		  },
 	  	  "tournament": {
-	  		"nbPlayers": "Quantos jogadores participarão do torneio?",
+			"nbPlayers": "Quantos jogadores participarão do torneio?",
+			"player": "Jogador",
 			"nextMatch": "Próxima partida",
-	  	  },
+			"validate": "Validar",
+			"enter": "digite um nome"
+		  },
 	  	  "update": {
 	  		"title": "Atualizar",
 	  		"username": "Nome de usuário",
@@ -216,7 +278,21 @@ i18next
 	  		"prevPassword": "Senha anterior",
 	  		"newPassword": "Nova senha",
 	  		"button": "Confirmar"
-	  	  }
+	  	  },
+		  "verify": {
+			"regexEmail": "O e-mail é obrigatório.",
+			"username": "O nome de usuário é obrigatório.",
+			"minimumLengthUser": "O nome de usuário deve ter entre 3 e 20 caracteres.",
+			"invalidEmail": "O e-mail não é válido.",
+			"password": "A senha é obrigatória.",
+			"regexPassword": "A senha deve ter pelo menos 8 caracteres e conter pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial.",
+			"invalidFormat": "Tipo de arquivo inválido. Apenas imagens são permitidas.",
+			"usernameAlreadyExists": "Este nome de usuário já existe.",
+			"emailAlreadyExists": "Este e-mail já existe.",
+			"prevPassword": "A senha anterior é obrigatória.",
+			"wrongPrevPassword": "A senha anterior está incorreta.",
+			"diffPassword": "A nova senha deve ser diferente da anterior."
+		  }
 	  	}
 	    },
 	    fr: {
@@ -239,11 +315,13 @@ i18next
 	  		"game": "jeu",
 	  		"profil": "profil",
 	  		"logout": "déconnexion",
-	  		"login": "Connexion"
+	  		"login": "Connexion",
+			"flag": "🇫🇷",
 	  	  },
 	  	  "localParty": {
 	  		"label": "Entrez un nom pour le deuxième joueur...",
-	  		"button": "Valider"
+	  		"button": "Valider",
+			"username": "entrez un nom",
 	  	  },
 	  	  "login": {
 	  		"title": "Connexion",
@@ -251,7 +329,9 @@ i18next
 	  		"password": "Mot de passe",
 	  		"button": "Se connecter",
 	  		"register_p": "Vous n'avez pas de compte ?",
-	  		"register_a": "S'inscrire"
+	  		"register_a": "S'inscrire",
+			"usernameRequired": "Le nom d'utilisateur est requis",
+			"passwordRequired": "Le mot de passe est requis"
 	  	  },
 	  	  "profil": {
             "statistics": "Statistiques",
@@ -265,7 +345,10 @@ i18next
             "local": "Statistiques Locales",
             "solo": "Statistiques Solo",
             "tournament": "Statistiques de Tournoi",
-            "update": "Mettre à jour"
+            "update": "Mettre à jour",
+			"friends": "Amis",
+			"listFriends": "Liste d'amis",
+			"deleteFriends": "Supprimer"
           },
 	  	  "register": {
 	  		"title": "Inscription",
@@ -275,12 +358,16 @@ i18next
 	  		"button": "Confirmer"
 	  	  },
 		  "solo": {
-			"sentence": "Vous jouerez du côté gauche, l'IA du côté droit ! Êtes-vous prêt ?"
+			"sentence": "Vous jouerez du côté gauche, l'IA du côté droit ! Êtes-vous prêt ?",
+			"button": "Prêt !"
 		  },
 	  	  "tournament": {
-	  		"nbPlayers": "Combien de joueurs participeront au tournoi ?",
+			"nbPlayers": "Combien de joueurs participeront au tournoi ?",
+			"player": "Joueur",
 			"nextMatch": "Prochain match",
-	  	  },
+			"validate": "Valider",
+			"enter": "entrez un nom",
+		  },
 	  	  "update": {
 	  		"title": "Mettre à jour",
 	  		"username": "Nom d'utilisateur",
@@ -288,7 +375,21 @@ i18next
 	  		"prevPassword": "Mot de passe précédent",
 	  		"newPassword": "Nouveau mot de passe",
 	  		"button": "Confirmer"
-	  	  }
+	  	  },
+		  "verify": {
+			"regexEmail": "L'email est requis.",
+			"username": "Le nom d'utilisateur est requis.",
+			"minimumLengthUser": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères.",
+			"invalidEmail": "L'email n'est pas valide.",
+			"password": "Le mot de passe est requis.",
+			"regexPassword": "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule et un caractère spécial.",
+			"invalidFormat": "Type de fichier invalide. Seules les images sont autorisées.",
+			"usernameAlreadyExists": "Ce nom d'utilisateur existe déjà.",
+			"emailAlreadyExists": "Cet email existe déjà.",
+			"prevPassword": "Le mot de passe précédent est requis.",
+			"wrongPrevPassword": "Le mot de passe précédent est incorrect.",
+			"diffPassword": "Le nouveau mot de passe doit être différent du précédent."
+		  }
 	  	}
 	    }
 	},

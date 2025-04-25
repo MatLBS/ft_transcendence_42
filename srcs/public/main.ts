@@ -1,7 +1,7 @@
 import { json } from 'stream/consumers';
 import { applyLink } from './scripts/utils.js';
 
-export let language = "en"; // Langue par défaut
+export let language = "en";
 
 // Définition du type pour la réponse serveur
 interface ResponseData {

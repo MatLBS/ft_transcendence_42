@@ -1,6 +1,7 @@
 import { recvContent } from '../main.js';
 import { applyLink, getInputValue } from './utils.js';
 import { verifyForm } from '../../middleware/verify.js';
+import { language } from '../main.js';
 
 // const register_button = document.getElementById('register_button');
 
@@ -124,7 +125,7 @@ function validateFormGoogle() {
 	})
 }
 
-function validateForm() {
+async function validateForm() {
 	const error_input = document.getElementById('error_input');
 	const previousPassword = getInputValue('prev_password');
 	const newPassword = getInputValue('new_password');
@@ -137,7 +138,21 @@ function validateForm() {
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
 
-	const formResponse = verifyForm(username, email, newPassword);
+	let jsonLanguage;
+	await fetch('/languages', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ language }),
+	})
+		.then(async (response) => {
+			jsonLanguage = await response.json();
+		})
+		.catch((error: unknown) => {
+			console.error('Erreur lors de la récupération du contenu:', error);
+		});
+
+	const formResponse = await verifyForm(username, email, newPassword, jsonLanguage);
 	if (formResponse.message !== "ok" && !formResponse.password) {
 		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
 		return;

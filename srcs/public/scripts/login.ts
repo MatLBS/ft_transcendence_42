@@ -1,5 +1,6 @@
 import { recvContent } from '../main.js';
 import { applyLink, getInputValue } from './utils.js';
+import { language } from '../main.js';
 
 // const login_button = document.getElementById('login_button');
 
@@ -33,7 +34,20 @@ if (appDiv) {
 	});
 }
 
-function validateForm() {
+async function validateForm() {
+	let jsonLanguage;
+	await fetch('/languages', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ language }),
+	})
+		.then(async (response) => {
+			jsonLanguage = await response.json();
+		})
+		.catch((error: unknown) => {
+			console.error('Erreur lors de la récupération du contenu:', error);
+		});
 	const error_input = document.getElementById('error_input');
 	if (!error_input)
 		return;
@@ -42,11 +56,11 @@ function validateForm() {
 	const username = getInputValue('username');
 
 	if (username === "") {
-		error_input.innerHTML = `<p>Username is required</p>`;
+		error_input.innerHTML = `<p>${jsonLanguage!.login.usernameRequired}</p>`;
 		return;
 	}
 	if (password === "") {
-		error_input.innerHTML = `<p>Password is required</p>`;
+		error_input.innerHTML = `<p>${jsonLanguage!.login.passwordRequired}</p>`;
 		return;
 	}
 	fetch('/verifLogin', {
