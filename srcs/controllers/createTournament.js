@@ -1,6 +1,7 @@
-import { createTournamentDb,  getMaxId, fillTournamentDb, getTournamentById, hasAlreadyLose } from '../dist/prisma/seed.js';
+import { createTournamentDb,  getMaxId, fillTournamentDb, getTournamentById, hasAlreadyLose, findUserById } from '../dist/prisma/seed.js';
 import { findUsersTournament } from '../dist/prisma/seed.js';
 import { getUserBackend } from './getUser.js';
+import { authenticateUser } from "./tokens.js";
 
 function getRandomNumber(playerIds) {
 	const randomIndex = Math.floor(Math.random() * playerIds.length);
@@ -15,7 +16,7 @@ export const createTournament = async (req, reply) => {
 	var playersInfos = new Map();
 
 	const userLogIn = await getUserBackend(req, reply);
-	for (let i = 0; i < req.body.playerData.length; ++i) {
+	for (let i = 1; i < req.body.playerData.length; ++i) {
 		if (req.body.playerData[i].trim() === '' || req.body.playerData[i].trim() === userLogIn)
 			return;
 	}

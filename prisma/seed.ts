@@ -424,15 +424,15 @@ export async function logUser(id: number, isOnline: boolean) {
 	})
 }
 
-export async function getLocalMatches(user: string) {
+export async function getLocalMatches(userId: number) {
 	const localMatches = await prisma.local.findMany({
 		where: {
 			OR: [
 				{
-					winner: user,
+					winnerId: userId,
 				},
 				{
-					loser: user,
+					loserId: userId,
 				},
 			],
 		},
@@ -442,15 +442,15 @@ export async function getLocalMatches(user: string) {
 	return localMatches;
 }
 
-export async function getSoloMatches(user: string) {
+export async function getSoloMatches(userId: number) {
 	const soloMatches = await prisma.solo.findMany({
 		where: {
 			OR: [
 				{
-					winner: user,
+					winnerId: userId,
 				},
 				{
-					loser: user,
+					loserId: userId,
 				},
 			],
 		},
@@ -460,15 +460,15 @@ export async function getSoloMatches(user: string) {
 	return soloMatches;
 }
 
-export async function getTournamentMatches(user: string) {
+export async function getTournamentMatches(userId: number) {
 	const tournamentMatches = await prisma.tournamentMatches.findMany({
 		where: {
 			OR: [
 				{
-					winner: user,
+					winnerId: userId,
 				},
 				{
-					loser: user,
+					loserId: userId,
 				},
 			],
 		},
