@@ -11,38 +11,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-	<nav class="bg-blue-500 h-32 flex justify-between items-center">
-		<ul class="flex gap-5 ml-3">
-			<li><a class="my" href="/"><%= jsonLanguage.index.home %></a></li>
-			<li><a class="my" href="/about"><%= jsonLanguage.index.about %></a></li>
-			<li><a class="my" href="/game"><%= jsonLanguage.index.game %></a></li>
-			<li><a class="my connected" href="/profil"><%= jsonLanguage.index.profil %></a></li>
-			<li><a class="logout connected" href="/login" ><%= jsonLanguage.index.logout %></a></li>
-			<li><a class="my disconnected" href="/login"><%= jsonLanguage.index.login %></a></li>
-		</ul>
-		<div class="search-container">
-			<input type="text" id="search-input" placeholder="Rechercher..." autocomplete="off" />
-			<ul id="search-results"></ul>
-		</div>
-		<div class="mr-3">
-			<div id="language-select" class="w-24 relative">
-				<div class="flex justify-center align-center">
-					<div id="language-default" class="flex justify-center items-center w-full rounded-full p-2">
-						<%= jsonLanguage.index.flag %>
-						<span class="material-icons pl-2">expand_more</span>
-					</div>
-				</div>
-				<div class="flex justify-center align-center absolute w-full z-10">
-					<ul id="languages-options" class="list-inside rounded-lg hidden mt-2 w-full text-center border-2 border-gray-500">
-						<li data-value="fr" id="language-options" class=" hover:bg-gray-200">🇫🇷</li>
-						<li data-value="en" id="language-options" class="hover:bg-gray-200 ">🇬🇧</li>
-						<li data-value="es" id="language-options" class="hover:bg-gray-200">🇪🇸</li>
-						<li data-value="pt" id="language-options" class="hover:bg-gray-200">🇵🇹</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</nav>
 	<div id="app"></div>
 	<script type="module" src="/dist/srcs/public/main.js"></script>
 	<script id="game" src="/dist/srcs/public/scripts/pong.js" ></script>
