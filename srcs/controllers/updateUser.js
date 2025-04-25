@@ -7,8 +7,11 @@ import { authenticateUser } from './tokens.js';
 import { verifyForm } from '../dist/srcs/middleware/verify.js';
 import { verifEmail, verifCode } from './email.js';
 import { parseRequestParts } from '../middleware/parseRequestParts.js';
+import { getLanguageWithoutBody } from './getLanguage.js'
 
 const verifUpdate = async (req, reply, fields) => {
+	let language = req.cookies.userLanguage;
+	let jsonLanguage = await getLanguageWithoutBody(language);
 	const response = await authenticateUser(req);
 
 	const user = await findUserById(response.user.id);
@@ -17,13 +20,13 @@ const verifUpdate = async (req, reply, fields) => {
 	}
 
 	if (fields.previousPassword === "")
-		return reply.send({message : "The previous password is required."});
+		return reply.send({message : jsonLanguage.verify.prevPassword});
 
 	const validPassword = await app.bcrypt.compare(fields.previousPassword, user.password);
 	if (!validPassword)
-		return reply.send({message : "The previous password is incorrect."});
+		return reply.send({message : jsonLanguage.verify.wrongPrevPassword});
 
-	const formResponse = verifyForm(fields.username, fields.email, fields.newPassword, "");
+	const formResponse = verifyForm(fields.username, fields.email, fields.newPassword, jsonLanguage);
 	if (formResponse.message !== "ok") {
 		if (fields.newPassword === "") {
 			if (!formResponse.password)
@@ -35,14 +38,14 @@ const verifUpdate = async (req, reply, fields) => {
 
 	const isUsername = await findUser(fields.username);
 	if (isUsername && fields.username !== user.username) {
-		return reply.send({ message: "This username already exists." });
+		return reply.send({ message: jsonLanguage.verify.usernameAlreadyExists });
 	}
 	const isUserEmail = await findUserByEmail(fields.email);
 	if (isUserEmail && fields.email !== user.email) {
-		return reply.send({ message: "This email already exists." });
+		return reply.send({ message: jsonLanguage.verify.emailAlreadyExists });
 	}
 	if (fields.newPassword !== "" && fields.newPassword === fields.previousPassword)
-		return reply.send({message : "The new password must be different from the previous one."});
+		return reply.send({message : jsonLanguage.verify.diffPassword});
 	return { response, user };
 }
 

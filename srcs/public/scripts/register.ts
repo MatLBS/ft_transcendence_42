@@ -104,9 +104,20 @@ async function validateForm() {
 	if (!error_input)
 		return;
 
-	const formResponse = await verifyForm(username, email, password, language);
-	console.log("ici")
-	console.log(formResponse)
+	let jsonLanguage;
+		await fetch('/languages', {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ language }),
+		})
+			.then(async (response) => {
+				jsonLanguage = await response.json();
+			})
+			.catch((error: unknown) => {
+				console.error('Erreur lors de la récupération du contenu:', error);
+			});
+	const formResponse = await verifyForm(username, email, password, jsonLanguage);
 	if (formResponse.message !== "ok") {
 		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
 		return;

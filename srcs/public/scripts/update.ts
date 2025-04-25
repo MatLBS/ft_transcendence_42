@@ -138,7 +138,21 @@ async function validateForm() {
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
 
-	const formResponse = await verifyForm(username, email, newPassword, language);
+	let jsonLanguage;
+	await fetch('/languages', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ language }),
+	})
+		.then(async (response) => {
+			jsonLanguage = await response.json();
+		})
+		.catch((error: unknown) => {
+			console.error('Erreur lors de la récupération du contenu:', error);
+		});
+
+	const formResponse = await verifyForm(username, email, newPassword, jsonLanguage);
 	if (formResponse.message !== "ok" && !formResponse.password) {
 		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
 		return;

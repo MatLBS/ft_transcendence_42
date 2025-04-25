@@ -87,7 +87,13 @@ i18next
 			"minimumLengthUser": "Username must be between 3 and 20 characters long.",
 			"invalidEmail": "The email is not valid.",
 			"password": "Password is required.",
-			"regexPassword": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character."
+			"regexPassword": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.",
+			"invalidFormat": "Invalid file type. Only images are allowed.",
+			"usernameAlreadyExists": "This username already exists.",
+			"emailAlreadyExists": "This email already exists.",
+			"prevPassword": "The previous password is required.",
+			"wrongPrevPassword": "The previous password is incorrect.",
+			"diffPassword": "The new password must be different from the previous one.",
 
 		  }
 	  	}
@@ -126,7 +132,9 @@ i18next
 	  		"password": "Contraseña",
 	  		"button": "Iniciar sesión",
 	  		"register_p": "¿No tienes una cuenta?",
-	  		"register_a": "Registrarse"
+	  		"register_a": "Registrarse",
+			"usernameRequired": "Nombre de usuario es obligatorio",
+        	"passwordRequired": "Contraseña es obligatoria"
 	  	  },
 	  	  "profil": {
             "statistics": "Estadísticas",
@@ -174,7 +182,13 @@ i18next
 			"minimumLengthUser": "El nombre de usuario debe tener entre 3 y 20 caracteres.",
 			"invalidEmail": "El correo electrónico no es válido.",
 			"password": "La contraseña es obligatoria.",
-			"regexPassword": "La contraseña debe tener al menos 8 caracteres e incluir al menos una letra mayúscula, una letra minúscula y un carácter especial."
+			"regexPassword": "La contraseña debe tener al menos 8 caracteres e incluir al menos una letra mayúscula, una letra minúscula y un carácter especial.",
+			"invalidFormat": "Tipo de archivo no válido. Solo se permiten imágenes.",
+			"usernameAlreadyExists": "Este nombre de usuario ya existe.",
+			"emailAlreadyExists": "Este correo electrónico ya existe.",
+			"prevPassword": "Se requiere la contraseña anterior.",
+			"wrongPrevPassword": "La contraseña anterior es incorrecta.",
+			"diffPassword": "La nueva contraseña debe ser diferente de la anterior."
 		  }
 	  	}
 	    },
@@ -212,7 +226,9 @@ i18next
 	  		"password": "Senha",
 	  		"button": "Entrar",
 	  		"register_p": "Não tem uma conta?",
-	  		"register_a": "Registrar"
+	  		"register_a": "Registrar",
+			"usernameRequired": "Nome de usuário é obrigatório",
+        	"passwordRequired": "Senha é obrigatória"
 	  	  },
 	  	  "profil": {
             "statistics": "Estatísticas",
@@ -260,7 +276,13 @@ i18next
 			"minimumLengthUser": "O nome de usuário deve ter entre 3 e 20 caracteres.",
 			"invalidEmail": "O e-mail não é válido.",
 			"password": "A senha é obrigatória.",
-			"regexPassword": "A senha deve ter pelo menos 8 caracteres e conter pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial."
+			"regexPassword": "A senha deve ter pelo menos 8 caracteres e conter pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial.",
+			"invalidFormat": "Tipo de arquivo inválido. Apenas imagens são permitidas.",
+			"usernameAlreadyExists": "Este nome de usuário já existe.",
+			"emailAlreadyExists": "Este e-mail já existe.",
+			"prevPassword": "A senha anterior é obrigatória.",
+			"wrongPrevPassword": "A senha anterior está incorreta.",
+			"diffPassword": "A nova senha deve ser diferente da anterior."
 		  }
 	  	}
 	    },
@@ -348,7 +370,13 @@ i18next
 			"minimumLengthUser": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères.",
 			"invalidEmail": "L'email n'est pas valide.",
 			"password": "Le mot de passe est requis.",
-			"regexPassword": "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule et un caractère spécial."
+			"regexPassword": "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule et un caractère spécial.",
+			"invalidFormat": "Type de fichier invalide. Seules les images sont autorisées.",
+			"usernameAlreadyExists": "Ce nom d'utilisateur existe déjà.",
+			"emailAlreadyExists": "Cet email existe déjà.",
+			"prevPassword": "Le mot de passe précédent est requis.",
+			"wrongPrevPassword": "Le mot de passe précédent est incorrect.",
+			"diffPassword": "Le nouveau mot de passe doit être différent du précédent."
 		  }
 	  	}
 	    }

@@ -7,8 +7,11 @@ import { __dirname } from '../router.js';
 import { verifyForm } from '../dist/srcs/middleware/verify.js';
 import { parseRequestParts } from '../middleware/parseRequestParts.js';
 import { sendEmail, generateCode, verifCode } from './email.js';
+import { getLanguageWithoutBody } from './getLanguage.js'
 
 export const verifFormRegister = async (req, reply) => {
+	let language = req.cookies.userLanguage;
+	let jsonLanguage = await getLanguageWithoutBody(language);
 	try {
 		const parts = req.parts();
 		let fields = {};
@@ -16,30 +19,28 @@ export const verifFormRegister = async (req, reply) => {
 			if (part.file) {
 				if (!part.mimetype.startsWith('image/')) {
 					part.file.resume();
-					return reply.send({ message: 'Invalid file type. Only images are allowed.' });
+					return reply.send({ message: jsonLanguage.verify.invalidFormat });
 				}
 				part.file.resume();
 			}
 			else
 				fields[part.fieldname] = part.value;
 		}
-
 		const email = fields.email;
 		const username = fields.username;
 
-		const formResponse = verifyForm(username, email, fields.password, "");
+		const formResponse = verifyForm(username, email, fields.password, jsonLanguage);
 		if (formResponse.message !== "ok") {
 			return reply.send({ message: formResponse.message });
 		}
 
-
 		const user = await findUser(username);
 		if (user) {
-			return reply.send({ message: "This username already exists." });
+			return reply.send({ message: jsonLanguage.verify.usernameAlreadyExists });
 		}
 		const userEmail = await findUserByEmail(email);
 		if (userEmail) {
-			return reply.send({ message: "This email already exists." });
+			return reply.send({ message: jsonLanguage.verify.emailAlreadyExists });
 		}
 
 		const code = await generateCode(req, reply);
@@ -64,6 +65,8 @@ export const verifFormRegister = async (req, reply) => {
 }
 
 export const checkUserBack = async (req, reply) => {
+	let language = req.cookies.userLanguage;
+	let jsonLanguage = await getLanguageWithoutBody(language);
 	try {
 		// Utiliser req.parts() pour traiter les fichiers et les champs
 		const uploadDir = path.join(__dirname, './uploads');
@@ -79,11 +82,11 @@ export const checkUserBack = async (req, reply) => {
 
 		const user = await findUser(username);
 		if (user) {
-			return reply.send({ message: "This username already exists." });
+			return reply.send({ message: jsonLanguage.verify.usernameAlreadyExists });
 		}
 		const userEmail = await findUserByEmail(email);
 		if (userEmail) {
-			return reply.send({ message: "This email already exists." });
+			return reply.send({ message: jsonLanguage.verify.emailAlreadyExists });
 		}
 
 		const response = await verifCode(req, reply, fields.verif_email);

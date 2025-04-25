@@ -6,7 +6,7 @@ export const updateUserLanguage =  async (req, reply) => {
 	const response = await authenticateUser(req);
 	reply
 		.setCookie("userLanguage", language, {
-			httpOnly: true,
+			httpOnly: false,
 			secure: false,
 			sameSite: "lax",
 			path: "/",
