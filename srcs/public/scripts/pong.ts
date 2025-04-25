@@ -5,8 +5,8 @@ import * as GUI from "@babylonjs/gui";
 
 const WINPOINT = 2;
 class FirstPersonController {
-	scene: Scene;
-	engine: Engine;
+	scene!: Scene;
+	engine!: Engine;
 	paddle1!: AbstractMesh;
 	paddle2!: AbstractMesh;
 	ball!: AbstractMesh;
