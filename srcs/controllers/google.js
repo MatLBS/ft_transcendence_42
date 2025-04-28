@@ -124,7 +124,6 @@ export const googleCallback = async (req, reply) => {
 		if (tokens.id_token) {
 			const decoded = jwt.decode(tokens.id_token);
 			const img = await uploadImageFromUrl(decoded.picture, decoded.given_name);
-			console.log("img", img);
 			await createUserGoogle(decoded.given_name, decoded.email, img);
 			return loginUserGoogle(req, reply, decoded.email);
 		}
