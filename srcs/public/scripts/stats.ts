@@ -25,19 +25,19 @@ function displayStats(typeMatch: Array<any>, match__history: HTMLInputElement | 
 
 		const typeCell = document.createElement('p');
 		typeCell.textContent = typeMatch[i].type;
-		typeCell.classList.add('w-1/6');
+		typeCell.classList.add('w-1/6', 'max-w-48', 'overflow-hidden');
 
 		const winnerCell = document.createElement('p');
 		winnerCell.textContent = typeMatch[i].winner;
-		winnerCell.classList.add('w-1/6');
+		winnerCell.classList.add('w-1/6', 'max-w-48', 'overflow-hidden');
 
 		const loserCell = document.createElement('p');
 		loserCell.textContent = typeMatch[i].loser;
-		loserCell.classList.add('w-1/6');
+		loserCell.classList.add('w-1/6', 'max-w-48', 'overflow-hidden');
 
 		const scoreCell = document.createElement('p');
 		scoreCell.textContent = `${typeMatch[i].winnerScore} - ${typeMatch[i].loserScore}`;
-		scoreCell.classList.add('w-1/6');
+		scoreCell.classList.add('w-1/6', 'max-w-48', 'overflow-hidden');
 
 		const dateCell = document.createElement('p');
 		const matchDate = new Date(typeMatch[i].matchDate);
@@ -49,7 +49,7 @@ function displayStats(typeMatch: Array<any>, match__history: HTMLInputElement | 
 			minute: '2-digit',
 		});
 		dateCell.textContent = formattedDateTime;
-		dateCell.classList.add('w-1/6');
+		dateCell.classList.add('w-1/6', 'max-w-48', 'overflow-hidden');
 
 		if (i % 2 === 0)
 			divParent.classList.add('bg-gray-100');

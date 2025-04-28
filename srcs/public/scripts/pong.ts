@@ -768,7 +768,7 @@ document.addEventListener('click', async (event) => {
 		//Create an instance of local game
 		const usernameElement = document.getElementById('username') as HTMLInputElement;
 		const player2 = usernameElement.value;
-		if (player2.trim() === "" || player2.trim() === userLogIn) {
+		if (player2.trim() === "" || player2.trim() === userLogIn || player2.trim().length > 30) {
 			return;
 		}
 		createNewGame(true, false);

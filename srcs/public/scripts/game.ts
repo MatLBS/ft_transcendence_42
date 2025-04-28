@@ -137,6 +137,10 @@ async function validateLocalGame() {
 		alert(`Player 2 can't have the same username as the user log in.`);
 		return false;
 	}
+	else if (player2.trim().length > 30) {
+		alert(`Username is too long. Please enter a name with less than 30 characters.`);
+		return false;
+	}
 	
 	await fetch('/createLocal', {
 		method: 'POST',
@@ -319,6 +323,12 @@ async function handleTournamentSettingsClick(e: MouseEvent) {
 				}
 				if (playerData[i].trim() === userLogIn) {
 					alert(`Player ${i + 1} can't have the same username as the user log in.`);
+					submitButton.disabled = false;
+					(target as HTMLButtonElement).dataset.processing = 'false';
+					return;
+				}
+				if (playerData[i].trim().length > 30) {
+					alert(`Player ${i + 1} has a name that is too long. Please enter a name with less than 30 characters.`);
 					submitButton.disabled = false;
 					(target as HTMLButtonElement).dataset.processing = 'false';
 					return;
