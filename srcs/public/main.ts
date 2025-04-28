@@ -1,5 +1,6 @@
 import { json } from 'stream/consumers';
 import { applyLink } from './scripts/utils.js';
+import { displayGlobal, displayMatches} from './scripts/stats.js';
 
 export let language = "en";
 
@@ -34,7 +35,7 @@ export async function recvContent(url: string): Promise<void> {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
 
-	fetch('/url', {
+	await fetch('/url', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
@@ -46,6 +47,10 @@ export async function recvContent(url: string): Promise<void> {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
 	history.pushState({}, '', url);
+	if (url === '/profil') {
+		await displayMatches("getMatchsResults");
+		await displayGlobal("getMatchsResults");
+	}
 }
 
 // Met à jour le contenu de la page avec les données reçues du serveur
@@ -73,6 +78,7 @@ function updatePageContent(data: ResponseData): void {
 		scriptElement.type = 'module';
 		scriptElement.src = data.js;
 		scriptElement.id = 'js';
+		scriptElement.defer = true;
 		document.body.appendChild(scriptElement);
 	}
 
