@@ -5,7 +5,7 @@ import { getErrorPage } from "./errorPage.js";
 export const getUser = async (req , reply) => {
 	const response = await authenticateUser(req);
 	const username = await findUserById(response.user.id)
-	reply.send({ user: { username: username.username } }); 
+	reply.send({ user: { username: username.username } });
 }
 
 export const getUserBackend = async (req , reply) => {
@@ -20,7 +20,8 @@ export const getExternalUser = async (req , reply) => {
 			username = req.url.split("/").pop();
 			user = await findUser(username);
 			if (!user) {
-				return await getErrorPage(req, reply);
+				// return await getErrorPage(req, reply);
+				return ({ status: 404 });
 			}
 		} catch (error) {
 			console.error(error);
