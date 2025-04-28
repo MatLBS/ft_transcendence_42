@@ -18,7 +18,6 @@ export const charts: {
 export async function displayMatches(root:string) {
 	const match__history = document.getElementById('match__history') as HTMLInputElement | null;
 
-
 	await fetch(root, {
 		method: 'GET',
 		credentials: 'include',
@@ -133,7 +132,7 @@ interface MatchData {
 	winner: string;
 	winnerScore: number;
   }
-  
+
   interface DailyResult {
 	date: string;
 	wins: number;
@@ -152,7 +151,7 @@ function getDailyWinLoss(localMatches: MatchData[], username: string): DailyResu
 		date.setUTCDate(date.getUTCDate() - i);
 		dates.push(date.toISOString().split('T')[0]);
 	}
-  
+
 	// Initialize daily counts
 	const dailyCounts = new Map<string, { wins: number; losses: number }>();
 	dates.forEach(date => {
@@ -161,23 +160,23 @@ function getDailyWinLoss(localMatches: MatchData[], username: string): DailyResu
 
 	// Process each match
 	localMatches.forEach(match => {
-	const matchDate = new Date(match.matchDate);
-	
-	// Skip future matches
-	if (matchDate > now) return;
+		const matchDate = new Date(match.matchDate);
 
-	const matchDateStr = matchDate.toISOString().split('T')[0];
-	const dailyResult = dailyCounts.get(matchDateStr);
-	
-	if (dailyResult) {
-		if (match.winner === username) {
-			dailyResult.wins++;
-		} else {
-			dailyResult.losses++;
-		}
-	  }
+		// Skip future matches
+		if (matchDate > now) return;
+
+		const matchDateStr = matchDate.toISOString().split('T')[0];
+		const dailyResult = dailyCounts.get(matchDateStr);
+
+			if (dailyResult) {
+				if (match.winner === username) {
+					dailyResult.wins++;
+				} else {
+					dailyResult.losses++;
+				}
+			}
 	});
-  
+
 	// Convert to sorted array
 	return dates.map(date => ({
 		date,
@@ -211,7 +210,7 @@ export async function displayGlobal(root:string){
 		tournamentMatches = data.matchs.tournament;
 		userName = data.user;
 		userId = data.userId;
-		console.log("userid = ", userId);
+		console.log("userid1 = ", userId);
 		for (let i = 0; i < localMatches.length; i++)
 			localMatches[i].winner === userName ? gamesWinLocal++ : gamesLoseLocal++;
 		for (let i = 0; i < soloMatches.length; i++)
@@ -226,13 +225,13 @@ export async function displayGlobal(root:string){
 	const weeklyTournamentWin = getDailyWinLoss(tournamentMatches,userName );
 	if (gamesWin + gamesLose === 0)
 		return;
-	
+
 	const last7Days = Array.from({ length: 7 }, (_, i) => {
 		const date = new Date();
 		date.setDate(date.getDate() - i);
 		return date.toISOString().split('T')[0];
 	}).reverse();
-	
+
 	const winsByDayGlobal = last7Days.map(date => {
 		const localResult = weeklyLocalWin.find(result => result.date === date) || { wins: 0, losses: 0 };
 		const soloResult = weeklySoloWin.find(result => result.date === date) || { wins: 0, losses: 0 };
@@ -253,6 +252,9 @@ export async function displayGlobal(root:string){
 		return;
 	}
 
+	if (charts.barChart) {
+		charts.barChart.destroy();
+	}
 	charts.barChart = new Chart(barChartCanvas, {
 		type: 'bar',
 		data: {
@@ -290,16 +292,19 @@ export async function displayGlobal(root:string){
 			},
 			animation: {
 				duration: 1000,
-				easing: 'easeOutBounce' 
+				easing: 'easeOutBounce'
 			},
 		},
 	});
 
-	
+
 	const global = document.getElementById('globalChart') as HTMLCanvasElement | null;
 	if (!global) {
 		console.error('Canvas non trouvé !');
 		return;
+	}
+	if (charts.globalPieChart) {
+		charts.globalPieChart.destroy();
 	}
 	charts.globalPieChart = new Chart(global, {
 		type: 'doughnut',
@@ -338,6 +343,10 @@ export async function displayGlobal(root:string){
 		return;
 	}
 
+
+	if (charts.localBarChart) {
+		charts.localBarChart.destroy();
+	}
 	charts.localBarChart = new Chart(localBarChartCanvas, {
 		type: 'bar',
 		data: {
@@ -375,15 +384,18 @@ export async function displayGlobal(root:string){
 			},
 			animation: {
 				duration: 1000,
-				easing: 'easeOutBounce' 
+				easing: 'easeOutBounce'
 			},
 		},
 	});
-	
+
 	const local = document.getElementById('localChart') as HTMLCanvasElement | null;
 	if (!local) {
 		console.error('Canvas non trouvé !');
 		return;
+	}
+	if (charts.localPieChart) {
+		charts.localPieChart.destroy();
 	}
 	charts.localPieChart = new Chart(local, {
 		type: 'doughnut',
@@ -422,6 +434,9 @@ export async function displayGlobal(root:string){
 		return;
 	}
 
+	if (charts.soloBarChart) {
+		charts.soloBarChart.destroy();
+	}
 	charts.soloBarChart = new Chart(soloBarChartCanvas, {
 		type: 'bar',
 		data: {
@@ -459,15 +474,18 @@ export async function displayGlobal(root:string){
 			},
 			animation: {
 				duration: 1000,
-				easing: 'easeOutBounce' 
+				easing: 'easeOutBounce'
 			},
 		},
 	});
-	
+
 	const solo = document.getElementById('soloChart') as HTMLCanvasElement | null;
 	if (!solo) {
 		console.error('Canvas non trouvé !');
 		return;
+	}
+	if (charts.soloPieChart) {
+		charts.soloPieChart.destroy();
 	}
 	charts.soloPieChart = new Chart(solo, {
 		type: 'doughnut',
@@ -505,7 +523,9 @@ export async function displayGlobal(root:string){
 		console.error('Canvas for bar chart not found!');
 		return;
 	}
-
+	if (charts.tournamentBarChart) {
+		charts.tournamentBarChart.destroy();
+	}
 	charts.tournamentBarChart = new Chart(tournamentBarChartCanvas, {
 		type: 'bar',
 		data: {
@@ -543,15 +563,19 @@ export async function displayGlobal(root:string){
 			},
 			animation: {
 				duration: 1000,
-				easing: 'easeOutBounce' 
+				easing: 'easeOutBounce'
 			},
 		},
 	});
-	
+
 	const tournament = document.getElementById('tournamentChart') as HTMLCanvasElement | null;
 	if (!tournament) {
 		console.error('Canvas non trouvé !');
 		return;
+	}
+
+	if (charts.tournamentPieChart) {
+		charts.tournamentPieChart.destroy();
 	}
 	charts.tournamentPieChart = new Chart(tournament, {
 		type: 'doughnut',
@@ -572,5 +596,5 @@ export async function displayGlobal(root:string){
 			},
 		}
 	});
-	
+
 }
