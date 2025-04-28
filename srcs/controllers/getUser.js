@@ -4,6 +4,7 @@ import { getErrorPage } from "./errorPage.js";
 
 export const getUser = async (req , reply) => {
 	const response = await authenticateUser(req);
+	console.log(response)
 	reply.send({ user: { username: response.user.username } }); 
 }
 

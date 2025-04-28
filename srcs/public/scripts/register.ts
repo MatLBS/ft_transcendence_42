@@ -130,13 +130,14 @@ async function validateForm() {
 	if (profile_picture) {
 		formData.append('profile_picture', profile_picture);
 	}
-	fetch('/verifForm', {
+	await fetch('/verifForm', {
 		method: 'POST',
 		body: formData,
 	})
 	.then(async (response) => {
 		const data = await response.json();
 		if (data.message !== "ok") {
+			console.log("ici")
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
 			return;
 		} else {
