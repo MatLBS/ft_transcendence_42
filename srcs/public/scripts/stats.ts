@@ -131,6 +131,8 @@ interface MatchData {
 	matchDate: string;
 	winner: string;
 	winnerScore: number;
+	winnerId : number;
+	looserId : number; 
   }
 
   interface DailyResult {
@@ -139,7 +141,7 @@ interface MatchData {
 	losses: number;
 }
 
-function getDailyWinLoss(localMatches: MatchData[], username: string): DailyResult[] {
+function getDailyWinLoss(localMatches: MatchData[], userId: number): DailyResult[] {
 	const now = new Date();
 	const today = new Date(now);
 	today.setUTCHours(0, 0, 0, 0); // Start of today in UTC
@@ -169,7 +171,7 @@ function getDailyWinLoss(localMatches: MatchData[], username: string): DailyResu
 		const dailyResult = dailyCounts.get(matchDateStr);
 
 			if (dailyResult) {
-				if (match.winner === username) {
+				if (match.winnerId === userId) {
 					dailyResult.wins++;
 				} else {
 					dailyResult.losses++;
@@ -195,10 +197,10 @@ export async function displayGlobal(root:string){
 	let gamesLoseTournament = 0;
 
 	let userName: string = '';
-	let userId : number;
-	let localMatches: {id : number, winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
-	let soloMatches: { id:number , winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
-	let tournamentMatches: { id:number , winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
+	let userId: number = 0; // Initialize with a default value
+	let localMatches: {id : number, winner: string ; winnerId: number; loser: string; looserId:number ;winnerScore: number; loserScore: number; matchDate: string }[] = [];
+	let soloMatches: { id: number , winner: string; loser: string; winnerId : number; looserId : number; winnerScore: number; loserScore: number; matchDate: string }[] = [];
+	let tournamentMatches: { id: number , winner: string; loser: string; winnerId : number; looserId : number;  winnerScore: number; loserScore: number; matchDate: string }[] = [];
 	await fetch(root, {
 		method: 'GET',
 		credentials: 'include',
@@ -209,20 +211,19 @@ export async function displayGlobal(root:string){
 		soloMatches = data.matchs.solo;
 		tournamentMatches = data.matchs.tournament;
 		userName = data.user;
-		userId = data.userId;
-		console.log("userid1 = ", userId);
+		userId = data.userId || 0;
 		for (let i = 0; i < localMatches.length; i++)
-			localMatches[i].winner === userName ? gamesWinLocal++ : gamesLoseLocal++;
+			localMatches[i].winnerId === userId ? gamesWinLocal++ : gamesLoseLocal++;
 		for (let i = 0; i < soloMatches.length; i++)
-			soloMatches[i].winner === userName ? gamesWinSolo++ : gamesLoseSolo++;
+			soloMatches[i].winnerId === userId ? gamesWinSolo++ : gamesLoseSolo++;
 		for (let i = 0; i < tournamentMatches.length; i++)
-			tournamentMatches[i].winner === userName ? gamesWinTournament++ : gamesLoseTournament++;
+			tournamentMatches[i].winnerId === userId ? gamesWinTournament++ : gamesLoseTournament++;
 	});
 	const gamesWin = gamesWinSolo + gamesWinLocal + gamesWinTournament;
 	const gamesLose = gamesLoseSolo + gamesLoseLocal + gamesLoseTournament;
-	const weeklyLocalWin = getDailyWinLoss(localMatches,userName );
-	const weeklySoloWin = getDailyWinLoss(soloMatches,userName );
-	const weeklyTournamentWin = getDailyWinLoss(tournamentMatches,userName );
+	const weeklyLocalWin = getDailyWinLoss(localMatches,userId);
+	const weeklySoloWin = getDailyWinLoss(soloMatches,userId );
+	const weeklyTournamentWin = getDailyWinLoss(tournamentMatches,userId );
 	if (gamesWin + gamesLose === 0)
 		return;
 
