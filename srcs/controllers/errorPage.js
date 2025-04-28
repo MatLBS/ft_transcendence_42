@@ -10,8 +10,7 @@ export const getErrorPage = (req, reply) => {
 // Fonction pour charger une page d'erreur
 export const errorPage = async (req, reply, response, errorCode) => {
 	const isConnected = response.status === 200;
-	const css = null;
-	// const css = path.join(__dirname, 'views', `error_page/style/${errorCode}.css`);
+	const css = path.join('public', `style/error_page/error.css`);
 	const jsonLanguage = req.body.jsonLanguage;
 	const content = await ejs.renderFile(path.join(__dirname, 'views', `error_page/${errorCode}.ejs`), { jsonLanguage });
 	if (response.status === 200 && response.newAccessToken) {

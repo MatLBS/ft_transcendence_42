@@ -51,7 +51,7 @@ export async function recvContent(url: string): Promise<void> {
 		await displayMatches("getMatchsResults");
 		await displayGlobal("getMatchsResults");
 	} else if (url.includes('/users/')) {
-		const titleErrorElements = document.getElementsByClassName('title-error');
+		const titleErrorElements = document.getElementsByClassName('error-code');
 		if (titleErrorElements)
 			return ;
 		const urlParts = window.location.pathname.split('/');
@@ -121,8 +121,8 @@ function handleLinks(): void {
 
 function seeTarget(e: MouseEvent): void {
 	const target = e.target as HTMLAnchorElement;
+	applyLink(target, e);
 	if (target.closest('nav')) {
-		applyLink(target, e);
 		if (target.tagName === 'A' && target.classList.contains('logout')) {
 			handleLogout(e);
 		}
