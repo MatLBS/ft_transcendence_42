@@ -80,8 +80,3 @@ async function handleFriends(action: string) {
 	alert(data.message);
 	recvContent(`/users/${username}`);
 }
-
-const urlParts = window.location.pathname.split('/');
-const username = urlParts[urlParts.length - 1];
-displayMatches(`/getExternalMatchsResults/${username}`);
-displayGlobal(`/getExternalMatchsResults/${username}`);

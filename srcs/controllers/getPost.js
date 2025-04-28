@@ -8,25 +8,7 @@ import { findUserById } from "../dist/prisma/seed.js";
 import { json } from 'stream/consumers';
 import { getUserProfile } from './getUserProfile.js';
 import { getFollowedUsers } from '../dist/prisma/friends.js';
-
-// Fonction pour charger une page d'erreur
-const errorPage = async (req, reply, response, errorCode) => {
-	const isConnected = response.status === 200;
-	const css = path.join(__dirname, 'views', `error_page/style/${errorCode}.css`);
-	const jsonLanguage = req.body.jsonLanguage;
-	const content = await ejs.renderFile(path.join(__dirname, 'views', `error_page/${errorCode}.ejs`), { jsonLanguage });
-	if (response.status === 200 && response.newAccessToken) {
-		return reply
-			.setCookie('access_token', response.newAccessToken, {
-				httpOnly: false,
-				secure: false,
-				sameSite: 'Strict'
-			})
-			.code(errorCode).send({ content, css, isConnected });
-	} else {
-		return reply.code(errorCode).send({ content, css, isConnected });
-	}
-};
+import { errorPage } from './errorPage.js';
 
 // Vérifie si une page nécessite une connexion
 const needLogin = (file) => ["profil", "game", "update"].includes(file);
@@ -37,15 +19,17 @@ const dontNeedLogin = (file) => ["login", "register"].includes(file);
 const redirectToLogin = async (req, reply) => {
 	const jsonLanguage = req.body.jsonLanguage;
 	const css = routes.login.css;
+	const js = routes.login.js;
 	const content = await ejs.renderFile(path.join(__dirname, 'views', '/login.ejs'), { jsonLanguage });
-	return reply.send({ content, css, isConnected: false });
+	return reply.send({ content, css, js, isConnected: false });
 }
 
 const redirectToHome = async (req, reply) => {
 	const jsonLanguage = req.body.jsonLanguage;
 	const css = routes.home.css;
+	const js = routes.home.js;
 	const content = await ejs.renderFile(path.join(__dirname, 'views', '/home.ejs'), { jsonLanguage });
-	return reply.send({ content, css, isConnected: false });
+	return reply.send({ content, css, js, isConnected: true });
 }
 
 export const getPost = async (req, reply) => {
@@ -60,7 +44,7 @@ export const getPost = async (req, reply) => {
 
 	try {
 		// Authentification de l'utilisateur
-		const response = await authenticateUser(req);
+		response = await authenticateUser(req);
 		if (response.status !== 200) {
 			if (needLogin(file)) {
 				return await redirectToLogin(req, reply);

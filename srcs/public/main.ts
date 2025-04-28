@@ -50,6 +50,14 @@ export async function recvContent(url: string): Promise<void> {
 	if (url === '/profil') {
 		await displayMatches("getMatchsResults");
 		await displayGlobal("getMatchsResults");
+	} else if (url.includes('/users/')) {
+		const titleErrorElements = document.getElementsByClassName('title-error');
+		if (titleErrorElements)
+			return ;
+		const urlParts = window.location.pathname.split('/');
+		const username = urlParts[urlParts.length - 1];
+		await displayMatches(`/getExternalMatchsResults/${username}`);
+		await displayGlobal(`/getExternalMatchsResults/${username}`);
 	}
 }
 
