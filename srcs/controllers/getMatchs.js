@@ -1,4 +1,4 @@
-import { getLocalMatches, getSoloMatches, getTournamentMatches } from '../dist/prisma/seed.js';
+import { getLocalMatches, getSoloMatches, getTournamentMatches, findUserById } from '../dist/prisma/seed.js';
 import { getExternalUser } from './getUser.js';
 import { authenticateUser } from "./tokens.js";
 
@@ -7,8 +7,9 @@ export const getMatchsResults = async (req, reply) => {
 	const response = await authenticateUser(req);
 	if (response.status !== 200)
 		return;
-	const user = response.user.username;
 	const userId = response.user.id ;
+	const userInfos = await findUserById(userId);
+	const user = userInfos.username;
 	try {
 		const localMatchs = await getLocalMatches(userId);
 		matchs['local'] = localMatchs;
@@ -27,8 +28,9 @@ export const getExternalMatchsResults = async (req, reply) => {
 	const response = await getExternalUser(req);
 	if (response.status !== 200)
 		return;
-	const user = response.username;
 	const userId = response.id;
+	const userInfos = await findUserById(userId);
+	const user = userInfos.username;
 	try {
 		const localMatchs = await getLocalMatches(userId);
 		matchs['local'] = localMatchs;

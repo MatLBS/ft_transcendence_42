@@ -14,6 +14,55 @@ export const charts: {
 	tournamentBarChart?: typeof Chart
 } = {};
 
+function displayStats(typeMatch: Array<any>, match__history: HTMLInputElement | null, data: any) {
+	for (let i = 0; i < typeMatch.length; i++) {
+		if (typeMatch[i].winnerId !== 0)
+			typeMatch[i].winner = data.user;
+		if (typeMatch[i].loserId !== 0)
+			typeMatch[i].loser = data.user;
+		const divParent = document.createElement('div');
+		divParent.classList.add('flex', 'justify-around', 'align-center', 'text-center', 'm-2');
+
+		const typeCell = document.createElement('p');
+		typeCell.textContent = typeMatch[i].type;
+		typeCell.classList.add('w-1/6');
+
+		const winnerCell = document.createElement('p');
+		winnerCell.textContent = typeMatch[i].winner;
+		winnerCell.classList.add('w-1/6');
+
+		const loserCell = document.createElement('p');
+		loserCell.textContent = typeMatch[i].loser;
+		loserCell.classList.add('w-1/6');
+
+		const scoreCell = document.createElement('p');
+		scoreCell.textContent = `${typeMatch[i].winnerScore} - ${typeMatch[i].loserScore}`;
+		scoreCell.classList.add('w-1/6');
+
+		const dateCell = document.createElement('p');
+		const matchDate = new Date(typeMatch[i].matchDate);
+		const formattedDateTime = matchDate.toLocaleString('en-GB', {
+			day: '2-digit',
+			month: '2-digit',
+			year: 'numeric',
+			hour: '2-digit',
+			minute: '2-digit',
+		});
+		dateCell.textContent = formattedDateTime;
+		dateCell.classList.add('w-1/6');
+
+		if (i % 2 === 0)
+			divParent.classList.add('bg-gray-100');
+
+		divParent.appendChild(typeCell);
+		divParent.appendChild(winnerCell);
+		divParent.appendChild(loserCell);
+		divParent.appendChild(scoreCell);
+		divParent.appendChild(dateCell);
+		match__history?.appendChild(divParent);
+	}
+}
+
 
 export async function displayMatches(root:string) {
 	const match__history = document.getElementById('match__history') as HTMLInputElement | null;
@@ -25,102 +74,23 @@ export async function displayMatches(root:string) {
 	.then(async (response) => {
 		const data = await response.json();
 		const localMatches = data.matchs.local;
+		localMatches.forEach((match: MatchData & { type?: string }) => {
+			match.type = 'Local';
+		});
 		const soloMatches = data.matchs.solo;
+		soloMatches.forEach((match: MatchData & { type?: string }) => {
+			match.type = 'Solo';
+		});
 		const tournamentMatches = data.matchs.tournament;
+		tournamentMatches.forEach((match: MatchData & { type?: string }) => {
+			match.type = 'Tournament';
+		});
 
-		for (let i = 0; i < localMatches.length; i++) {
-			const divLocal = document.createElement('div');
-			divLocal.classList.add('flex', 'justify-around', 'align-center', 'text-center', 'm-2');
-
-			const typeCell = document.createElement('p');
-			typeCell.textContent = 'Local';
-			typeCell.classList.add('w-1/6');
-
-			const winnerCell = document.createElement('p');
-			winnerCell.textContent = localMatches[i].winner;
-			winnerCell.classList.add('w-2/6');
-
-			const loserCell = document.createElement('p');
-			loserCell.textContent = localMatches[i].loser;
-			loserCell.classList.add('w-2/6');
-
-			const scoreCell = document.createElement('p');
-			scoreCell.textContent = `${localMatches[i].winnerScore} - ${localMatches[i].loserScore}`;
-			scoreCell.classList.add('w-1/6');
-
-			if (i % 2 === 0)
-				divLocal.classList.add('bg-gray-100');
-
-			divLocal.appendChild(typeCell);
-			divLocal.appendChild(winnerCell);
-			divLocal.appendChild(loserCell);
-			divLocal.appendChild(scoreCell);
-			match__history?.appendChild(divLocal);
-		}
-
-		for (let i = 0; i < soloMatches.length; i++) {
-			const divSolo = document.createElement('div');
-			divSolo.classList.add('flex', 'justify-around', 'align-center', 'text-center', 'm-2');
-
-			const typeCell = document.createElement('p');
-			typeCell.textContent = 'Solo';
-			typeCell.classList.add('w-1/6');
-
-			const winnerCell = document.createElement('p');
-			winnerCell.textContent = soloMatches[i].winner;
-			winnerCell.classList.add('w-2/6');
-
-			const loserCell = document.createElement('p');
-			loserCell.textContent = soloMatches[i].loser;
-			loserCell.classList.add('w-2/6');
-
-			const scoreCell = document.createElement('p');
-			scoreCell.textContent = `${soloMatches[i].winnerScore} - ${soloMatches[i].loserScore}`;
-			scoreCell.classList.add('w-1/6');
-
-			if ((localMatches.length + i) % 2 === 0) {
-			divSolo.classList.add('bg-gray-100');
-			}
-
-			divSolo.appendChild(typeCell);
-			divSolo.appendChild(winnerCell);
-			divSolo.appendChild(loserCell);
-			divSolo.appendChild(scoreCell);
-
-			match__history?.appendChild(divSolo);
-		}
-
-		for (let i = 0; i < tournamentMatches.length; i++) {
-			const divTournament = document.createElement('div');
-			divTournament.classList.add('flex', 'justify-around', 'align-center', 'text-center', 'm-2');
-
-			const typeCell = document.createElement('p');
-			typeCell.textContent = 'Tournament';
-			typeCell.classList.add('w-1/6');
-
-			const winnerCell = document.createElement('p');
-			winnerCell.textContent = tournamentMatches[i].winner;
-			winnerCell.classList.add('w-2/6');
-
-			const loserCell = document.createElement('p');
-			loserCell.textContent = tournamentMatches[i].loser;
-			loserCell.classList.add('w-2/6');
-
-			const scoreCell = document.createElement('p');
-			scoreCell.textContent = `${tournamentMatches[i].winnerScore} - ${tournamentMatches[i].loserScore}`;
-			scoreCell.classList.add('w-1/6');
-
-			if ((localMatches.length + soloMatches.length + i) % 2 === 0) {
-			divTournament.classList.add('bg-gray-100');
-			}
-
-			divTournament.appendChild(typeCell);
-			divTournament.appendChild(winnerCell);
-			divTournament.appendChild(loserCell);
-			divTournament.appendChild(scoreCell);
-
-			match__history?.appendChild(divTournament);
-		}
+		const totalMatches = localMatches.concat(soloMatches, tournamentMatches);
+		totalMatches.sort((a: MatchData, b: MatchData) => {
+			return new Date(b.matchDate).getTime() - new Date(a.matchDate).getTime();
+		});
+		displayStats(totalMatches, match__history, data);
 	})
 }
 
