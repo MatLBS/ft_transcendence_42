@@ -105,6 +105,10 @@ nav {
   .connected:hover, .disconnected:hover {
 	opacity: 1;
   }
+
+  .logout {
+	color: #90e0ef !important; /* Couleur normale */
+  }
   
   .logout:hover {
 	color: #ff4d4d !important;
