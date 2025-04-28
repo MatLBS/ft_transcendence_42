@@ -137,7 +137,6 @@ async function validateForm() {
 	.then(async (response) => {
 		const data = await response.json();
 		if (data.message !== "ok") {
-			console.log("ici")
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
 			return;
 		} else {

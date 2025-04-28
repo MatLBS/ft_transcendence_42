@@ -31,7 +31,6 @@ if (appDiv) {
 			if (divLocal)
 			{
 				divLocal.classList.toggle('open');
-				console.log("local");
 				charts.localBarChart.reset();
 				charts.localBarChart.update();
 				charts.localPieChart.reset();

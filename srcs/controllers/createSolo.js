@@ -27,8 +27,6 @@ export async function updateResultSoloGame(req, reply) {
 			winnerId = 0;
 			loserId = user.id;
 		}
-		console.log(winner)
-		console.log(loser)
 		const id = await getMaxId("solo");
 		await fillSoloDb(id, winner, loser, winnerScore, loserScore, winnerId, loserId);
 	} catch (error) {

@@ -28,7 +28,6 @@ if (appDiv) {
 			const existingPongScript = document.getElementById('game');
 			if (existingPongScript) {
 				// Stop the script before removing it
-				console.log("going to stop");
 				const stopEvent = new Event('stop');
 				existingPongScript.dispatchEvent(stopEvent);
 
@@ -43,7 +42,6 @@ if (appDiv) {
 			const existingPongScript = document.getElementById('game');
 			if (existingPongScript) {
 				// Stop the script before removing it
-				console.log("going to stop");
 				const stopEvent = new Event('stop');
 				existingPongScript.dispatchEvent(stopEvent);
 
@@ -331,7 +329,6 @@ function initCustomSelect() {
 				(target as HTMLButtonElement).dataset.processing = 'false';
 				return;
 			}
-			console.log(playerData)
 			
 			fetch('/createTournament', {
 				method: 'POST',
