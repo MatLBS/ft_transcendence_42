@@ -209,9 +209,12 @@ function initCustomSelect() {
 		console.error('gameSettings for custom select are missing.');
 		return;
 	}
+	gameSettings.removeEventListener('click', handleTournamentSettingsClick);
+	gameSettings.addEventListener('click',handleTournamentSettingsClick)
+};
 
-	gameSettings.addEventListener('click', async (e: MouseEvent) => {
-		const target = e.target as HTMLElement;
+async function handleTournamentSettingsClick(e: MouseEvent) {
+	const target = e.target as HTMLElement;
 		const customDefault = document.getElementById('custom-default');
 		const hiddenValue = document.getElementById('hiddenValue') as HTMLInputElement | null;
 		const playerNames = document.getElementById('playerNames');
@@ -237,7 +240,7 @@ function initCustomSelect() {
 			}
 			customDefault.innerHTML = `
 			${target.textContent}
-			<span class="material-icons pl-5">expand_more</span>`;
+			<span class="material-icons pl-5" id="expandTournament">expand_more</span>`;
 			hiddenValue.value = target.getAttribute('data-value') || '';
 			playerNames.innerHTML = '';
 			const value: number = parseInt(hiddenValue.value || '0');
@@ -346,9 +349,7 @@ function initCustomSelect() {
 				(target as HTMLButtonElement).dataset.processing = 'false';
 			});
 		}
-
-	});
-};
+}
 
 const buttonNextMatch = document.getElementById('buttonNextMatch');
 

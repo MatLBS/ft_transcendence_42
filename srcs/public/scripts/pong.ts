@@ -635,6 +635,24 @@ class FirstPersonController {
 			this.resetBall();
 			this.paddle1.position.x = 0;
 			this.paddle2.position.x = 0;
+			if (this.local === true)
+			{
+				fetch('/createLocal', {
+					method: 'POST',
+					credentials: 'include',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(this.player2name),
+				});
+			}
+			if (this.local === false)
+			{
+				fetch('/createSolo', {
+					method: 'POST',
+					credentials: 'include',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({  }),
+				});
+			}
 		});
 
 		advancedTexture.addControl(restartButton);

@@ -14,6 +14,55 @@ export const charts: {
 	tournamentBarChart?: typeof Chart
 } = {};
 
+function displayStats(typeMatch: Array<any>, match__history: HTMLInputElement | null, data: any) {
+	for (let i = 0; i < typeMatch.length; i++) {
+		if (typeMatch[i].winnerId !== 0)
+			typeMatch[i].winner = data.user;
+		if (typeMatch[i].loserId !== 0)
+			typeMatch[i].loser = data.user;
+		const divParent = document.createElement('div');
+		divParent.classList.add('flex', 'justify-around', 'align-center', 'text-center', 'm-2');
+
+		const typeCell = document.createElement('p');
+		typeCell.textContent = typeMatch[i].type;
+		typeCell.classList.add('w-1/6');
+
+		const winnerCell = document.createElement('p');
+		winnerCell.textContent = typeMatch[i].winner;
+		winnerCell.classList.add('w-1/6');
+
+		const loserCell = document.createElement('p');
+		loserCell.textContent = typeMatch[i].loser;
+		loserCell.classList.add('w-1/6');
+
+		const scoreCell = document.createElement('p');
+		scoreCell.textContent = `${typeMatch[i].winnerScore} - ${typeMatch[i].loserScore}`;
+		scoreCell.classList.add('w-1/6');
+
+		const dateCell = document.createElement('p');
+		const matchDate = new Date(typeMatch[i].matchDate);
+		const formattedDateTime = matchDate.toLocaleString('en-GB', {
+			day: '2-digit',
+			month: '2-digit',
+			year: 'numeric',
+			hour: '2-digit',
+			minute: '2-digit',
+		});
+		dateCell.textContent = formattedDateTime;
+		dateCell.classList.add('w-1/6');
+
+		if (i % 2 === 0)
+			divParent.classList.add('bg-gray-100');
+
+		divParent.appendChild(typeCell);
+		divParent.appendChild(winnerCell);
+		divParent.appendChild(loserCell);
+		divParent.appendChild(scoreCell);
+		divParent.appendChild(dateCell);
+		match__history?.appendChild(divParent);
+	}
+}
+
 
 export async function displayMatches(root:string) {
 	const match__history = document.getElementById('match__history') as HTMLInputElement | null;
@@ -25,102 +74,23 @@ export async function displayMatches(root:string) {
 	.then(async (response) => {
 		const data = await response.json();
 		const localMatches = data.matchs.local;
+		localMatches.forEach((match: MatchData & { type?: string }) => {
+			match.type = 'Local';
+		});
 		const soloMatches = data.matchs.solo;
+		soloMatches.forEach((match: MatchData & { type?: string }) => {
+			match.type = 'Solo';
+		});
 		const tournamentMatches = data.matchs.tournament;
+		tournamentMatches.forEach((match: MatchData & { type?: string }) => {
+			match.type = 'Tournament';
+		});
 
-		for (let i = 0; i < localMatches.length; i++) {
-			const divLocal = document.createElement('div');
-			divLocal.classList.add('flex', 'justify-around', 'align-center', 'text-center', 'm-2');
-
-			const typeCell = document.createElement('p');
-			typeCell.textContent = 'Local';
-			typeCell.classList.add('w-1/6');
-
-			const winnerCell = document.createElement('p');
-			winnerCell.textContent = localMatches[i].winner;
-			winnerCell.classList.add('w-2/6');
-
-			const loserCell = document.createElement('p');
-			loserCell.textContent = localMatches[i].loser;
-			loserCell.classList.add('w-2/6');
-
-			const scoreCell = document.createElement('p');
-			scoreCell.textContent = `${localMatches[i].winnerScore} - ${localMatches[i].loserScore}`;
-			scoreCell.classList.add('w-1/6');
-
-			if (i % 2 === 0)
-				divLocal.classList.add('bg-gray-100');
-
-			divLocal.appendChild(typeCell);
-			divLocal.appendChild(winnerCell);
-			divLocal.appendChild(loserCell);
-			divLocal.appendChild(scoreCell);
-			match__history?.appendChild(divLocal);
-		}
-
-		for (let i = 0; i < soloMatches.length; i++) {
-			const divSolo = document.createElement('div');
-			divSolo.classList.add('flex', 'justify-around', 'align-center', 'text-center', 'm-2');
-
-			const typeCell = document.createElement('p');
-			typeCell.textContent = 'Solo';
-			typeCell.classList.add('w-1/6');
-
-			const winnerCell = document.createElement('p');
-			winnerCell.textContent = soloMatches[i].winner;
-			winnerCell.classList.add('w-2/6');
-
-			const loserCell = document.createElement('p');
-			loserCell.textContent = soloMatches[i].loser;
-			loserCell.classList.add('w-2/6');
-
-			const scoreCell = document.createElement('p');
-			scoreCell.textContent = `${soloMatches[i].winnerScore} - ${soloMatches[i].loserScore}`;
-			scoreCell.classList.add('w-1/6');
-
-			if ((localMatches.length + i) % 2 === 0) {
-			divSolo.classList.add('bg-gray-100');
-			}
-
-			divSolo.appendChild(typeCell);
-			divSolo.appendChild(winnerCell);
-			divSolo.appendChild(loserCell);
-			divSolo.appendChild(scoreCell);
-
-			match__history?.appendChild(divSolo);
-		}
-
-		for (let i = 0; i < tournamentMatches.length; i++) {
-			const divTournament = document.createElement('div');
-			divTournament.classList.add('flex', 'justify-around', 'align-center', 'text-center', 'm-2');
-
-			const typeCell = document.createElement('p');
-			typeCell.textContent = 'Tournament';
-			typeCell.classList.add('w-1/6');
-
-			const winnerCell = document.createElement('p');
-			winnerCell.textContent = tournamentMatches[i].winner;
-			winnerCell.classList.add('w-2/6');
-
-			const loserCell = document.createElement('p');
-			loserCell.textContent = tournamentMatches[i].loser;
-			loserCell.classList.add('w-2/6');
-
-			const scoreCell = document.createElement('p');
-			scoreCell.textContent = `${tournamentMatches[i].winnerScore} - ${tournamentMatches[i].loserScore}`;
-			scoreCell.classList.add('w-1/6');
-
-			if ((localMatches.length + soloMatches.length + i) % 2 === 0) {
-			divTournament.classList.add('bg-gray-100');
-			}
-
-			divTournament.appendChild(typeCell);
-			divTournament.appendChild(winnerCell);
-			divTournament.appendChild(loserCell);
-			divTournament.appendChild(scoreCell);
-
-			match__history?.appendChild(divTournament);
-		}
+		const totalMatches = localMatches.concat(soloMatches, tournamentMatches);
+		totalMatches.sort((a: MatchData, b: MatchData) => {
+			return new Date(b.matchDate).getTime() - new Date(a.matchDate).getTime();
+		});
+		displayStats(totalMatches, match__history, data);
 	})
 }
 
@@ -131,6 +101,8 @@ interface MatchData {
 	matchDate: string;
 	winner: string;
 	winnerScore: number;
+	winnerId : number;
+	looserId : number; 
   }
 
   interface DailyResult {
@@ -139,7 +111,7 @@ interface MatchData {
 	losses: number;
 }
 
-function getDailyWinLoss(localMatches: MatchData[], username: string): DailyResult[] {
+function getDailyWinLoss(localMatches: MatchData[], userId: number): DailyResult[] {
 	const now = new Date();
 	const today = new Date(now);
 	today.setUTCHours(0, 0, 0, 0); // Start of today in UTC
@@ -169,7 +141,7 @@ function getDailyWinLoss(localMatches: MatchData[], username: string): DailyResu
 		const dailyResult = dailyCounts.get(matchDateStr);
 
 			if (dailyResult) {
-				if (match.winner === username) {
+				if (match.winnerId === userId) {
 					dailyResult.wins++;
 				} else {
 					dailyResult.losses++;
@@ -195,10 +167,10 @@ export async function displayGlobal(root:string){
 	let gamesLoseTournament = 0;
 
 	let userName: string = '';
-	let userId : number;
-	let localMatches: {id : number, winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
-	let soloMatches: { id:number , winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
-	let tournamentMatches: { id:number , winner: string; loser: string; winnerScore: number; loserScore: number; matchDate: string }[] = [];
+	let userId: number = 0; // Initialize with a default value
+	let localMatches: {id : number, winner: string ; winnerId: number; loser: string; looserId:number ;winnerScore: number; loserScore: number; matchDate: string }[] = [];
+	let soloMatches: { id: number , winner: string; loser: string; winnerId : number; looserId : number; winnerScore: number; loserScore: number; matchDate: string }[] = [];
+	let tournamentMatches: { id: number , winner: string; loser: string; winnerId : number; looserId : number;  winnerScore: number; loserScore: number; matchDate: string }[] = [];
 	await fetch(root, {
 		method: 'GET',
 		credentials: 'include',
@@ -209,20 +181,19 @@ export async function displayGlobal(root:string){
 		soloMatches = data.matchs.solo;
 		tournamentMatches = data.matchs.tournament;
 		userName = data.user;
-		userId = data.userId;
-		console.log("userid1 = ", userId);
+		userId = data.userId || 0;
 		for (let i = 0; i < localMatches.length; i++)
-			localMatches[i].winner === userName ? gamesWinLocal++ : gamesLoseLocal++;
+			localMatches[i].winnerId === userId ? gamesWinLocal++ : gamesLoseLocal++;
 		for (let i = 0; i < soloMatches.length; i++)
-			soloMatches[i].winner === userName ? gamesWinSolo++ : gamesLoseSolo++;
+			soloMatches[i].winnerId === userId ? gamesWinSolo++ : gamesLoseSolo++;
 		for (let i = 0; i < tournamentMatches.length; i++)
-			tournamentMatches[i].winner === userName ? gamesWinTournament++ : gamesLoseTournament++;
+			tournamentMatches[i].winnerId === userId ? gamesWinTournament++ : gamesLoseTournament++;
 	});
 	const gamesWin = gamesWinSolo + gamesWinLocal + gamesWinTournament;
 	const gamesLose = gamesLoseSolo + gamesLoseLocal + gamesLoseTournament;
-	const weeklyLocalWin = getDailyWinLoss(localMatches,userName );
-	const weeklySoloWin = getDailyWinLoss(soloMatches,userName );
-	const weeklyTournamentWin = getDailyWinLoss(tournamentMatches,userName );
+	const weeklyLocalWin = getDailyWinLoss(localMatches,userId);
+	const weeklySoloWin = getDailyWinLoss(soloMatches,userId );
+	const weeklyTournamentWin = getDailyWinLoss(tournamentMatches,userId );
 	if (gamesWin + gamesLose === 0)
 		return;
 
