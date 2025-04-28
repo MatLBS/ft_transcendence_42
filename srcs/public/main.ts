@@ -1,5 +1,6 @@
 import { json } from 'stream/consumers';
 import { applyLink } from './scripts/utils.js';
+import { displayGlobal, displayMatches} from './scripts/stats.js';
 
 export let language = "en";
 
@@ -34,7 +35,7 @@ export async function recvContent(url: string): Promise<void> {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
 
-	fetch('/url', {
+	await fetch('/url', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
@@ -46,6 +47,10 @@ export async function recvContent(url: string): Promise<void> {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
 	history.pushState({}, '', url);
+	if (url === '/profil') {
+		await displayMatches("getMatchsResults");
+		await displayGlobal("getMatchsResults");
+	}
 }
 
 // Met à jour le contenu de la page avec les données reçues du serveur
@@ -73,6 +78,7 @@ function updatePageContent(data: ResponseData): void {
 		scriptElement.type = 'module';
 		scriptElement.src = data.js;
 		scriptElement.id = 'js';
+		scriptElement.defer = true;
 		document.body.appendChild(scriptElement);
 	}
 
@@ -99,26 +105,30 @@ function hideElements(isConnected: boolean): void {
 
 // Gère les clics sur les liens dynamiques avec délégation d'événements
 function handleLinks(): void {
-	const nav = document.querySelector('nav');
-	if (!nav) return;
-	nav.removeEventListener('click', seeTarget);
-	nav.addEventListener('click', seeTarget);
+	const app = document.querySelector('#app');
+	if (!app) return;
+	app.removeEventListener('click', seeTarget as EventListener);
+	app.addEventListener('click', seeTarget as EventListener);
 }
 
 function seeTarget(e: MouseEvent): void {
 	const target = e.target as HTMLAnchorElement;
-	applyLink(target, e);
-	if (target.tagName === 'A' && target.classList.contains('logout')) {
-		handleLogout(e);
+	if (target.closest('nav')) {
+		applyLink(target, e);
+		if (target.tagName === 'A' && target.classList.contains('logout')) {
+			handleLogout(e);
+		}
+		if (target.closest('#language-select'))  {
+			const languageOptions = document.getElementById('languages-options');
+			if (languageOptions)
+				languageOptions.classList.toggle('open');
+		}
+		if (target.tagName === 'LI' && target.id === 'language-options')
+			handleLanguage(e);
+		if (target.matches('#search-input')) {
+			handleSearch();
+		}
 	}
-	if (target.closest('#language-select'))  {
-		const languageOptions = document.getElementById('languages-options');
-		if (languageOptions)
-			languageOptions.classList.toggle('open');
-	}
-	if (target.tagName === 'LI' && target.id === 'language-options')
-		handleLanguage(e);
-
 }
 
 async function handleLanguage(e: Event): Promise<void> {
@@ -216,7 +226,6 @@ function start(): void {
 	recvContent(window.location.pathname);
 	handleLinks();
 	handlePopState();
-	handleSearch();
 }
 
 // Gère l'événement de fermeture de la fenêtre

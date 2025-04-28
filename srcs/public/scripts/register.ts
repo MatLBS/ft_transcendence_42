@@ -130,7 +130,7 @@ async function validateForm() {
 	if (profile_picture) {
 		formData.append('profile_picture', profile_picture);
 	}
-	fetch('/verifForm', {
+	await fetch('/verifForm', {
 		method: 'POST',
 		body: formData,
 	})

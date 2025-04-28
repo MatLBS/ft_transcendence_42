@@ -20,7 +20,7 @@ if (appDiv) {
 			if (customOptions) customOptions.classList.toggle('open');
 			return;
 		}
-		
+
 		if (target.tagName === 'SPAN' && target.id === 'global') {
 			const divGlobal = document.getElementById('divGlobal');
 			if (divGlobal)
@@ -38,7 +38,6 @@ if (appDiv) {
 			if (divLocal)
 			{
 				divLocal.classList.toggle('open');
-				console.log("local");
 				charts.localBarChart.reset();
 				charts.localBarChart.update();
 				charts.localPieChart.reset();
@@ -109,5 +108,5 @@ window.addEventListener("scroll", () => {
 		}
 });
 
-displayMatches("getMatchsResults");
-displayGlobal("getMatchsResults");
+// displayMatches("getMatchsResults");
+// displayGlobal("getMatchsResults");

@@ -26,7 +26,7 @@ const verifUpdate = async (req, reply, fields) => {
 	if (!validPassword)
 		return reply.send({message : jsonLanguage.verify.wrongPrevPassword});
 
-	const formResponse = verifyForm(fields.username, fields.email, fields.newPassword, jsonLanguage);
+	const formResponse = await verifyForm(fields.username, fields.email, fields.newPassword, jsonLanguage);
 	if (formResponse.message !== "ok") {
 		if (fields.newPassword === "") {
 			if (!formResponse.password)

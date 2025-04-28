@@ -1,6 +1,7 @@
-import { createTournamentDb,  getMaxId, fillTournamentDb, getTournamentById, hasAlreadyLose } from '../dist/prisma/seed.js';
+import { createTournamentDb,  getMaxId, fillTournamentDb, getTournamentById, hasAlreadyLose, findUserById } from '../dist/prisma/seed.js';
 import { findUsersTournament } from '../dist/prisma/seed.js';
 import { getUserBackend } from './getUser.js';
+import { authenticateUser } from "./tokens.js";
 
 function getRandomNumber(playerIds) {
 	const randomIndex = Math.floor(Math.random() * playerIds.length);
@@ -15,7 +16,7 @@ export const createTournament = async (req, reply) => {
 	var playersInfos = new Map();
 
 	const userLogIn = await getUserBackend(req, reply);
-	for (let i = 0; i < req.body.playerData.length; ++i) {
+	for (let i = 1; i < req.body.playerData.length; ++i) {
 		if (req.body.playerData[i].trim() === '' || req.body.playerData[i].trim() === userLogIn)
 			return;
 	}
@@ -87,12 +88,26 @@ export async function nextMatchTournament(req, reply) {
 
 export async function updateResultTournamentGame(req, reply) {
 	try {
-		const winner = req.body.winner;
-		const loser = req.body.loser;
+		let user, winnerId, loserId;
+		const response = await authenticateUser(req);
+		if (response.status === 200)
+			user = await findUserById(response.user.id);
+		const winner = req.body.winner.trim();
+		const loser = req.body.loser.trim();
 		const winnerScore = req.body.winnerScore;
 		const loserScore = req.body.loserScore;
+		if (user.username === winner) {
+			winnerId = user.id;
+			loserId = 0;
+		} else if (user.username === loser) {
+			winnerId = 0;
+			loserId = user.id;
+		} else {
+			winnerId = 0;
+			loserId = 0;
+		}
 		const id = await getMaxId("tournament");
-		await fillTournamentDb(id, winner, loser, winnerScore, loserScore);
+		await fillTournamentDb(id, winner, loser, winnerScore, loserScore, winnerId, loserId);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}

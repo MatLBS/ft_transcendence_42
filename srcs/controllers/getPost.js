@@ -10,10 +10,11 @@ import { getUserProfile } from './getUserProfile.js';
 import { getFollowedUsers } from '../dist/prisma/friends.js';
 
 // Fonction pour charger une page d'erreur
-const errorPage = (reply, response, errorCode) => {
+const errorPage = async (req, reply, response, errorCode) => {
 	const isConnected = response.status === 200;
-	const css = path.join(__dirname, 'public', `error_page/style/${errorCode}.css`);
-	const content = fs.readFileSync(path.join(__dirname, 'public', `error_page/${errorCode}.html`), 'utf8');
+	const css = path.join(__dirname, 'views', `error_page/style/${errorCode}.css`);
+	const jsonLanguage = req.body.jsonLanguage;
+	const content = await ejs.renderFile(path.join(__dirname, 'views', `error_page/${errorCode}.ejs`), { jsonLanguage });
 	if (response.status === 200 && response.newAccessToken) {
 		return reply
 			.setCookie('access_token', response.newAccessToken, {
@@ -28,10 +29,24 @@ const errorPage = (reply, response, errorCode) => {
 };
 
 // Vérifie si une page nécessite une connexion
-const needLogin = (file) => ["admin", "profil", "game", "update"].includes(file);
+const needLogin = (file) => ["profil", "game", "update"].includes(file);
 
 // Vérifie si une page nécessite que le user ne soit pas connecté
 const dontNeedLogin = (file) => ["login", "register"].includes(file);
+
+const redirectToLogin = async (req, reply) => {
+	const jsonLanguage = req.body.jsonLanguage;
+	const css = routes.login.css;
+	const content = await ejs.renderFile(path.join(__dirname, 'views', '/login.ejs'), { jsonLanguage });
+	return reply.send({ content, css, isConnected: false });
+}
+
+const redirectToHome = async (req, reply) => {
+	const jsonLanguage = req.body.jsonLanguage;
+	const css = routes.home.css;
+	const content = await ejs.renderFile(path.join(__dirname, 'views', '/home.ejs'), { jsonLanguage });
+	return reply.send({ content, css, isConnected: false });
+}
 
 export const getPost = async (req, reply) => {
 	let file = req.body.url.split("/");
@@ -47,12 +62,14 @@ export const getPost = async (req, reply) => {
 		// Authentification de l'utilisateur
 		const response = await authenticateUser(req);
 		if (response.status !== 200) {
-			if (needLogin(file)) return errorPage(reply, response, 403);
+			if (needLogin(file)) {
+				return await redirectToLogin(req, reply);
+			}
 		} else {
 			isConnected = true;
-			if (dontNeedLogin(file)) return errorPage(reply, response, 403);
+			if (dontNeedLogin(file)) return await redirectToHome(req, reply);
 			user = await findUserById(response.user.id);
-			if (!user) return errorPage(reply, response, 403);
+			if (!user) return await errorPage(req, reply, response, 403);
 			user.google = response.user.google;
 			friends = await getFollowedUsers(user.id);
 		}
@@ -64,7 +81,7 @@ export const getPost = async (req, reply) => {
 			css = route.css;
 			js = route.js;
 		} else {
-			return errorPage(reply, response, 404);
+			return await errorPage(req, reply, response, 404);
 		}
 
 		// Envoi de la réponse
@@ -81,6 +98,6 @@ export const getPost = async (req, reply) => {
 		}
 	} catch (error) {
 		console.error("Error in getPost:", error);
-		return errorPage(reply, response, 500);
+		return await errorPage(req, reply, response, 500);
 	}
 };
