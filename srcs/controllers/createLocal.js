@@ -3,21 +3,20 @@ import { authenticateUser } from "./tokens.js";
 
 
 export const createLocalGame = async (req, reply) => {
-
-	let players = []
-
-	const response = await authenticateUser(req);
-	const player1 = await isUserExist(response.user.username);
-
-	if (req.body.player2.trim() === '' || req.body.player2.trim() === player1.username)
-		return;
-
-	players.push(player1.username);
-	players.push(req.body.player2);
-
 	try {
+		let players = []
+
+		const response = await authenticateUser(req);
+		const player1 = await findUserById(response.user.id);
+
+		if (req.body.player2.trim() === '' || req.body.player2.trim() === player1.username)
+			return;
+
+		players.push(player1.username);
+		players.push(req.body.player2);
 		await createLocalDb(players)
 	} catch (error) {
+		console.log("error")
 		return reply.send({message: error.message});
 	}
 }
