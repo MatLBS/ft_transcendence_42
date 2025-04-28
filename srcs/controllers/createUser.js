@@ -11,6 +11,8 @@ import { getLanguageWithoutBody } from './getLanguage.js'
 
 export const verifFormRegister = async (req, reply) => {
 	let language = req.cookies.userLanguage;
+	if (!language)
+		language = "en"
 	let jsonLanguage = await getLanguageWithoutBody(language);
 	try {
 		const parts = req.parts();
@@ -29,7 +31,7 @@ export const verifFormRegister = async (req, reply) => {
 		const email = fields.email;
 		const username = fields.username;
 
-		const formResponse = verifyForm(username, email, fields.password, jsonLanguage);
+		const formResponse = await verifyForm(username, email, fields.password, jsonLanguage);
 		if (formResponse.message !== "ok") {
 			return reply.send({ message: formResponse.message });
 		}
@@ -48,7 +50,6 @@ export const verifFormRegister = async (req, reply) => {
 		if (response.message !== "ok") {
 			return reply.send({ message: response.message });
 		}
-
 		return reply
 			.setCookie("code_id", code.codeId, {
 				httpOnly: true,

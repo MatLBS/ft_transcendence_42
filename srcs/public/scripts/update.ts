@@ -151,7 +151,7 @@ async function validateForm() {
 		.catch((error: unknown) => {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
-
+	
 	const formResponse = await verifyForm(username, email, newPassword, jsonLanguage);
 	if (formResponse.message !== "ok" && !formResponse.password) {
 		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;

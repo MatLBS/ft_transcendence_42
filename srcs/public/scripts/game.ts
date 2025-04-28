@@ -28,7 +28,6 @@ if (appDiv) {
 			const existingPongScript = document.getElementById('game');
 			if (existingPongScript) {
 				// Stop the script before removing it
-				console.log("going to stop");
 				const stopEvent = new Event('stop');
 				existingPongScript.dispatchEvent(stopEvent);
 
@@ -43,7 +42,6 @@ if (appDiv) {
 			const existingPongScript = document.getElementById('game');
 			if (existingPongScript) {
 				// Stop the script before removing it
-				console.log("going to stop");
 				const stopEvent = new Event('stop');
 				existingPongScript.dispatchEvent(stopEvent);
 
@@ -237,15 +235,22 @@ function initCustomSelect() {
 				console.error('One or more elements for custom select are missing.');
 				return;
 			}
-
 			customDefault.innerHTML = `
 			${target.textContent}
 			<span class="material-icons pl-5">expand_more</span>`;
 			hiddenValue.value = target.getAttribute('data-value') || '';
-
 			playerNames.innerHTML = '';
-
 			const value: number = parseInt(hiddenValue.value || '0');
+
+			let userLogIn: string | undefined;
+			await fetch('/getUser', {
+				method: 'GET',
+				credentials: 'include',
+			})
+				.then(async (response) => {
+					const data = await response.json();
+					userLogIn = data.user.username as string;
+				})		
 
 			for (let i = 0; i < value; i++) {
 				const playerContainer = document.createElement('div');
@@ -254,8 +259,13 @@ function initCustomSelect() {
 				playerContainer.innerHTML += `<span>${jsonLanguage!.tournament.player} ${i + 1}</span>`;
 				const tempDiv = document.createElement('div');
 				tempDiv.className = 'flex justify-center align-center w-full';
-				tempDiv.innerHTML += `<input type="text" id="playerName" name="playerName" placeholder="${jsonLanguage!.tournament.enter}..." class="border-2 border-gray-500 w-[50%] rounded-full">`;
-				
+
+				if (i === 0) {
+					tempDiv.innerHTML += `<input type="text" id="playerName" name="playerName" value="${userLogIn}" readonly class="border-2 border-gray-500 w-[50%] rounded-full bg-gray-200 text-center">`;
+				} else {
+					tempDiv.innerHTML += `<input type="text" id="playerName" name="playerName" placeholder="${jsonLanguage!.tournament.enter}..." class="border-2 border-gray-500 w-[50%] rounded-full">`;
+				}
+
 				playerContainer.appendChild(tempDiv);
 				playerNames.appendChild(playerContainer);
 			}
@@ -297,7 +307,7 @@ function initCustomSelect() {
 					userLogIn = data.user.username as string;
 				})
 			
-			for (let i = 0; i < playerData.length; i++) {
+			for (let i = 1; i < playerData.length; i++) {
 				if (playerData[i].trim() === '') {
 					alert(`Player ${i + 1} has an empty name. Please fill in all fields.`);
 					submitButton.disabled = false;
