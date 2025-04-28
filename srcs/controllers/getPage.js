@@ -1,12 +1,7 @@
 import { authenticateUser } from "./tokens.js";
-import { getLanguageWithoutBody } from "./getLanguage.js"
 
 // pour gerer les url directe
 export const getPage = async (req, reply) => {
-	let clientLanguage = req.cookies.userLanguage;
-	if (!clientLanguage)
-		clientLanguage = "en"
-	const jsonLanguage = await getLanguageWithoutBody(clientLanguage);
 	const response = await authenticateUser(req);
 	if (response.status === 200 && response.newAccessToken) {
 		return reply
@@ -15,8 +10,8 @@ export const getPage = async (req, reply) => {
 				secure: false,
 				sameSite: 'Strict'
 			})
-			.view("index.ejs", {jsonLanguage});
+			.view("index.ejs");
 	} else {
-		return reply.view("index.ejs", {jsonLanguage});
+		return reply.view("index.ejs");
 	}
 }
