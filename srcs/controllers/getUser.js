@@ -1,10 +1,11 @@
 import { authenticateUser } from "./tokens.js";
-import { findUser } from "../dist/prisma/seed.js";
+import { findUser, findUserById } from "../dist/prisma/seed.js";
 import { getErrorPage } from "./errorPage.js";
 
 export const getUser = async (req , reply) => {
 	const response = await authenticateUser(req);
-	reply.send({ user: { username: response.user.username } }); 
+	const username = await findUserById(response.user.id)
+	reply.send({ user: { username: username.username } }); 
 }
 
 export const getUserBackend = async (req , reply) => {

@@ -1,6 +1,6 @@
 import { json } from "stream/consumers";
 
-export async function verifyForm(username: string, email: string, password: string, jsonLanguage: any) {
+export function verifyForm(username: string, email: string, password: string, jsonLanguage: any) {
 	const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$/;
 	const emailRegex = /[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
 
