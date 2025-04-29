@@ -703,6 +703,24 @@ class FirstPersonController {
 			this.resetBall();
 			this.paddle1.position.x = 0;
 			this.paddle2.position.x = 0;
+			if (this.local === true)
+			{
+				fetch('/createLocal', {
+					method: 'POST',
+					credentials: 'include',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(this.player2name),
+				});
+			}
+			if (this.local === false)
+			{
+				fetch('/createSolo', {
+					method: 'POST',
+					credentials: 'include',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({  }),
+				});
+			}
 		});
 
 		advancedTexture.addControl(restartButton);
@@ -818,7 +836,7 @@ document.addEventListener('click', async (event) => {
 		//Create an instance of local game
 		const usernameElement = document.getElementById('username') as HTMLInputElement;
 		const player2 = usernameElement.value;
-		if (player2.trim() === "" || player2.trim() === userLogIn) {
+		if (player2.trim() === "" || player2.trim() === userLogIn || player2.trim().length > 30) {
 			return;
 		}
 		createNewGame(true, false);

@@ -54,7 +54,7 @@ if (appDiv) {
 		// Gestion des clics sur le bouton "Custom Select"
 		if (target.tagName === 'SPAN' && target.id === 'expandTournament')  {
 			const customOptions = document.getElementById('custom-options');
-			if (customOptions) customOptions.classList.toggle('open');
+			if (customOptions) customOptions.classList.toggle('openTournament');
 			return;
 		}
 
@@ -137,6 +137,10 @@ async function validateLocalGame() {
 		alert(`Player 2 can't have the same username as the user log in.`);
 		return false;
 	}
+	else if (player2.trim().length > 30) {
+		alert(`Username is too long. Please enter a name with less than 30 characters.`);
+		return false;
+	}
 	
 	await fetch('/createLocal', {
 		method: 'POST',
@@ -209,9 +213,12 @@ function initCustomSelect() {
 		console.error('gameSettings for custom select are missing.');
 		return;
 	}
+	gameSettings.removeEventListener('click', handleTournamentSettingsClick);
+	gameSettings.addEventListener('click',handleTournamentSettingsClick)
+};
 
-	gameSettings.addEventListener('click', async (e: MouseEvent) => {
-		const target = e.target as HTMLElement;
+async function handleTournamentSettingsClick(e: MouseEvent) {
+	const target = e.target as HTMLElement;
 		const customDefault = document.getElementById('custom-default');
 		const hiddenValue = document.getElementById('hiddenValue') as HTMLInputElement | null;
 		const playerNames = document.getElementById('playerNames');
@@ -237,7 +244,7 @@ function initCustomSelect() {
 			}
 			customDefault.innerHTML = `
 			${target.textContent}
-			<span class="material-icons pl-5">expand_more</span>`;
+			<span class="material-icons pl-5" id="expandTournament">expand_more</span>`;
 			hiddenValue.value = target.getAttribute('data-value') || '';
 			playerNames.innerHTML = '';
 			const value: number = parseInt(hiddenValue.value || '0');
@@ -320,6 +327,12 @@ function initCustomSelect() {
 					(target as HTMLButtonElement).dataset.processing = 'false';
 					return;
 				}
+				if (playerData[i].trim().length > 30) {
+					alert(`Player ${i + 1} has a name that is too long. Please enter a name with less than 30 characters.`);
+					submitButton.disabled = false;
+					(target as HTMLButtonElement).dataset.processing = 'false';
+					return;
+				}
 			}
 
 			const uniquePlayers = new Set(playerData.map(name => name.trim()));
@@ -346,9 +359,7 @@ function initCustomSelect() {
 				(target as HTMLButtonElement).dataset.processing = 'false';
 			});
 		}
-
-	});
-};
+}
 
 const buttonNextMatch = document.getElementById('buttonNextMatch');
 

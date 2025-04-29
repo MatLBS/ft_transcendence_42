@@ -807,6 +807,10 @@ video {
   width: 100%;
 }
 
+.max-w-48 {
+  max-width: 12rem;
+}
+
 .shrink {
   flex-shrink: 1;
 }
@@ -861,6 +865,10 @@ video {
 
 .gap-5 {
   gap: 1.25rem;
+}
+
+.overflow-hidden {
+  overflow: hidden;
 }
 
 .truncate {
