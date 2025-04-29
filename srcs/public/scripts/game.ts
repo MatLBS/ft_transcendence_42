@@ -54,7 +54,7 @@ if (appDiv) {
 		// Gestion des clics sur le bouton "Custom Select"
 		if (target.tagName === 'SPAN' && target.id === 'expandTournament')  {
 			const customOptions = document.getElementById('custom-options');
-			if (customOptions) customOptions.classList.toggle('open');
+			if (customOptions) customOptions.classList.toggle('openTournament');
 			return;
 		}
 
