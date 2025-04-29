@@ -488,6 +488,10 @@ class FirstPersonController {
 			}
 		});
 
+		/* if ('ontouchstart' in window) {
+			this.createTouchControls(keys);
+		} */
+
 		// Variables pour le delta time
 		let lastTime = performance.now();
 		const paddleSpeed = 0.25; // Ajustez cette valeur au besoin
@@ -533,6 +537,70 @@ class FirstPersonController {
 				}
 			}
 		});
+	}
+
+	private createTouchControls(keys: { [key: string]: boolean }): void {
+		// Création des boutons tactiles
+		const controls = document.createElement('div');
+		controls.style.cssText = `
+			position: fixed;
+			bottom: 20px;
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			touch-action: manipulation;
+		`;
+	
+		// Contrôles joueur 1 (gauche)
+		const leftControls = this.createTouchButton('⬅', 's', keys);
+		const rightControls = this.createTouchButton('➡', 'w', keys);
+		
+		// Contrôles joueur 2 (droite)
+		const upControls = this.createTouchButton('⬆', 'arrowup', keys);
+		const downControls = this.createTouchButton('⬇', 'arrowdown', keys);
+	
+		const wrapperLeft = document.createElement('div');
+		wrapperLeft.append(leftControls, rightControls);
+	
+		const wrapperRight = document.createElement('div');
+		wrapperRight.append(upControls, downControls);
+	
+		controls.append(wrapperLeft, wrapperRight);
+		document.body.appendChild(controls);
+	}
+	
+	private createTouchButton(label: string, key: string, keys: any): HTMLElement {
+		const btn = document.createElement('button');
+		btn.textContent = label;
+		btn.style.cssText = `
+			font-size: 40px;
+			padding: 20px 30px;
+			opacity: 0.5;
+			border: none;
+			background: none;
+			touch-action: manipulation;
+		`;
+	
+		// Gestion des événements tactiles
+		btn.ontouchstart = (e) => {
+			e.preventDefault();
+			keys[key] = true;
+			btn.style.opacity = '1';
+		};
+	
+		btn.ontouchend = (e) => {
+			e.preventDefault();
+			keys[key] = false;
+			btn.style.opacity = '0.5';
+		};
+	
+		btn.ontouchcancel = (e) => {
+			e.preventDefault();
+			keys[key] = false;
+			btn.style.opacity = '0.5';
+		};
+	
+		return btn;
 	}
 
 	private addBallTrail(): void {
