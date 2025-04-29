@@ -56,7 +56,6 @@ export async function recvContent(url: string): Promise<void> {
 			return ;
 		const urlParts = window.location.pathname.split('/');
 		const username = urlParts[urlParts.length - 1];
-		console.log("Test");
 		await displayMatches(`/getExternalMatchsResults/${username}`);
 		await displayGlobal(`/getExternalMatchsResults/${username}`);
 	}
