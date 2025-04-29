@@ -52,10 +52,11 @@ export async function recvContent(url: string): Promise<void> {
 		await displayGlobal("getMatchsResults");
 	} else if (url.includes('/users/')) {
 		const titleErrorElements = document.getElementsByClassName('title-error');
-		if (titleErrorElements)
+		if (titleErrorElements.length != 0)
 			return ;
 		const urlParts = window.location.pathname.split('/');
 		const username = urlParts[urlParts.length - 1];
+		console.log("Test");
 		await displayMatches(`/getExternalMatchsResults/${username}`);
 		await displayGlobal(`/getExternalMatchsResults/${username}`);
 	}
