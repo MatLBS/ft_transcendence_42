@@ -1,24 +1,5 @@
 import { applyLink } from "./utils.js";
-// const buttons = document.querySelectorAll("[data-carousel-button]")
 
-// buttons.forEach(button => {
-//	 button.addEventListener("click", () => {
-//		 const offset = button.dataset.carouselButton === "next" ? 1 : -1
-//		 const slides = button
-//			 .closest("[data-carousel]")
-//			 .querySelector("[data-slides]")
-
-//		 const activeSlide = slides.querySelector("[data-active]")
-//		 let newIndex = [...slides.children].indexOf(activeSlide) + offset
-//		 if (newIndex < 0) newIndex = slides.children.length - 1
-//		 if (newIndex >= slides.children.length) newIndex = 0
-
-//		 slides.children[newIndex].dataset.active = true
-//		 delete activeSlide.dataset.active
-//	 })
-// })
-
-// et ajoute un écouteur d'événements pour chaque bouton
 const appDiv = document.getElementById("app");
 if (appDiv) {
 	appDiv.addEventListener("click", (e: MouseEvent) => {
@@ -29,12 +10,6 @@ if (appDiv) {
 		}
 	})
 }
-
-// Sélectionne tous les boutons avec l'attribut [data-carousel-button]
-// const buttons: NodeListOf<HTMLButtonElement> = document.querySelectorAll("[data-carousel-button]");
-
-// buttons.forEach((button: HTMLButtonElement) => {
-// 	button.addEventListener("click", () => {
 function handleCarouselButtonClick(target: HTMLButtonElement) {
 	// Détermine l'offset en fonction du bouton cliqué (next ou prev)
 	const offset = target.dataset.carouselButton === "next" ? 1 : -1;
@@ -61,4 +36,42 @@ function handleCarouselButtonClick(target: HTMLButtonElement) {
 	children[newIndex].dataset.active = "true";
 	delete activeSlide.dataset.active;
 };
-// });
+
+// new FinisherHeader({
+// 	"count": 10,
+// 	"size": {
+// 	  "min": 676,
+// 	  "max": 1171,
+// 	  "pulse": 0
+// 	},
+// 	"speed": {
+// 	  "x": {
+// 		"min": 0.1,
+// 		"max": 0.6
+// 	  },
+// 	  "y": {
+// 		"min": 0.1,
+// 		"max": 0.6
+// 	  }
+// 	},
+// 	"colors": {
+// 	  "background": "#9138e5",
+// 	  "particles": [
+// 		"#ff4848",
+// 		"#000000",
+// 		"#2235e5",
+// 		"#000000",
+// 		"#ff0000"
+// 	  ]
+// 	},
+// 	"blending": "overlay",
+// 	"opacity": {
+// 	  "center": 0.5,
+// 	  "edge": 0.05
+// 	},
+// 	"skew": -2,
+// 	"shapes": [
+// 	  "s",
+// 	  "t"
+// 	]
+//   });`

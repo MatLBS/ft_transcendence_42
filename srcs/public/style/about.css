@@ -74,3 +74,57 @@ body {
 .carousel-button.next {
   right: 1rem;
 }
+
+.wrapper{
+  display: flex;
+}
+.wrapper .static-txt{
+  color: #000000;
+  font-size: 60px;
+  font-weight: 400;
+}
+.wrapper #dynamic-txts{
+  margin-left: 15px;
+  height: 90px;
+  line-height: 90px;
+  overflow: hidden;
+}
+
+#dynamic-txts li{
+  list-style: none;
+  color: #FC6D6D;
+  font-size: 60px;
+  font-weight: 500;
+  position: relative;
+  top: 0;
+  animation: slide 9s steps(3) infinite;
+}
+@keyframes slide {
+  100%{
+    top: -270px;
+  }
+}
+#dynamic-txts li span {
+  position: relative;
+  display: inline-block;
+  line-height: 90px;
+  height: 90px;
+}
+#dynamic-txts li span::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #ffffff;
+  border-left: 2px solid #FC6D6D;
+  animation: typing 3s steps(10) infinite;
+}
+@keyframes typing {
+  40%, 60%{
+    left: calc(100% + 30px);
+  }
+  100%{
+    left: 0;
+  }
+}
