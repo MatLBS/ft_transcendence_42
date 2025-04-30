@@ -1,5 +1,5 @@
-import { recvContent } from '../main.js';
-import { applyLink, getInputValue } from './utils.js';
+import { navigateTo } from '../main.js';
+import { getInputValue } from './utils.js';
 import { verifyForm } from '../../middleware/verify.js';
 import { language } from '../main.js';
 
@@ -10,7 +10,6 @@ const appDiv = document.getElementById("app");
 if (appDiv) {
 	appDiv.addEventListener("click", (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
-		applyLink(target, e);
 
 		if (target.tagName === "BUTTON" && target.id === "confirm_button") {
 			validateForm()
@@ -83,7 +82,7 @@ function registerUser() {
 			}
 			return;
 		} else {
-			recvContent('/profil');
+			navigateTo('/profil');
 		}
 	})
 	.catch((error) => {

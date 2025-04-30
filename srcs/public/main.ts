@@ -1,6 +1,5 @@
 import { json } from 'stream/consumers';
 import { applyLink } from './scripts/utils.js';
-import { displayGlobal, displayMatches} from './scripts/stats.js';
 
 export let language = "en";
 
@@ -11,6 +10,11 @@ interface ResponseData {
 	css?: string;
 	errcode?: number;
 	isConnected: boolean;
+}
+
+export async function navigateTo(url: string): Promise<void> {
+	recvContent(url);
+	history.pushState({}, '', url);
 }
 
 // Fait une requête au serveur pour récupérer le contenu de la page demandée (sans recharger la page)
@@ -46,19 +50,10 @@ export async function recvContent(url: string): Promise<void> {
 		.catch((error: unknown) => {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});
-	history.pushState({}, '', url);
-	if (url === '/profil') {
-		await displayMatches("getMatchsResults");
-		await displayGlobal("getMatchsResults");
-	} else if (url.includes('/users/')) {
-		const titleErrorElements = document.getElementsByClassName('title-error');
-		if (titleErrorElements.length != 0)
-			return ;
-		const urlParts = window.location.pathname.split('/');
-		const username = urlParts[urlParts.length - 1];
-		await displayMatches(`/getExternalMatchsResults/${username}`);
-		await displayGlobal(`/getExternalMatchsResults/${username}`);
-	}
+	url = url.split('/')[1] || url;
+	setTimeout(() => {
+		window.dispatchEvent(new CustomEvent(url));
+	}, 100);
 }
 
 // Met à jour le contenu de la page avec les données reçues du serveur
@@ -86,7 +81,7 @@ function updatePageContent(data: ResponseData): void {
 		scriptElement.type = 'module';
 		scriptElement.src = data.js;
 		scriptElement.id = 'js';
-		scriptElement.defer = true;
+		// scriptElement.defer = true;
 		document.body.appendChild(scriptElement);
 	}
 
@@ -173,7 +168,7 @@ function handleLogout(e: Event): void {
 		.then((response: Response) => response.json())
 		.then((data: { status: number }) => {
 			if (data.status === 200) {
-				recvContent('/login');
+				navigateTo('/login');
 			}
 		})
 		.catch((error: unknown) => {

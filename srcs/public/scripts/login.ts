@@ -1,12 +1,11 @@
-import { recvContent } from '../main.js';
-import { applyLink, getInputValue } from './utils.js';
+import { navigateTo } from '../main.js';
+import { getInputValue } from './utils.js';
 import { language } from '../main.js';
 
 const appDiv = document.getElementById("app");
 if (appDiv) {
 	appDiv.addEventListener("click", (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
-		applyLink(target, e);
 
 		if (target.tagName === "BUTTON" && target.id === "login_button") {
 			Login()
@@ -104,7 +103,7 @@ function Login() {
 	.then(async (response) => {
 		const data = await response.json();
 		if (data.message === "ok") {
-			recvContent("/profil");
+			navigateTo("/profil");
 		} else {
 			if (data.code === true) {
 				error_mail.innerHTML = data.message;

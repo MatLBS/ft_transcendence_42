@@ -63,7 +63,7 @@ export const getPost = async (req, reply) => {
 		// Recherche de la route correspondante
 		const route = routes[file];
 		if (route) {
-			content = await ejs.renderFile(path.join(route.dir, route.file), { user, jsonLanguage, friends });
+			content = await ejs.renderFile(path.join(route.dir, route.file), { user, jsonLanguage, friends, isConnected});
 			css = route.css;
 			js = route.js;
 		} else {
