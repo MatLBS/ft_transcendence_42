@@ -27,12 +27,6 @@ if (appDiv) {
 		}
 	})
 }
-
-// Sélectionne tous les boutons avec l'attribut [data-carousel-button]
-// const buttons: NodeListOf<HTMLButtonElement> = document.querySelectorAll("[data-carousel-button]");
-
-// buttons.forEach((button: HTMLButtonElement) => {
-// 	button.addEventListener("click", () => {
 function handleCarouselButtonClick(target: HTMLButtonElement) {
 	// Détermine l'offset en fonction du bouton cliqué (next ou prev)
 	const offset = target.dataset.carouselButton === "next" ? 1 : -1;
@@ -59,4 +53,3 @@ function handleCarouselButtonClick(target: HTMLButtonElement) {
 	children[newIndex].dataset.active = "true";
 	delete activeSlide.dataset.active;
 };
-// });

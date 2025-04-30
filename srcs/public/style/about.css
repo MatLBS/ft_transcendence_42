@@ -6,71 +6,217 @@ body {
   margin: 0;
 }
 
-.carousel {
-  position: relative;
-  width: 50%;
-  height: 50em;
+.wrapper{
+  display: flex;
+}
+.wrapper .static-txt{
+  color: #ffffff;
+  font-size: 60px;
+  font-weight: 400;
+}
+.wrapper #dynamic-txts{
+  margin-left: 15px;
+  height: 90px;
+  line-height: 90px;
+  overflow: hidden;
 }
 
-.carousel > ul {
-  margin: 0;
-  padding: 0;
+#dynamic-txts li{
   list-style: none;
+  color: #FC6D6D;
+  font-size: 60px;
+  font-weight: 500;
+  position: relative;
+  top: 0;
+  animation: slide 9s steps(3) infinite;
 }
-
-.slide {
+@keyframes slide {
+  100%{
+    top: -270px;
+  }
+}
+#dynamic-txts li span {
+  position: relative;
+  display: inline-block;
+  line-height: 90px;
+  height: 90px;
+}
+#dynamic-txts li span::after{
+  content: "";
   position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: 200ms opacity ease-in-out;
-  transition-delay: 200ms;
-}
-
-.image {
-  height : 40em;
-  width : auto;
-}
-
-.slide > img {
-  display: block;
-  width: 100%;
+  left: 0;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  width: 100%;
+  background: #000000;
+  border-left: 2px solid #FC6D6D;
+  animation: typing 3s steps(20) infinite;
+}
+@keyframes typing {
+  40%, 60%{
+    left: calc(100% + 30px);
+  }
+  100%{
+    left: 0;
+  }
 }
 
-.slide[data-active] {
-  opacity: 1;
-  z-index: 1;
-  transition-delay: 0ms;
+@layer base, rhythm, layout, components, default, overwrites;
+
+html {
+  scroll-snap-type: y mandatory;
+  timeline-scope: --section, --main, --site-header;
 }
 
-.carousel-button {
-  position: absolute;
-  z-index: 2;
-  background: none;
-  border: none;
-  font-size: 4rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: rgba(255, 255, 255, .5);
-  cursor: pointer;
-  border-radius: .25rem;
-  padding: 0 .5rem;
-  background-color: rgba(0, 0, 0, .1);
+body,
+.content {
+  background-color: var(--color-background, rgb(0, 0, 0));
 }
 
-.carousel-button:hover,
-.carousel-button:focus {
-  color: white;
-  background-color: rgba(0, 0, 0, .2);
+main {
+  view-timeline: --main;
 }
 
-
-.carousel-button.prev {
-  left: 1rem;
+.section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  view-timeline: --section;
+  height: 100dvh;
 }
 
-.carousel-button.next {
-  right: 1rem;
+.profile-img {
+  width: 400px;
+  height: auto;
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.indicator::before {
+  animation: indicate linear both;
+  animation-timeline: --main;
+  animation-range: contain;
+}
+
+@keyframes indicate {
+  0% {
+    --color-indicator: var(--color-primary);
+    transform: translateY(0);
+  }
+
+  25% {
+    --color-indicator: var(--color-yellow);
+  }
+
+  50% {
+    --color-indicator: var(--color-secondary);
+  }
+
+  75% {
+    --color-indicator: var(--color-red);
+  }
+
+  100% {
+    --color-indicator: var(--color-purple);
+    transform: translateY(
+      calc(var(--indicator-total-height) - var(--indicator-size))
+    );
+  }
+}
+
+/* Remove gradient indicator on scroll-to-end (visible on small screens */
+
+.site-header label:last-of-type {
+  view-timeline: --site-header inline;
+}
+
+.site-header::after {
+  animation: fade-scroll ease-in-out both;
+  animation-timeline: --site-header;
+  animation-range: entry-crossing;
+}
+
+@keyframes fade-scroll {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Change animation based on radio checked */
+body:has([value="horizontal-scroll"]:checked) .content {
+  /* 
+    The only reason we're repeat these two properties instead of simply 
+    setting `animation-name` is so the polyfill will pick them up 
+    They're flaky though and tend to get stuck. You might need to
+    refresh the page and select an option before scrolling
+  */
+  animation: horizontal-scroll ease-in-out both;
+  animation-timeline: --section;
+}
+
+body:has([value="backwards-scroll"]:checked) .content {
+  animation: backwards-scroll ease-in-out both;
+  animation-timeline: --section;
+}
+
+body:has([value="zoom-scroll"]:checked) .content {
+  animation: zoom-scroll ease-in-out both;
+  animation-timeline: --section;
+}
+
+/* Alternative animations */
+/* Very cool, try it */
+@keyframes horizontal-scroll {
+  0% {
+    transform: translate3d(100%, 0%, 0);
+  }
+
+  50% {
+    transform: none;
+  }
+
+  100% {
+    transform: translate3d(-100%, 0%, 0);
+  }
+}
+
+/* Befuddling, try it */
+@keyframes backwards-scroll {
+  0% {
+    transform: translate3d(0%, -100%, 0);
+  }
+
+  50% {
+    transform: none;
+  }
+
+  100% {
+    transform: translate3d(0%, 100%, 0);
+  }
+}
+
+/* WIP */
+@keyframes zoom-scroll {
+  0% {
+    filter: blur(10rem);
+    transform: scale(0);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  50% {
+    filter: blur(0);
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  100% {
+    filter: blur(3rem);
+    transform: scale(1.5);
+    opacity: 0;
+    visibility: hidden;
+  }
 }
