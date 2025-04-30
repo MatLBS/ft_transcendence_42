@@ -32,9 +32,8 @@ if (appDiv) {
 		}
 		if (target.tagName === "SPAN" && target.id === "upload_icon_profil") {
 			const fileInput = document.getElementById('profile_picture');
-			if (fileInput) {
+			if (fileInput)
 				fileInput.click();
-		}
 		}
 	});
 }
