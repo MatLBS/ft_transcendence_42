@@ -1,32 +1,42 @@
-<nav class="bg-blue-500 h-32 flex justify-between items-center sticky top-0 z-50">
-	<ul class="flex gap-5 ml-3">
-		<li><a class="my" href="/"><%= jsonLanguage.index.home %></a></li>
-		<li><a class="my" href="/about"><%= jsonLanguage.index.about %></a></li>
-		<li  class="connected"><a class="my" href="/game"><%= jsonLanguage.index.game %></a></li>
-		<li class="connected"><a class="my profile" href="/profil"><%= jsonLanguage.index.profil %></a></li>
-		<li class="connected"><a class="logout" href="/login" ><%= jsonLanguage.index.logout %></a></li>
-		<li class="disconnected"><a class="my" href="/login"><%= jsonLanguage.index.login %></a></li>
-	</ul>
-	<div class="search-container">
-		<input type="text" id="search-input" placeholder="Rechercher..." autocomplete="off" />
-		<ul id="search-results"></ul>
+<nav class="bg-blue-500 h-32 flex justify-between items-center sticky top-0 z-50 px-4">
+	<!-- Mobile burger button -->
+	<button id="burger" class="text-white focus:outline-none">
+		<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+		</svg>
+	</button>
+
+	<!-- Desktop & mobile menu links -->
+	<div id="burger-menu" class="flex justify-between items-center w-full">
+		<ul class="list-nav gap-5 ml-3">
+			<li><a class="my" href="/"> <%= jsonLanguage.index.home %> </a></li>
+			<li><a class="my" href="/about"> <%= jsonLanguage.index.about %> </a></li>
+			<li class="connected"><a class="my" href="/game"> <%= jsonLanguage.index.game %> </a></li>
+			<li class="connected"><a class="my profile" href="/profil"> <%= jsonLanguage.index.profil %> </a></li>
+			<li class="connected"><a class="logout" href="/login"> <%= jsonLanguage.index.logout %> </a></li>
+			<li class="disconnected"><a class="my" href="/login"> <%= jsonLanguage.index.login %> </a></li>
+		</ul>
+
+			<!-- Search bar -->
+			<div class="search-container">
+				<input type="text" id="search-input" placeholder="Rechercher..." autocomplete="off" class="rounded px-2 py-1 text-black" />
+				<ul id="search-results"></ul>
+			</div>
 	</div>
+
+	<!-- Language selector (always visible) -->
 	<div class="mr-3">
 		<div id="language-select" class="w-24 relative">
-			<div class="flex justify-center align-center">
-				<div id="language-default" class="flex justify-center items-center w-full rounded-full p-2">
-					<%= jsonLanguage.index.flag %>
-					<span class="material-icons pl-2">expand_more</span>
-				</div>
-			</div>
-			<div class="flex justify-center align-center absolute w-full z-10">
-				<ul id="languages-options" class="list-inside rounded-lg hidden mt-2 w-full text-center border-2 border-gray-500">
-					<li data-value="fr" id="language-options" class="hover:bg-gray-200">🇫🇷</li>
-					<li data-value="en" id="language-options" class="hover:bg-gray-200 ">🇬🇧</li>
-					<li data-value="es" id="language-options" class="hover:bg-gray-200">🇪🇸</li>
-					<li data-value="pt" id="language-options" class="hover:bg-gray-200">🇵🇹</li>
-				</ul>
-			</div>
+		<div id="language-default" class="flex justify-center items-center w-full rounded-full p-2 cursor-pointer text-white">
+			<%= jsonLanguage.index.flag %>
+			<span class="material-icons pl-2">expand_more</span>
+		</div>
+		<ul id="languages-options" class="list-inside rounded-lg hidden mt-2 w-full text-center border-2 border-gray-500 bg-white text-black absolute right-0">
+			<li data-value="fr" id="language-options" class="p-2 hover:bg-gray-200">🇫🇷</li>
+			<li data-value="en" id="language-options" class="p-2 hover:bg-gray-200">🇬🇧</li>
+			<li data-value="es" id="language-options" class="p-2 hover:bg-gray-200">🇪🇸</li>
+			<li data-value="pt" id="language-options" class="p-2 hover:bg-gray-200">🇵🇹</li>
+		</ul>
 		</div>
 	</div>
 </nav>
