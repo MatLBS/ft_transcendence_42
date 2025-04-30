@@ -15,8 +15,9 @@ export const getLanguage = async (req, reply) => {
 	const response = await authenticateUser(req);
 	if (response.status === 200) {
 		const user = await findUserById(response.user.id);
-		language = user.language !== null ? user.language : language;
-	} 
+		if (user)
+			language = user.language !== null ? user.language : language;
+	}
 	translations = i18next.getResourceBundle(language, 'translation');
 	return (translations);
 }
