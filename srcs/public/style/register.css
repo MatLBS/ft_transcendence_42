@@ -14,7 +14,7 @@
 	   margin: 0;
 	 }
 
-	 .login {
+	 .register {
 		color: var(--white-color);
 	 }
 
@@ -33,21 +33,21 @@
 		height: auto;
 		}
 
-		.login {
+		.register {
 		position: relative;
 		height: 100vh;
 		display: grid;
 		align-items: center;
 		}
 
-		.login__img {
+		.register__img {
 		position: absolute;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		object-position: center;
 		}
-		.login__form {
+		.register__form {
 		position: relative;
 		background-color: hsla(0, 0%, 10%, 0.1);
 		border: 2px solid var(--white-color);
@@ -57,31 +57,31 @@
 		backdrop-filter: blur(10px);
 		}
 
-		.login__title {
+		.register__title {
 		text-align: center;
 		font-size: var(--h1-font-size);
 		font-weight: var(--font-medium);
 		margin-bottom: 2rem;
 		}
-		.login__content {
+		.register__content {
 		display: grid;
 		}
 
-		.login__content {
+		.register__content {
 		row-gap: 1.75rem;
 		/* margin-bottom: 1.5rem; */
 		}
 
-		.login__box {
+		.register__box {
 		/* grid-template-columns: max-content 1fr;
 		align-items: center;
 		column-gap: 0.75rem; */
 		border-bottom: 2px solid var(--white-color);
 		}
-		.login__icon, .login__eye {
+		.register__icon, .register__eye {
 		font-size: 1.25rem;
 		}
-		.login__input {
+		.register__input {
 		width: 100%;
 		padding-block: 0.8rem;
 		background: none;
@@ -89,53 +89,53 @@
 		position: relative;
 		z-index: 1;
 		}
-		.login__box-input {
+		.register__box-input {
 		position: relative;
 		}
 
-		.login__label {
+		.register__label {
 		position: absolute;
 		left: 0;
 		top: 13px;
 		font-weight: var(--font-medium);
 		transition: top 0.3s, font-size 0.3s;
 		}
-		.login__eye {
+		.register__eye {
 		position: absolute;
 		right: 0;
 		top: 18px;
 		z-index: 10;
 		cursor: pointer;
 		}
-		.login__box:nth-child(2) input {
+		.register__box:nth-child(2) input {
 		padding-right: 1.8rem;
 		}
 
-		.login__check, .login__check-group {
+		.register__check, .register__check-group {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		}
-		.login__check {
+		.register__check {
 		margin-bottom: 1.5rem;
 		}
-		.login__check-label, .login__forgot, .login__register {
+		.register__check-label, .register__forgot, .register__register {
 		   font-size: var(--small-font-size);
 		}
-		.login__check-group {
+		.register__check-group {
 		   column-gap: 0.5rem;
 		}
-		.login__check-input {
+		.register__check-input {
 		   width: 16px;
 		   height: 16px;
 		}
-		.login__forgot {
+		.register__forgot {
 		   color: var(--white-color);
 		   }
-		   .login__forgot:hover {
+		   .register__forgot:hover {
 			text-decoration: underline;
 		   }
-		   .login__button {
+		   .register__button {
 			width: 100%;
 			padding: 1rem;
 			border-radius: 0.5rem;
@@ -143,45 +143,45 @@
 			font-weight: var(--font-medium);
 			cursor: pointer;
 		   }
-		   .login__register {
+		   .register__register {
 			   text-align: center ;
 		   }
 
-		   .login__register a {
+		   .register__register a {
 			color: var(--white-color);
 			font-weight: var(--font-medium);
 		   }
-		   .login__register a:hover {
+		   .register__register a:hover {
 			text-decoration: underline;
 
 		   }
 
-		   .login__input:focus + .login__label {
+		   .register__input:focus + .register__label {
 			top: -12px;
 			font-size: var(--small-font-size);
 		   }
 
-		   .login__input:not(:placeholder-shown) + .login__label {
+		   .register__input:not(:placeholder-shown) + .register__label {
 			   top: -12px;
 			   font-size: var(--small-font-size);
 		   }
 
-		   #login-eye {
+		   #register-eye {
 			   position: relative;
 			   float: right;
 		   }
 
 		   /* for medium devices */
 		   @media screen and (min-width: 576px) {
-			.login {
+			.register {
 			   justify-content: center;
 			}
-			.login__form {
+			.register__form {
 			   width: 432px;
 			   padding: 4rem 3rem 3.5rem;
 			   border-radius: 1.5rem;
 			}
-			.login__title {
+			.register__title {
 			   font-size: 2rem;
 			}
 		   }
