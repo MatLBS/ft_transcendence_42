@@ -14,15 +14,17 @@
 				<%= user.username %>
 			</h2>
 		</div>
-	<% if (isConnected && !himself) { %>
-		<% if (!friend) { %>
-	<button id="add-friends" class="text-black text-center">add friends</button>
-	<% } else { %>
-	<button id="delete-friends" class="text-black text-center">delete friends</button>
-		<% } %>
-	<% } %>
 	</div>
-	<h2 class="stats__title text-center"><%= jsonLanguage.profil.statistics %></h2>
+	<div class="flex justify-center items-center m-5">
+		<% if (isConnected && !himself) { %>
+			<% if (!friend) { %>
+		<button id="add-friends" class="text-black text-center p-3 bg-blue-500 text-white rounded-lg hover:scale-110">Add friends</button>
+		<% } else { %>
+		<button id="delete-friends" class="text-black text-center p-3 bg-blue-500 text-white rounded-lg hover:scale-110">Delete friends</button>
+			<% } %>
+		<% } %>
+	</div>
+	<h2 class="stats__title text-center pb-5"><%= jsonLanguage.profil.statistics %></h2>
 	<div class="stats flex justify-center align-center gap-16">
 		<div id="match__history" class="w-2/5 border-2 border-gray-300">
 			<h2 class="text-center p-5"><%= jsonLanguage.profil.matchHistory %></h2>
