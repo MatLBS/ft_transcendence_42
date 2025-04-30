@@ -67,19 +67,20 @@
 					<div>
 						<i class="bx bx-lock-alt"></i>
 						<div class="update__box-input">
-							<input type="file" id="profile_picture" class="update__input" name="profile_picture" accept="image/*">
+							<input type="file" id="profile_picture" class="update__input hidden" name="profile_picture" accept="image/*">
 						</div>
 					</div>
 				</div>
 
-				<div class="flex justify-center">
+				<div class="flex justify-center relative">
 					<img
 						src="<%= user.profilePicture %>"
 						id="preview_image"
 						alt="Photo de profil de <%= user.username %>"
 						class="profile-image rounded-full h-32 w-auto"
 						style="max-width: 200px;"
-					/>
+						/>
+					<span class="material-symbols-outlined p-2 h-10 w-auto bg-gray-500 rounded-full hover:scale-110" id="upload_icon_profil">add</span>
 				</div>
 			</div>
 			<button id="<%= !user.google ? 'update_button' : 'update_button_google' %>" class="update__button text-black text-center"><%= jsonLanguage.update.button %></button>

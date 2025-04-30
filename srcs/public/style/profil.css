@@ -299,5 +299,5 @@ canvas {
 
 .edit {
 	position: absolute;
-	right: 42vw; /* Décalage basé sur 10% de la largeur de l'écran */
+	right: 42vw;
 }

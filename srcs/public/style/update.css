@@ -231,9 +231,15 @@
 }
 
 .close-button {
-	color: black; /* Change la couleur du texte */
-	font-size: 1.5rem; /* Augmente la taille */
-	cursor: pointer; /* Change le curseur pour indiquer qu'il est cliquable */
+	color: black;
+	font-size: 1.5rem;
+	cursor: pointer;
+}
+
+#upload_icon_profil {
+	position: absolute;
+	bottom: 4px;
+	right: 90px;
 }
 
 
