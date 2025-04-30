@@ -121,8 +121,8 @@ function handleLinks(): void {
 
 function seeTarget(e: MouseEvent): void {
 	const target = e.target as HTMLAnchorElement;
+	applyLink(target, e);
 	if (target.closest('nav')) {
-		applyLink(target, e);
 		if (target.tagName === 'A' && target.classList.contains('logout')) {
 			handleLogout(e);
 		}

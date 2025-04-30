@@ -1,2 +1,12 @@
 <%- include('../../components/navbar.html') %>
-<h1>401 Unauthorized</h1>
+<div class="container">
+	<div class="error-emoji">🔐</div>
+	<div class="error-code">401</div>
+	<h1 class="error-title">Identification requise pour accéder à cette zone !</h1>
+	<p class="error-message">Veuillez vous authentifier pour poursuivre votre exploration spatiale.</p>
+	<br>
+	<div class="action-buttons">
+		<a href="/login" class="my home-btn">Se connecter</a>
+		<a href="/" class="my home-btn">Retour à l'accueil</a>
+	</div>
+</div>
