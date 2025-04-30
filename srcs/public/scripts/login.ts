@@ -2,12 +2,6 @@ import { recvContent } from '../main.js';
 import { applyLink, getInputValue } from './utils.js';
 import { language } from '../main.js';
 
-// const login_button = document.getElementById('login_button');
-
-/// Fonction pour gérer les clics sur les liens dynamiques
-/// @param target - L'élément cible du clic
-/// @param e - L'événement de clic
-/// @returns void
 const appDiv = document.getElementById("app");
 if (appDiv) {
 	appDiv.addEventListener("click", (e: MouseEvent) => {

@@ -5,6 +5,8 @@ import { getErrorPage } from "./errorPage.js";
 export const getUser = async (req , reply) => {
 	const response = await authenticateUser(req);
 	const username = await findUserById(response.user.id)
+	if (!username)
+		return;
 	reply.send({ user: { username: username.username } });
 }
 

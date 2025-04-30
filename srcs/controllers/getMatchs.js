@@ -9,6 +9,8 @@ export const getMatchsResults = async (req, reply) => {
 		return;
 	const userId = response.user.id ;
 	const userInfos = await findUserById(userId);
+	if (!userInfos)
+		return;
 	const user = userInfos.username;
 	try {
 		const localMatchs = await getLocalMatches(userId);
@@ -30,6 +32,8 @@ export const getExternalMatchsResults = async (req, reply) => {
 		return;
 	const userId = response.id;
 	const userInfos = await findUserById(userId);
+	if (!userInfos)
+		return;
 	const user = userInfos.username;
 	try {
 		const localMatchs = await getLocalMatches(userId);

@@ -15,5 +15,7 @@ export const updateUserLanguage =  async (req, reply) => {
 	if (response.status !== 200)
 		return;
 	const user = await findUserById(response.user.id);
+	if (!user)
+		return;
 	await updateUserLanguageDB(user.id, language)
 }
