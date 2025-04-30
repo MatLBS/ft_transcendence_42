@@ -2,8 +2,6 @@ import { navigateTo } from '../main.js';
 import { getInputValue } from './utils.js';
 import { language } from '../main.js';
 
-// const login_button = document.getElementById('login_button');
-
 /// Fonction pour gérer les clics sur les liens dynamiques
 /// @param target - L'élément cible du clic
 /// @param e - L'événement de clic
@@ -109,6 +107,7 @@ function Login() {
 	.then(async (response) => {
 		const data = await response.json();
 		if (data.message === "ok") {
+			navigateTo("/profil");
 			navigateTo("/profil");
 		} else {
 			if (data.code === true) {

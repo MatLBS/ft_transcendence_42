@@ -10,7 +10,7 @@ export const local = async (req, reply) => {
 
 	const response = await authenticateUser(req);
 	let language = await findUserById(response.user.id);
-	language = language.language
+	!language ? language = { language: "en" } : language = language.language;
 	const jsonLanguage = await getLanguageWithoutBody(language);
 
 	const route = routes["local"];
