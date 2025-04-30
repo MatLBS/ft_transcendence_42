@@ -10,6 +10,7 @@ export const createLocalGame = async (req, reply) => {
 		const player1 = await findUserById(response.user.id);
 		if (!player1)
 			return;
+
 		if (req.body.player2.trim() === '' || req.body.player2.trim() === player1.username)
 			return;
 		players.push(player1.username);

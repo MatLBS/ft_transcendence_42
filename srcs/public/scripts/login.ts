@@ -108,6 +108,7 @@ function Login() {
 		const data = await response.json();
 		if (data.message === "ok") {
 			navigateTo("/profil");
+			navigateTo("/profil");
 		} else {
 			if (data.code === true) {
 				error_mail.innerHTML = data.message;
