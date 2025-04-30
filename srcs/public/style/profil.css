@@ -63,7 +63,7 @@ h2 {
 	margin: auto;
 }
 
-.open {
+.openStats {
 	display: flex !important
 }
 
@@ -75,15 +75,33 @@ h2 {
 	position: fixed;
 	top: 0;
 	right: -320px;
-	width: 300px;
-	height: 100%;
+	width: clamp(260px, 25vw, 300px);
+	height: 100vh;
 	background: #fff;
-	box-shadow: -4px 0 8px rgba(0,0,0,0.1);
+	box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
 	padding: 1rem;
 	box-sizing: border-box;
 	transition: right 0.3s ease;
 	overflow-y: auto;
 	z-index: 1000;
+}
+
+/* Pour les tablettes */
+@media (max-width: 900px) {
+	#container {
+		right: -70vw;
+		width: 65vw;
+		padding: 0.75rem;
+	}
+}
+
+/* Pour les petits écrans (mobiles) */
+@media (max-width: 600px) {
+	#container {
+		right: -92vw;
+		width: 90vw;
+		padding: 0.5rem;
+	}
 }
 
 #container.open-friends {
@@ -122,6 +140,7 @@ h2 {
 	padding: 0.5rem 1rem;
 	border-radius: 8px;
 	cursor: pointer;
+	z-index: 1000;
 }
 
 #open-friends:hover {
@@ -272,7 +291,7 @@ h2 {
 	height: 250px;
 	margin: auto;
 	position: relative;
-  }
+}
 canvas {
 	width: 100% !important;
 	height: 100% !important;

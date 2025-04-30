@@ -51,8 +51,8 @@ export async function recvContent(url: string): Promise<void> {
 		await displayMatches("getMatchsResults");
 		await displayGlobal("getMatchsResults");
 	} else if (url.includes('/users/')) {
-		const titleErrorElements = document.getElementsByClassName('error-code');
-		if (titleErrorElements)
+		const titleErrorElements = document.getElementsByClassName('title-error');
+		if (titleErrorElements.length != 0)
 			return ;
 		const urlParts = window.location.pathname.split('/');
 		const username = urlParts[urlParts.length - 1];

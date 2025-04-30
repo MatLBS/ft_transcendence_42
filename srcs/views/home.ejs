@@ -1,5 +1,33 @@
 <%- include('../components/navbar.html') %>
-<div>
-	<h1><%= jsonLanguage.home.title %></h1>
-	<p><%= jsonLanguage.home.subtitle %></p>
+
+<div id="pong-homepage">
+	<div id="welcome-div" class="justify-center">
+		<h1>🏓 Welcome to Pong 42 </h1>
+	</div>
+	<div class="flex justify-center items-center">
+		<div id="rules-div">
+			<h2>🎯 Games Objectives</h2>
+			<ul>
+				<li>First to 5 points wins.</li>
+				<li>Ball speed increases over time.</li>
+				<li>Angle depends on where you hit the ball.</li>
+				<li>No power-ups—pure Pong skill!</li>
+			</ul>
+			<h2>🕹️ Controles </h2>
+			<ul>
+				<li>Left Player W ➡️ Up | S ➡️ Down </li>
+				<li>Right Player (IA or Friend) Arrow Up ➡️ Up | Arrow Down ➡️ Down</li>
+			</ul>
+			<h2>🏆 Game modes</h2>
+			<ul>
+				<li>Local against one friend</li>
+				<li>Solo against our machavielic IA</li>
+				<li>Tournament up to 16 persons ! </li>
+			</ul>
+		</div>
+	</div>
+	<div class="action-buttons">
+		<button class="play-button">Play Now 🎮</button>
+		<button class="signup-button">Sign Up ✨</button>
+	</div>
 </div>

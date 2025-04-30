@@ -32,8 +32,6 @@ import { search } from './controllers/search.js';
 import { getUserProfile } from './controllers/getUserProfile.js';
 import { addFriends, deleteFriends } from './controllers/handleFriends.js';
 
-// peut etre sauvegarder le content des fichier html.
-
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function loadRoutesFromDirectory(directory, useEjs) {
@@ -43,8 +41,8 @@ function loadRoutesFromDirectory(directory, useEjs) {
 	files.forEach(file => {
 		if (path.extname(file) === ".html" || path.extname(file) === ".ejs") {
 			const routeName = path.basename(file, path.extname(file)); // Nom du fichier sans extension
-			const cssPath = "public/style/" + routeName + ".css";
-			const jsPath = "dist/srcs/public/scripts/" + routeName + ".js";
+			const cssPath = "/public/style/" + routeName + ".css";
+			const jsPath = "/dist/srcs/public/scripts/" + routeName + ".js";
 
 			routes[routeName] = {
 				dir: directory,
@@ -53,7 +51,7 @@ function loadRoutesFromDirectory(directory, useEjs) {
 				css: fs.existsSync("srcs/" + cssPath) ? cssPath : null,
 				js: fs.existsSync("srcs/" + jsPath) ? jsPath : null,
 			};
-		} // peut etre ajouter un else if pour les dossier (recursive)
+		}
 	});
 	return routes;
 }
