@@ -56,7 +56,6 @@ export async function recvContent(url: string): Promise<void> {
 			return ;
 		const urlParts = window.location.pathname.split('/');
 		const username = urlParts[urlParts.length - 1];
-		console.log("Test");
 		await displayMatches(`/getExternalMatchsResults/${username}`);
 		await displayGlobal(`/getExternalMatchsResults/${username}`);
 	}
@@ -122,8 +121,8 @@ function handleLinks(): void {
 
 function seeTarget(e: MouseEvent): void {
 	const target = e.target as HTMLAnchorElement;
+	applyLink(target, e);
 	if (target.closest('nav')) {
-		applyLink(target, e);
 		if (target.tagName === 'A' && target.classList.contains('logout')) {
 			handleLogout(e);
 		}

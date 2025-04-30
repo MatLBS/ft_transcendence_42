@@ -51,9 +51,11 @@ export const getPost = async (req, reply) => {
 			}
 		} else {
 			isConnected = true;
-			if (dontNeedLogin(file)) return await redirectToHome(req, reply);
+			if (dontNeedLogin(file))
+				return await redirectToHome(req, reply);
 			user = await findUserById(response.user.id);
-			if (!user) return await errorPage(req, reply, response, 403);
+			if (!user)
+				return await errorPage(req, reply, response, 403);
 			user.google = response.user.google;
 			friends = await getFollowedUsers(user.id);
 		}

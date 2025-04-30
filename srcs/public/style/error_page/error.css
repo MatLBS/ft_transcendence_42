@@ -1,0 +1,125 @@
+/* Page 404 Style */
+body {
+	background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+	height: calc(100vh - 200px);
+}
+
+.container {
+	text-align: center;
+	padding: 2rem;
+	max-width: 800px;
+	margin: 0 auto;
+	animation: fadeIn 1s ease-in;
+}
+
+.error-emoji {
+	font-size: 4rem;
+	margin-bottom: 1.5rem;
+	filter: drop-shadow(0 0 10px #00b4d8);
+	animation: float 3s ease-in-out infinite;
+}
+
+.error-code {
+	font-size: 6rem;
+	font-weight: bold;
+	background: linear-gradient(45deg, #00b4d8, #90e0ef);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	text-shadow: 0 0 20px rgba(0, 180, 216, 0.3);
+	margin: 1rem 0;
+	animation: glow 2s ease-in-out infinite alternate;
+	border-radius: 15px;
+}
+
+.error-title {
+	font-size: 1.8rem;
+	color: #e6e6e6;
+	margin: 1.5rem 0;
+	line-height: 1.6;
+	padding: 1rem;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.05);
+}
+
+.error-message {
+	font-size: 1rem;
+	color: #e6e6e6;
+	margin: 1rem 0;
+	line-height: 1.6;
+	padding: 1rem;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.05);
+}
+
+.home-btn {
+	display: inline-block;
+	padding: 1rem 2.5rem;
+	background: linear-gradient(45deg, #00b4d8, #0077b6);
+	color: white !important;
+	text-decoration: none;
+	border-radius: 8px;
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	transition: all 0.3s ease;
+	margin-top: 1rem;
+	border: none;
+	cursor: pointer;
+	box-shadow: 0 4px 15px rgba(0, 180, 216, 0.2);
+}
+
+.home-btn:hover {
+	transform: scale(1.05);
+	box-shadow: 0 0 25px rgba(0, 180, 216, 0.4);
+}
+
+
+.error-emoji[data-emoji="💥"] {
+	animation: shake 1.5s ease-in-out infinite;
+}
+
+@keyframes shake {
+	0%, 100% { transform: translateX(0); }
+	25% { transform: translateX(-10px); }
+	75% { transform: translateX(10px); }
+}
+
+@keyframes float {
+	0%, 100% { transform: translateY(0); }
+	50% { transform: translateY(-15px); }
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(30px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow {
+	0% {
+		box-shadow: 0 0 5px rgba(0, 180, 216, 0.4);
+	}
+	100% {
+		box-shadow: 0 0 40px rgba(0, 180, 216, 0.4);
+	}
+}
+
+@media (max-width: 768px) {
+	.error-code {
+		font-size: 4rem;
+	}
+
+	.error-message {
+		font-size: 1.2rem;
+		padding: 0.8rem;
+	}
+
+	.error-emoji {
+		font-size: 3rem;
+	}
+
+	.home-btn {
+		padding: 0.8rem 1.5rem;
+		font-size: 0.9rem;
+	}
+}
