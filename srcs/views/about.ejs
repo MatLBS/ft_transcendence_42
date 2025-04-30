@@ -3,11 +3,10 @@
 	  <main class="w-full">
 		<!-- Section d'introduction -->
 		<section id="intro" class="section flex flex-col justify-center items-center px-4">
-		  <div class="text-center max-w-4xl mx-auto">
-			<h1 class="text-4xl md:text-6xl font-bold mb-6 text-white">Bienvenue sur notre page</h1>
-			
+		  <div class="text-center mx-auto">
+			<h1 class="text-4xl md:text-6xl font-bold mb-6 text-white"><%= jsonLanguage.about.title %></h1>
 			<div class="wrapper flex justify-center items-center flex-wrap">
-			  <div class="static-txt mr-4">Nous sommes</div>
+			  <div class="static-txt mr-4"><%= jsonLanguage.about.welcome %></div>
 			  <div id="dynamic-txts" class="text-left">
 				<ul>
 				  <li><span>Miguel Simao</span></li>
@@ -17,7 +16,7 @@
 			  </div>
 			</div>
 			
-			<p class="mt-8 text-xl text-gray-300">Faites défiler pour en savoir plus sur nous</p>
+			<p class="mt-8 text-xl text-gray-300"><%= jsonLanguage.about.more %></p>
 			
 			<div class="mt-12 animate-bounce">
 			  <svg class="w-6 h-6 mx-auto text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -27,58 +26,55 @@
 		  </div>
 		</section>
 	
-		<!-- Section Miguel -->
-		<section id="miguel" class="section flex flex-col justify-center items-center px-4">
+		<section id="miguel" class="section flex flex-col justify-center items-center px-4 text-white">
 		  <div class="content max-w-4xl mx-auto text-center">
 			<h2 class="text-3xl md:text-5xl font-bold mb-8 text-white">Miguel Simao</h2>
 			
 			<div class="flex flex-col md:flex-row justify-center items-center gap-8">
 			  <div class="md:w-1/2">
-				<img src="public/images/miguel.png" alt="Miguel Simao" class="profile-img mx-auto">
+				<img src="../public/images/miguel.jpg" alt="Miguel Simao" class="profile-img mx-auto">
 			  </div>
 			  
 			  <div class="md:w-1/2 text-left mt-6 md:mt-0">
-				<h3 class="text-2xl font-semibold mb-4 text-primary">Développeur Front-end</h3>
-				<p class="text-lg text-gray-300 mb-4">Passionné par la création d'interfaces utilisateur élégantes et fonctionnelles.</p>
-				<p class="text-lg text-gray-300">Spécialiste en HTML, CSS, JavaScript et animations web.</p>
+				<h3 class="text-2xl font-semibold mb-4 text-primary"><%= jsonLanguage.about.titleMiguel %></h3>
+				<p class="text-lg text-gray-300 mb-4">...</p>
+				<p class="text-lg text-gray-300">...</p>
 			  </div>
 			</div>
 		  </div>
 		</section>
 	
-		<!-- Section Jean-Baptiste -->
-		<section id="jb" class="section flex flex-col justify-center items-center px-4">
+		<section id="jb" class="section flex flex-col justify-center items-center px-4 text-white">
 		  <div class="content max-w-4xl mx-auto text-center">
 			<h2 class="text-3xl md:text-5xl font-bold mb-8 text-white">Jean-Baptiste Renier</h2>
 			
 			<div class="flex flex-col md:flex-row justify-center items-center gap-8">
 			  <div class="md:w-1/2 order-2 md:order-1 text-left mt-6 md:mt-0">
-				<h3 class="text-2xl font-semibold mb-4 text-primary">Développeur Back-end</h3>
-				<p class="text-lg text-gray-300 mb-4">Expert en architecture logicielle et développement de systèmes robustes.</p>
-				<p class="text-lg text-gray-300">Maîtrise les bases de données et les API RESTful.</p>
+				<h3 class="text-2xl font-semibold mb-4 text-primary"><%= jsonLanguage.about.titleJb %></h3>
+				<p class="text-lg text-gray-300 mb-4">...</p>
+				<p class="text-lg text-gray-300">...</p>
 			  </div>
 			  
 			  <div class="md:w-1/2 order-1 md:order-2">
-				<img src="public/images/jb.png" alt="Jean-Baptiste Renier" class="profile-img mx-auto">
+				<img src="../public/images/jb.jpg" alt="Jean-Baptiste Renier" class="profile-img mx-auto">
 			  </div>
 			</div>
 		  </div>
 		</section>
 	
-		<!-- Section Matéo -->
-		<section id="mateo" class="section flex flex-col justify-center items-center px-4">
+		<section id="mateo" class="section flex flex-col justify-center items-center px-4 text-white">
 		  <div class="content max-w-4xl mx-auto text-center">
 			<h2 class="text-3xl md:text-5xl font-bold mb-8 text-white">Matéo Le Bras Sancho</h2>
 			
 			<div class="flex flex-col md:flex-row justify-center items-center gap-8">
 			  <div class="md:w-1/2">
-				<img src="public/images/mateo.png" alt="Matéo Le Bras Sancho" class="profile-img mx-auto">
+				<img src="../public/images/mateo.jpg" alt="Matéo Le Bras Sancho" class="profile-img mx-auto">
 			  </div>
 			  
 			  <div class="md:w-1/2 text-left mt-6 md:mt-0">
-				<h3 class="text-2xl font-semibold mb-4 text-primary">Designer UX/UI</h3>
-				<p class="text-lg text-gray-300 mb-4">Créatif et attentif aux détails, spécialisé dans la conception d'expériences utilisateur.</p>
-				<p class="text-lg text-gray-300">Passionné par l'ergonomie et l'accessibilité web.</p>
+				<h3 class="text-2xl font-semibold mb-4 text-primary"><%= jsonLanguage.about.titleMateo %></h3>
+				<p class="text-lg text-gray-300 mb-4">...</p>
+				<p class="text-lg text-gray-300">...</p>
 			  </div>
 			</div>
 		  </div>

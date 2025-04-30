@@ -49,7 +49,7 @@ body {
   width: 100%;
   background: #000000;
   border-left: 2px solid #FC6D6D;
-  animation: typing 3s steps(10) infinite;
+  animation: typing 3s steps(20) infinite;
 }
 @keyframes typing {
   40%, 60%{
@@ -63,19 +63,13 @@ body {
 @layer base, rhythm, layout, components, default, overwrites;
 
 html {
-  /* Create a snapping rule on the html element */
   scroll-snap-type: y mandatory;
-
-  /* Create a timeline scope, so we can target any element on the page */
   timeline-scope: --section, --main, --site-header;
 }
 
-/* We'll want to match these colors for the best melty effect */
-/* But play around with them (and add a color to section) to see happens */
 body,
 .content {
   background-color: var(--color-background, rgb(0, 0, 0));
-  
 }
 
 main {
@@ -83,59 +77,25 @@ main {
 }
 
 .section {
-  /* Creating a snapping rule on the section element */
   scroll-snap-align: start;
   scroll-snap-stop: always;
-
-  /* Attach the timeline to the section element*/
   view-timeline: --section;
-
-  /* Set each section to the full dynamic height of the viewport */
   height: 100dvh;
 }
 
-.content {
-  /* Fix the content, so it doesn't scroll with the section */
-  overflow: hidden;
-  position: fixed;
-  inset: 0;
-
-  /* Animate the content based on the section scrolling */
-  --contrast: 4;
-  --blur: 0.5rem;
-
-  animation: blink ease-in-out both;
-  animation-timeline: --section;
+.profile-img {
+  width: 400px;
+  height: auto;
+  max-width: 100%;
+  border-radius: 10px;
 }
 
-@keyframes blink {
-  0%,
-  100% {
-    filter: blur(var(--blur)) contrast(var(--contrast));
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  50% {
-    filter: blur(0) contrast(1);
-    opacity: 1;
-    visibility: visible;
-  }
-}
-
-/* 
-  This is a bit of a hack to get the indicator to work because I'm lazy.
-  We're translating the dot from the top to the bottom of its parent,
-  using the browser scroll position as the animation timeline.
-  It's not really matched up to the scrolling sections, only appears to be.
-*/
 .indicator::before {
   animation: indicate linear both;
   animation-timeline: --main;
   animation-range: contain;
 }
 
-/* And we're manually setting the colors because see: lazy comment above */
 @keyframes indicate {
   0% {
     --color-indicator: var(--color-primary);
