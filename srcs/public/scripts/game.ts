@@ -1,4 +1,3 @@
-import { applyLink } from './utils.js';
 import { language } from '../main.js';
 
 // Ajoute un gestionnaire d'événements global pour la délégation
@@ -6,8 +5,6 @@ const appDiv = document.getElementById("app");
 if (appDiv) {
 	appDiv.addEventListener('click', async (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
-		// Gestion des liens dynamiques pour les éléments avec la classe "my"
-		applyLink(target, e);
 
 		// Gestion des clics sur le bouton "Tournament"
 		if (target.tagName === 'DIV' && target.id === 'tournament') {
@@ -141,7 +138,7 @@ async function validateLocalGame() {
 		alert(`Username is too long. Please enter a name with less than 30 characters.`);
 		return false;
 	}
-	
+
 	await fetch('/createLocal', {
 		method: 'POST',
 		credentials: 'include',
@@ -257,7 +254,7 @@ async function handleTournamentSettingsClick(e: MouseEvent) {
 				.then(async (response) => {
 					const data = await response.json();
 					userLogIn = data.user.username as string;
-				})		
+				})
 
 			for (let i = 0; i < value; i++) {
 				const playerContainer = document.createElement('div');
@@ -281,7 +278,7 @@ async function handleTournamentSettingsClick(e: MouseEvent) {
 			const validateButton = document.createElement('button');
 			validateButton.textContent = jsonLanguage!.tournament.validate;
 			validateButton.id = 'submit-button';
-			validateButton.className = 'bg-blue-500 text-white px-4 py-2 rounded-lg mt-4';				
+			validateButton.className = 'bg-blue-500 text-white px-4 py-2 rounded-lg mt-4';
 
 			const existingButton = divButton.querySelector('button');
 			if (existingButton)
@@ -293,11 +290,11 @@ async function handleTournamentSettingsClick(e: MouseEvent) {
 		if (target.matches('#submit-button')) {
 			if ((target as HTMLButtonElement).dataset.processing === 'true')
 				return; // Éviter le traitement multiple
-			
+
 			(target as HTMLButtonElement).dataset.processing = 'true';
 			const submitButton = target as HTMLButtonElement;
 			submitButton.disabled = true;
-			
+
 			const playerInputs = playerNames!.querySelectorAll('#playerName');
 			const playerData: string[] = [];
 			playerInputs.forEach((input) => {
@@ -313,7 +310,7 @@ async function handleTournamentSettingsClick(e: MouseEvent) {
 					const data = await response.json();
 					userLogIn = data.user.username as string;
 				})
-			
+
 			for (let i = 1; i < playerData.length; i++) {
 				if (playerData[i].trim() === '') {
 					alert(`Player ${i + 1} has an empty name. Please fill in all fields.`);
@@ -342,7 +339,7 @@ async function handleTournamentSettingsClick(e: MouseEvent) {
 				(target as HTMLButtonElement).dataset.processing = 'false';
 				return;
 			}
-			
+
 			fetch('/createTournament', {
 				method: 'POST',
 				credentials: 'include',
@@ -372,7 +369,7 @@ window.addEventListener('eventNextMatch', async (event) => {
 	.then(async (response) => {
 		data = await response.json();
 	})
-	
+
 	const divMessage = document.createElement('div');
 	divMessage.innerHTML = data?.[0] + " will play against " + data?.[1];
 	const divNextMatchButton = document.getElementById('divNextMatchButton');

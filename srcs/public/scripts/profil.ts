@@ -1,4 +1,3 @@
-import { applyLink } from './utils.js';
 import { recvContent } from '../main.js';
 import { displayGlobal, displayMatches, charts} from './stats.js';
 /** @global */
@@ -14,7 +13,6 @@ if (appDiv) {
 				removeFriends(username);
 			}
 		}
-		applyLink(target, e);
 		if (target.closest('#custom-select'))  {
 			const customOptions = document.getElementById('custom-options');
 			if (customOptions) customOptions.classList.toggle('open');
@@ -108,5 +106,7 @@ window.addEventListener("scroll", () => {
 		}
 });
 
-// displayMatches("getMatchsResults");
-// displayGlobal("getMatchsResults");
+window.addEventListener('profil', async (event: Event) => {
+	await displayMatches("getMatchsResults");
+	await displayGlobal("getMatchsResults");
+});
