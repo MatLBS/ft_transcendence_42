@@ -14,8 +14,21 @@ i18next
 	  		"tournament": "Tournament"
 	  	  },
 	  	  "home": {
-	  		"title": "Hello world",
-	  		"subtitle": "Home page"
+	  		"title": "🏓 Welcome to Pong 42",
+	  		"objectives": "🎯 Games Objectives",
+			"objectives_1": "First to 5 points wins.",
+			"objectives_2": "Ball speed increases over time.",
+			"objectives_3": "Angle depends on where you hit the ball.",
+			"objectives_4": "No power-ups—pure Pong skill!",
+			"controles":"🕹️ Controles",
+			"controles_1":"Left Player W ➡️ Up | S ➡️ Down ",
+			"controles_2":"Right Player (IA or Friend) Arrow Up ➡️ Up | Arrow Down ➡️ Down",
+			"modes":"🏆 Game modes",
+			"modes_1": "Local against one friend",
+			"modes_2": "Solo against our machavielic IA",
+			"modes_3": "Tournament up to 16 persons !",
+			"play":"Play Now 🎮",
+			"signup":"Sign Up ✨",
 	  	  },
 	  	  "index": {
 	  		"home": "home",
@@ -112,8 +125,21 @@ i18next
 	  		"tournament": "Torneo"
 	  	  },
 	  	  "home": {
-	  		"title": "Hola mundo",
-	  		"subtitle": "Página principal"
+			"title": "🏓 Bienvenido a Pong 42",
+			"objectives": "🎯 Objetivos del juego",
+			"objectives_1": "El primero en llegar a 5 puntos gana.",
+			"objectives_2": "La velocidad de la pelota aumenta con el tiempo.",
+			"objectives_3": "El ángulo depende de dónde golpees la pelota.",
+			"objectives_4": "Sin power-ups—¡pura habilidad en el Pong!",
+			"controles": "🕹️ Controles",
+			"controles_1": "Jugador izquierdo: W ➡️ Arriba | S ➡️ Abajo",
+			"controles_2": "Jugador derecho (IA o amigo): Flecha arriba ➡️ Arriba | Flecha abajo ➡️ Abajo",
+			"modes": "🏆 Modos de juego",
+			"modes_1": "Local contra un amigo",
+			"modes_2": "Solo contra nuestra IA maquiavélica",
+			"modes_3": "¡Torneo de hasta 16 personas!",
+			"play": "Jugar ahora 🎮",
+			"signup": "Registrarse ✨"
 	  	  },
 	  	  "index": {
 	  		"home": "inicio",
@@ -209,8 +235,21 @@ i18next
 	  		"tournament": "Torneio"
 	  	  },
 	  	  "home": {
-	  		"title": "Olá mundo",
-	  		"subtitle": "Página inicial"
+			"title": "🏓 Bem-vindo ao Pong 42",
+			"objectives": "🎯 Objetivos do jogo",
+			"objectives_1": "O primeiro a alcançar 5 pontos vence.",
+			"objectives_2": "A velocidade da bola aumenta com o tempo.",
+			"objectives_3": "O ângulo depende de onde você acerta a bola.",
+			"objectives_4": "Sem power-ups—pura habilidade no Pong!",
+			"controles": "🕹️ Controles",
+			"controles_1": "Jogador esquerdo: W ➡️ Cima | S ➡️ Baixo",
+			"controles_2": "Jogador direito (IA ou amigo): Seta para cima ➡️ Cima | Seta para baixo ➡️ Baixo",
+			"modes": "🏆 Modos de jogo",
+			"modes_1": "Local contra um amigo",
+			"modes_2": "Solo contra nossa IA maquiavélica",
+			"modes_3": "Torneio com até 16 pessoas!",
+			"play": "Jogar agora 🎮",
+			"signup": "Inscrever-se ✨"
 	  	  },
 	  	  "index": {
 	  		"home": "início",
@@ -306,8 +345,21 @@ i18next
 	  		"tournament": "Tournoi"
 	  	  },
 	  	  "home": {
-	  		"title": "Bonjour le monde",
-	  		"subtitle": "Page d'accueil"
+			"title": "🏓 Bienvenue à Pong 42",
+			"objectives": "🎯 Objectifs du jeu",
+			"objectives_1": "Le premier à 5 points gagne.",
+			"objectives_2": "La vitesse de la balle augmente avec le temps.",
+			"objectives_3": "L'angle dépend de l'endroit où vous frappez la balle.",
+			"objectives_4": "Pas de power-ups—seulement la maîtrise du Pong !",
+			"controles": "🕹️ Contrôles",
+			"controles_1": "Joueur gauche : W ➡️ Haut | S ➡️ Bas",
+			"controles_2": "Joueur droit (IA ou ami) : Flèche haut ➡️ Haut | Flèche bas ➡️ Bas",
+			"modes": "🏆 Modes de jeu",
+			"modes_1": "Local contre un ami",
+			"modes_2": "Solo contre notre IA machiavélique",
+			"modes_3": "Tournoi jusqu'à 16 personnes !",
+			"play": "Jouer maintenant 🎮",
+			"signup": "S'inscrire ✨"
 	  	  },
 	  	  "index": {
 	  		"home": "accueil",
