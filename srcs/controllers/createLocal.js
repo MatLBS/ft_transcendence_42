@@ -8,10 +8,10 @@ export const createLocalGame = async (req, reply) => {
 
 		const response = await authenticateUser(req);
 		const player1 = await findUserById(response.user.id);
-
+		if (!player1)
+			return;
 		if (req.body.player2.trim() === '' || req.body.player2.trim() === player1.username)
 			return;
-
 		players.push(player1.username);
 		players.push(req.body.player2);
 		await createLocalDb(players)
@@ -27,6 +27,8 @@ export async function updateResultLocalGame(req, reply) {
 		const response = await authenticateUser(req);
 		if (response.status === 200)
 			user = await findUserById(response.user.id);
+		if (!user)
+			return;
 		const winner = req.body.winner.trim();
 		const loser = req.body.loser.trim();
 		const winnerScore = req.body.winnerScore;
