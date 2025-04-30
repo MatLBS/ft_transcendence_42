@@ -3,12 +3,26 @@ import "@babylonjs/loaders";
 import * as CANNON from "cannon";
 import * as GUI from "@babylonjs/gui";
 
-const WINPOINT = 2;
+const WINPOINT = 5;
+
+interface GameState {
+	ballPosition: Vector3;
+	ballVelocity: Vector3;
+	opponentPosition: number;
+	timestamp: number;
+  }
+  
+  type NetworkMessage = 
+	| { type: 'STATE_UPDATE', payload: GameState }
+	| { type: 'INPUT_UPDATE', position: number }
+	| { type: 'SYNC_REQUEST' };
+
+
 class FirstPersonController {
 	scene!: Scene;
 	engine!: Engine;
-	paddle1!: AbstractMesh;
-	paddle2!: AbstractMesh;
+	protected paddle1!: AbstractMesh;
+	protected paddle2!: AbstractMesh;
 	ball!: AbstractMesh;
 	private local: boolean;
 	private tournament: boolean;
@@ -159,7 +173,7 @@ class FirstPersonController {
 		}
 	}
 
-	createGame(): void {
+	protected createGame(): void {
 		const deltaTime = this.scene.getEngine().getDeltaTime() / 1000; // Convert milliseconds to seconds
 		this.currentHue += deltaTime * 60; // 60 degrees per second - adjust this value to change speed
 		this.currentHue %= 360; // Keep hue in 0-360 range
@@ -789,6 +803,19 @@ class FirstPersonController {
 		this.scene.dispose();
 		this.engine.dispose();
 	}
+
+	//For remote 
+	protected showNetworkMessage(text: string) {
+		const overlay = document.getElementById('network-status');
+		if (overlay) {
+		  overlay.textContent = text;
+		  overlay.style.display = 'block';
+		}
+	  }
+	  
+	  protected lerp(a: number, b: number, t: number): number {
+		return a + (b - a) * t;
+	}
 }
 
 let currentGameInstance: FirstPersonController | null = null;
@@ -845,4 +872,77 @@ document.addEventListener('click', async (event) => {
 		//Create an instance of solo game
 		createNewGame(true, true);
 	}
+	if (target.id === 'remoteButton') {
+		if (currentGameInstance) currentGameInstance.stop();
+		currentGameInstance = new RemoteGame(false);
+	}
 });
+
+class RemoteGame extends FirstPersonController {
+	private ws: WebSocket;
+	private lastUpdateTime: number = 0;
+	private stateBuffer: Array<GameState> = [];
+	private opponentPosition: number = 0;
+  
+	constructor(isTournament: boolean) {
+	  super(false, isTournament);
+	  this.initNetwork();
+	}
+  
+	private initNetwork() {
+	  this.ws = new WebSocket('wss://your-server/ws');
+	  
+	  this.ws.onmessage = (event) => {
+		const data: NetworkMessage = JSON.parse(event.data);
+		this.handleNetworkMessage(data);
+	  };
+  
+	  this.ws.onclose = () => {
+		this.handleDisconnection();
+	  };
+	}
+  
+	private handleNetworkMessage(data: NetworkMessage) {
+	  switch (data.type) {
+		case 'STATE_UPDATE':
+		  this.stateBuffer.push(data.payload);
+		  break;
+		case 'INPUT_UPDATE':
+		  this.opponentPosition = data.position;
+		  break;
+	  }
+	}
+  
+	protected createGame(): void {
+	  super.createGame();
+	  this.interpolateOpponentPosition();
+	  this.sendPlayerInput();
+	}
+  
+	private interpolateOpponentPosition() {
+	  // Use state buffer for smooth interpolation
+	  if (this.stateBuffer.length > 0) {
+		const targetState = this.stateBuffer.shift()!;
+		this.paddle2.position.x = this.lerp(
+		  this.paddle2.position.x,
+		  targetState.opponentPosition,
+		  0.2
+		);
+	  }
+	}
+  
+	private sendPlayerInput() {
+	  if (Date.now() - this.lastUpdateTime > 50) { // 20 updates/sec
+		this.ws.send(JSON.stringify({
+		  type: 'INPUT_UPDATE',
+		  position: this.paddle1.position.x
+		}));
+		this.lastUpdateTime = Date.now();
+	  }
+	}
+  
+	private handleDisconnection() {
+	  this.showNetworkMessage("Connection lost - Reconnecting...");
+	  setTimeout(() => this.initNetwork(), 2000);
+	}
+}

@@ -19,7 +19,8 @@ i18next
 	  	  "game": {
 	  		"local": "Local",
 	  		"solo": "Solo",
-	  		"tournament": "Tournament"
+	  		"tournament": "Tournament",
+			"remote": "Remote",
 	  	  },
 	  	  "home": {
 	  		"title": "🏓 Welcome to Pong 42",
@@ -88,6 +89,10 @@ i18next
 	  	  },
 		  "solo": {
 	  		"sentence": "You will be playing on the left side, the IA on the right ! Are you ready ?",
+			"button": "Ready !",
+		},
+			"remote": {
+	  		"sentence": "You will be playing against someone, there might some delay to find someone !",
 			"button": "Ready !",
 		},
 	  	  "tournament": {

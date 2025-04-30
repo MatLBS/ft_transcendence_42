@@ -22,6 +22,7 @@ import { updateUser, updateUserGoogle, updateUserTwoFA } from './controllers/upd
 import {getUser, getExternalUser} from './controllers/getUser.js';
 import { googleAuth, googleCallback } from './controllers/google.js';
 import {solo} from './controllers/solo.js';
+import {remote} from './controllers/remote.js';
 import { createSoloGame, updateResultSoloGame } from './controllers/createSolo.js';
 import { createLocalGame, updateResultLocalGame } from './controllers/createLocal.js';
 import { getMatchsResults, getExternalMatchsResults } from './controllers/getMatchs.js';
@@ -115,6 +116,7 @@ export default async function userRoutes(app) {
 	app.get('/getUser',getUser);
 	app.get('/getExternalUser/:page',getExternalUser);
 	app.post('/solo',solo);
+	app.post('/remote',remote);
 	app.post('/createSolo', createSoloGame);
 	app.post('/postResultLocal', updateResultLocalGame);
 	app.post('/postResultSolo', updateResultSoloGame);

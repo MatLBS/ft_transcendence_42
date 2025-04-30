@@ -48,6 +48,19 @@ if (appDiv) {
 			return;
 		}
 
+		if (target.tagName === 'DIV' && target.id === 'remote') {
+			const existingPongScript = document.getElementById('game');
+			if (existingPongScript) {
+				// Stop the script before removing it
+				const stopEvent = new Event('stop');
+				existingPongScript.dispatchEvent(stopEvent);
+
+				existingPongScript.remove();
+			}
+			remoteClick();
+			return;
+		}
+
 		// Gestion des clics sur le bouton "Custom Select"
 		if (target.tagName === 'SPAN' && target.id === 'expandTournament')  {
 			const customOptions = document.getElementById('custom-options');
@@ -84,6 +97,27 @@ function hideDiv(divId: string, buttonId: string, otherDivId?: string) {
 	if (button) button.classList.toggle('none');
 	if (otherDiv) otherDiv.classList.toggle('none');
 	return;
+}
+
+async function remoteClick() {
+	await fetch('/remote', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(''),
+	})
+		.then(async (response) => {
+			const data = await response.json();
+			const gameSettings = document.getElementById('gameSettings');
+			if (gameSettings) gameSettings.innerHTML = data.content;
+
+			// Ajoute le fichier CSS pour le mode local
+			const linkElement = document.createElement('link');
+			linkElement.rel = 'stylesheet';
+			linkElement.href = 'public/style/local.css';
+			linkElement.id = 'css';
+			document.head.appendChild(linkElement);
+		});
 }
 
 async function localClick() {
