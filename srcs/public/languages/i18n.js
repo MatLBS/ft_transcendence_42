@@ -6,8 +6,16 @@ i18next
 	  en: {
 	  	translation: {
 	  	  "about": {
-	  		"title": "Discover the team"
-	  	  },
+			"title": "Discover the team",
+			"welcome": "We are",
+			"more": "Scroll down to learn more about us",
+			"titleMiguel": "Full-Stack Developer",
+			"presentationMiguel": "Full-Stack Developer",
+			"titleJb": "Full-Stack Developer",
+			"presentationJb": "Full-Stack Developer",
+			"titleMateo": "Full-Stack Developer",
+			"presentationMateo": "Full-Stack Developer",
+		  },
 	  	  "game": {
 	  		"local": "Local",
 	  		"solo": "Solo",
@@ -117,8 +125,16 @@ i18next
 	    es: {
 	  	translation: {
 	  	  "about": {
-	  		"title": "Descubre el equipo"
-	  	  },
+			"title": "Descubre el equipo",
+			"welcome": "Somos",
+			"more": "Desplázate para saber más sobre nosotros",
+			"titleMiguel": "Desarrollador Full-Stack",
+			"presentationMiguel": "Desarrollador Full-Stack",
+			"titleJb": "Desarrollador Full-Stack",
+			"presentationJb": "Desarrollador Full-Stack",
+			"titleMateo": "Desarrollador Full-Stack",
+			"presentationMateo": "Desarrollador Full-Stack",
+		  },
 	  	  "game": {
 	  		"local": "Local",
 			"solo": "Solo",
@@ -227,8 +243,16 @@ i18next
 	    pt: {
 	  	translation: {
 	  	  "about": {
-	  		"title": "Conheça a equipe"
-	  	  },
+			"title": "Conheça a equipe",
+			"welcome": "Somos",
+			"more": "Role para saber mais sobre nós",
+			"titleMiguel": "Desenvolvedor Full-Stack",
+			"presentationMiguel": "Desenvolvedor Full-Stack",
+			"titleJb": "Desenvolvedor Full-Stack",
+			"presentationJb": "Desenvolvedor Full-Stack",
+			"titleMateo": "Desenvolvedor Full-Stack",
+			"presentationMateo": "Desenvolvedor Full-Stack",
+		  },
 	  	  "game": {
 	  		"local": "Local",
 			"solo": "Solo",
@@ -337,8 +361,16 @@ i18next
 	    fr: {
 	  	translation: {
 	  	  "about": {
-	  		"title": "Découvrez l'équipe"
-	  	  },
+			"title": "Découvrez l'équipe",
+			"welcome": "Nous sommes",
+			"more": "Faites défiler pour en savoir plus sur nous",
+			"titleMiguel": "Développeur Full-Stack",
+			"presentationMiguel": "Développeur Full-Stack",
+			"titleJb": "Développeur Full-Stack",
+			"presentationJb": "Développeur Full-Stack",
+			"titleMateo": "Développeur Full-Stack",
+			"presentationMateo": "Développeur Full-Stack",
+		  },
 	  	  "game": {
 	  		"local": "Local",
 			"solo": "Solo",

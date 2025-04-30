@@ -1,12 +1,10 @@
 import { recvContent } from '../../main.js';
-import { applyLink } from '../utils.js';
 import { displayGlobal, displayMatches, charts} from '../stats.js';
 
 const appDiv = document.getElementById("app");
 if (appDiv) {
 	appDiv.addEventListener("click", (e: MouseEvent) => {
 		const target = e.target as HTMLElement;
-		applyLink(target, e);
 
 		if (target.tagName === "BUTTON" && target.id === "add-friends") {
 			handleFriends("addFriends");
@@ -30,7 +28,7 @@ if (appDiv) {
 			const divLocal = document.getElementById('divLocal');
 			if (divLocal)
 			{
-				divLocal.classList.toggle('open');
+				divLocal.classList.toggle('openStats');
 				charts.localBarChart.reset();
 				charts.localBarChart.update();
 				charts.localPieChart.reset();
@@ -42,7 +40,7 @@ if (appDiv) {
 			const divSolo = document.getElementById('divSolo');
 			if (divSolo)
 			{
-				divSolo.classList.toggle('open');
+				divSolo.classList.toggle('openStats');
 				charts.soloBarChart.reset();
 				charts.soloBarChart.update();
 				charts.soloPieChart.reset();
@@ -54,7 +52,7 @@ if (appDiv) {
 			const divTournament = document.getElementById('divTournament');
 			if (divTournament)
 			{
-				divTournament.classList.toggle('open');
+				divTournament.classList.toggle('openStats');
 				charts.tournamentBarChart.reset();
 				charts.tournamentBarChart.update();
 				charts.tournamentPieChart.reset();
@@ -80,3 +78,13 @@ async function handleFriends(action: string) {
 	alert(data.message);
 	recvContent(`/users/${username}`);
 }
+
+window.addEventListener('users', async (event: Event) => {
+	const titleErrorElements = document.getElementsByClassName('title-error');
+	if (titleErrorElements.length != 0)
+		return ;
+	const urlParts = window.location.pathname.split('/');
+	const username = urlParts[urlParts.length - 1];
+	await displayMatches(`/getExternalMatchsResults/${username}`);
+	await displayGlobal(`/getExternalMatchsResults/${username}`);
+});
