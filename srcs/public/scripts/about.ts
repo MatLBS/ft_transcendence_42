@@ -1,4 +1,3 @@
-import { applyLink } from "./utils.js";
 // const buttons = document.querySelectorAll("[data-carousel-button]")
 
 // buttons.forEach(button => {
@@ -23,7 +22,6 @@ const appDiv = document.getElementById("app");
 if (appDiv) {
 	appDiv.addEventListener("click", (e: MouseEvent) => {
 		const target = e.target as HTMLAnchorElement;
-		applyLink(target, e);
 		if (target.tagName === "BUTTON" && target.hasAttribute("data-carousel-button") && target instanceof HTMLButtonElement) {
 			handleCarouselButtonClick(target as HTMLButtonElement);
 		}
