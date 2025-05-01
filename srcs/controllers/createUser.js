@@ -68,14 +68,17 @@ export const verifFormRegister = async (req, reply) => {
 export const checkUserBack = async (req, reply) => {
 	let language = req.cookies.userLanguage;
 	let jsonLanguage = await getLanguageWithoutBody(language);
+	console.log(req.body)
 	try {
 		// Utiliser req.parts() pour traiter les fichiers et les champs
 		const uploadDir = path.join(__dirname, './uploads');
 		if (!fs.existsSync(uploadDir)) {
 			fs.mkdirSync(uploadDir, { recursive: true });
 		}
+		console.log("ici")
 		let { fields, fileBuffer, fileName } = await parseRequestParts(req, reply);
 		if (!fields) return;
+		console.log("ccccccc")
 
 		const password = fields.password;
 		const username = fields.username;
@@ -94,6 +97,8 @@ export const checkUserBack = async (req, reply) => {
 		if (response !== "ok") {
 			return reply.send({ message: response, code: true });
 		}
+
+		console.log(fileName)
 
 		if (!fileName) {
 			fileName = `temp_${Date.now()}.png`;

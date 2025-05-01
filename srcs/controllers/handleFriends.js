@@ -29,7 +29,7 @@ export const addFriends = async (req, reply) => {
 
 		const friendRequest = await addFollow(response.user.id, user.id);
 		if (friendRequest.ok) {
-			return reply.send({ ok: true, message: "Ami ajouter" });
+			return reply.send({ ok: true, message: "Ami ajouté" });
 		}
 		reply.send({ message: "Erreur lors de la demande d'ami" });
 	} catch (error) {

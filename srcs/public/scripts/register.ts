@@ -15,7 +15,10 @@ if (appDiv) {
 			validateForm()
 		}
 		if (target.tagName === "INPUT" && target.id === "profile_picture") {
-			previewImage()
+			previewImage("preview_image_profil", "profile_picture")
+		}
+		if (target.tagName === "INPUT" && target.id === "bg_picture") {
+			previewImage("preview_image_bg", "bg_picture")
 		}
 		if (target.tagName === "SPAN" && target.id === "register-eye") {
 			showPassword()
@@ -33,6 +36,11 @@ if (appDiv) {
 		}
 		if (target.tagName === "SPAN" && target.id === "upload_icon_profil") {
 			const fileInput = document.getElementById('profile_picture');
+			if (fileInput)
+				fileInput.click();
+		}
+		if (target.tagName === "SPAN" && target.id === "upload_icon_bg") {
+			const fileInput = document.getElementById('bg_picture');
 			if (fileInput)
 				fileInput.click();
 		}
@@ -58,6 +66,8 @@ function registerUser() {
 
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
+	const bg_pictureElement = document.getElementById('bg_picture') as HTMLInputElement | null;
+	const bg_picture = bg_pictureElement?.files?.[0];
 
 	if (!error_input || !error_mail)
 		return;
@@ -66,10 +76,12 @@ function registerUser() {
 	formData.append('username', username);
 	formData.append('email', email);
 	formData.append('password', password);
-	if (profile_picture) {
+	if (profile_picture)
 		formData.append('profile_picture', profile_picture);
-	}
+	if (bg_picture)
+		formData.append('bg_picture', bg_picture);
 	formData.append('verif_email', verif_email);
+	console.log("formData", formData);
 	fetch('/registerUser', {
 		method: 'POST',
 		body: formData,
@@ -172,8 +184,8 @@ function showPassword() {
 	input.type = (input.type === 'password') ? 'text' : 'password'
 }
 
-function previewImage() {
-	const profile_picture = document.getElementById('profile_picture');
+function previewImage(idPreview: string, idInput: string) {
+	const profile_picture = document.getElementById(idInput);
 	if (profile_picture) {
 		profile_picture.addEventListener('change', function (event) {
 			const target = event.target as HTMLInputElement | null;
@@ -182,7 +194,8 @@ function previewImage() {
 			const reader = new FileReader();
 
 			reader.onload = function (e) {
-				const imagePreview = document.getElementById('preview_image');
+				const imagePreview = document.getElementById(idPreview);
+				console.log(imagePreview)
 				if (!imagePreview) return;
 				(imagePreview as HTMLImageElement).src = e?.target?.result as string;
 			};

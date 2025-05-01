@@ -36,7 +36,7 @@
 		position: relative;
 		display: grid;
 		align-items: top;
-		margin-top: 2em;
+		margin-top: 5em;
 		}
 
 		.update__img {
@@ -152,7 +152,6 @@
 		   }
 		   .update__register a:hover {
 			text-decoration: underline;
-
 		   }
 
 		   .update__input:focus + .update__label {
