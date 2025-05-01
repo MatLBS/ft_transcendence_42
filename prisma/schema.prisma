@@ -16,6 +16,7 @@ model User {
   password       String?
   email          String  @unique
   profilePicture String?
+  bgPicture      String?
   language       String?
   isOnline       Boolean
 

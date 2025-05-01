@@ -6,41 +6,41 @@
 	<div id="title">
 	</div>
 </section>
-<div class="login">
-	<div action="" class="login__form">
-		<h1 class="login__title"><%= jsonLanguage.update.title %></h1>
+<div class="update">
+	<div action="" class="update__form">
+		<h1 class="update__title"><%= jsonLanguage.update.title %></h1>
 		<div id="error_input" class="mb-5 text-red-600"></div>
 
-		<div class="login__content">
+		<div class="update__content">
 			<div>
 				<i class="bx bx-lock-alt"></i>
-				<div class="login__box">
-					<div class="login__box-input">
-						<input type="text" id="username" name="username" required class="login__input" value="<%= user.username %>">
-						<label for="" class="login__label"><%= jsonLanguage.update.username %></label>
+				<div class="update__box">
+					<div class="update__box-input">
+						<input type="text" id="username" name="username" required class="update__input" value="<%= user.username %>">
+						<label for="" class="update__label"><%= jsonLanguage.update.username %></label>
 					</div>
 				</div>
 			</div>
 
-			<div class="login__content">
+			<div class="update__content">
 				<% if (!user.google) { %>
 					<div>
 						<i class="bx bx-lock-alt"></i>
-						<div class="login__box">
-							<div class="login__box-input">
-								<input type="email" id="email" required class="login__input" value="<%= user.email %>">
-								<label for="" class="login__label"><%= jsonLanguage.update.email %></label>
+						<div class="update__box">
+							<div class="update__box-input">
+								<input type="email" id="email" required class="update__input" value="<%= user.email %>">
+								<label for="" class="update__label"><%= jsonLanguage.update.email %></label>
 							</div>
 						</div>
 					</div>
 
-					<div class="login__box flex align-center">
+					<div class="update__box flex align-center">
 						<div class="w-11/12">
-							<i class="ri-lock-2-line login__icon"></i>
-							<div class="login__box-input">
-								<input type="password" required class="login__input" id="prev_password">
-								<label for="" class="login__label"><%= jsonLanguage.update.prevPassword %></label>
-								<i class="ri-eye-off-line login__eye"></i>
+							<i class="ri-lock-2-line update__icon"></i>
+							<div class="update__box-input">
+								<input type="password" required class="update__input" id="prev_password">
+								<label for="" class="update__label"><%= jsonLanguage.update.prevPassword %></label>
+								<i class="ri-eye-off-line update__eye"></i>
 							</div>
 						</div>
 						<div class="w-1/12 flex items-center justify-center">
@@ -48,13 +48,13 @@
 						</div>
 					</div>
 
-					<div class="login__box flex align-center">
+					<div class="update__box flex align-center">
 						<div class="w-11/12">
-						<i class="ri-lock-2-line login__icon"></i>
-						<div class="login__box-input">
-							<input type="password" id="new_password" required class="login__input">
-							<label for="" class="login__label"><%= jsonLanguage.update.newPassword %></label>
-							<i class="ri-eye-off-line login__eye"></i>
+						<i class="ri-lock-2-line update__icon"></i>
+						<div class="update__box-input">
+							<input type="password" id="new_password" required class="update__input">
+							<label for="" class="update__label"><%= jsonLanguage.update.newPassword %></label>
+							<i class="ri-eye-off-line update__eye"></i>
 						</div>
 						</div>
 						<div class="w-1/12 flex items-center justify-center">
@@ -63,26 +63,34 @@
 					</div>
 				<% } %>
 
-				<div class="login__content">
+				<div class="update__content">
 					<div>
 						<i class="bx bx-lock-alt"></i>
-						<div class="login__box-input">
-							<input type="file" id="profile_picture" class="login__input" name="profile_picture" accept="image/*">
+						<div class="update__box-input">
+							<input type="file" id="profile_picture" class="register__input hidden" name="profile_picture" accept="image/*">
+							<input type="file" id="bg_picture" class="register__input hidden" name="bg_picture" accept="image/*">
 						</div>
 					</div>
 				</div>
 
-				<div class="flex justify-center">
+				<div class="flex justify-center relative pb-2">
 					<img
-						src="<%= user.profilePicture %>"
-						id="preview_image"
-						alt="Photo de profil de <%= user.username %>"
-						class="profile-image rounded-full h-32 w-auto"
+						src="<%= user.bgPicture %>"
+						id="preview_image_bg"
+						class="background_image profile-image rounded-xl relative"
 						style="max-width: 200px;"
 					/>
+					<img
+						src="<%= user.profilePicture %>"
+						id="preview_image_profil"
+						class="profil_image profile-image rounded-full h-16 w-auto"
+						style="max-width: 200px;"
+					/>
+					<span class="material-symbols-outlined bg-gray-500 rounded-full hover:scale-125" id="upload_icon_profil">add</span>
+					<span class="material-symbols-outlined bg-gray-500 rounded-full hover:scale-125" id="upload_icon_bg">add</span>
 				</div>
 			</div>
-			<button id="<%= !user.google ? 'update_button' : 'update_button_google' %>" class="login__button text-black text-center"><%= jsonLanguage.update.button %></button>
+			<button id="<%= !user.google ? 'update_button' : 'update_button_google' %>" class="update__button text-black text-center"><%= jsonLanguage.update.button %></button>
 		</div>
 	</div>
 </div>

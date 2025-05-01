@@ -33,10 +33,10 @@
 		}
 
 		.login {
-		position: relative;
-		height: 100vh;
-		display: grid;
-		align-items: center;
+			position: relative;
+			display: grid;
+			align-items: top;
+			margin-top: 10em;
 		}
 
 		.login__img {
@@ -199,17 +199,6 @@
 	justify-content: center;
 }
 
-.modal-content {
-	background-color: white;
-	padding: 20px;
-	border-radius: 10px;
-}
-
-.modal-content p {
-	margin: 0;
-	color: black;
-}
-
 #verif_email {
 	padding: 20px;
 	border-radius: 10px;
@@ -223,7 +212,7 @@
 }
 
 .modal-content button{
-	background-color: #4CAF50;
+	background-color: #16213e;
 	color: white;
 	padding: 10px 20px;
 	border: none;

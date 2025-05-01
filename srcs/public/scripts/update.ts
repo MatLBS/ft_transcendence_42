@@ -14,7 +14,10 @@ if (appDiv) {
 			validateForm()
 		}
 		if (target.tagName === "INPUT" && target.id === "profile_picture") {
-			previewImage()
+			previewImage("preview_image_profil", "profile_picture")
+		}
+		if (target.tagName === "INPUT" && target.id === "bg_picture") {
+			previewImage("preview_image_bg", "bg_picture")
 		}
 		if (target.tagName === "SPAN" && (target.id === "new_password_eye" || target.id === "prev_password_eye")) {
 			showPassword(target.id)
@@ -29,6 +32,16 @@ if (appDiv) {
 			const modal = document.getElementById('modal');
 			if (modal)
 				modal.classList.add('hidden');
+		}
+		if (target.tagName === "SPAN" && target.id === "upload_icon_profil") {
+			const fileInput = document.getElementById('profile_picture');
+			if (fileInput)
+				fileInput.click();
+		}
+		if (target.tagName === "SPAN" && target.id === "upload_icon_bg") {
+			const fileInput = document.getElementById('bg_picture');
+			if (fileInput)
+				fileInput.click();
 		}
 	});
 }
@@ -72,8 +85,8 @@ function updateWithEmail() {
 	})
 }
 
-function previewImage() {
-	const profile_picture = document.getElementById('profile_picture');
+function previewImage(idPreview: string, idInput: string) {
+	const profile_picture = document.getElementById(idInput);
 	if (profile_picture) {
 		profile_picture.addEventListener('change', function (event) {
 			const target = event.target as HTMLInputElement | null;
@@ -82,7 +95,7 @@ function previewImage() {
 			const reader = new FileReader();
 
 			reader.onload = function (e) {
-				const imagePreview = document.getElementById('preview_image');
+				const imagePreview = document.getElementById(idPreview);
 				if (!imagePreview) return;
 				(imagePreview as HTMLImageElement).src = e?.target?.result as string;
 			};
@@ -136,6 +149,8 @@ async function validateForm() {
 
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
+	const bg_pictureElement = document.getElementById('bg_picture') as HTMLInputElement | null;
+	const bg_picture = bg_pictureElement?.files?.[0];
 
 	let jsonLanguage;
 	await fetch('/languages', {
@@ -162,9 +177,10 @@ async function validateForm() {
 	formData.append('email', email);
 	formData.append('previousPassword', previousPassword);
 	formData.append('newPassword', newPassword);
-	if (profile_picture) {
+	if (profile_picture)
 		formData.append('profile_picture', profile_picture);
-	}
+	if (bg_picture)
+		formData.append('bg_picture', bg_picture);
 
 	fetch('/updateUser', {
 		method: 'POST',
