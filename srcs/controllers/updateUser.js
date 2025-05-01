@@ -95,7 +95,8 @@ export const updateUserTwoFA = async (req, reply) => {
 
 export const updateUser = async (req, reply) => {
 
-	let { fields, fileBuffer, fileName } = await parseRequestParts(req, reply);
+	// let { fields, fileBuffer, fileName } = await parseRequestParts(req, reply);
+	let { fields, fileBufferProfil, fileProfil, fileBufferBg, fileBg } = await parseRequestParts(req, reply);
 	if (!fields) return;
 
 	const newPassword = fields.newPassword;
@@ -112,16 +113,17 @@ export const updateUser = async (req, reply) => {
 		return reply.send({ message : responseVerif, email : true});
 	}
 
-	if (fileName) {
-		fileName = await handleFileUpload(fileName, fileBuffer, user);
-	}
+	if (fileProfil)
+		fileProfil = await handleFileUpload(fileProfil, fileBufferProfil, user);
+	if (fileBg)
+		fileBg = await handleFileUpload(fileBg, fileBufferBg, user);
 
 	let hashedPassword = "";
 	if (newPassword !== "")
 		hashedPassword = await app.bcrypt.hash(newPassword);
 
 	try {
-		await updateUserDb(response.user.id, username, hashedPassword, email, fileName);
+		await updateUserDb(response.user.id, username, hashedPassword, email, fileProfil, fileBg);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}

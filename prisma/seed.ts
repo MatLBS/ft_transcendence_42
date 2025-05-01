@@ -3,7 +3,9 @@ import { PrismaClient } from '@prisma/client'
 
 export const prisma = new PrismaClient()
 
-export async function createUser (username: string, password: string, email: string, profilePicture?: string) {
+export async function createUser (username: string, password: string, email: string, profilePicture?: string, bgPicture?: string) {
+	console.log(profilePicture)
+	console.log(bgPicture)
 	const usernameAlreadyExist = await prisma.user.findFirst({
 		where: {
 			username: username,
@@ -27,6 +29,7 @@ export async function createUser (username: string, password: string, email: str
 			password: password,
 			email: email,
 			profilePicture: profilePicture || null,
+			bgPicture: bgPicture || null,
 			isOnline: false,
 		},
 	})
@@ -67,7 +70,7 @@ export async function createUserGoogle (username: string, email: string, profile
 	return;
 }
 
-export async function updateUserDb (id: number, username: string, password: string, email: string, profilePicture?: string) {
+export async function updateUserDb (id: number, username: string, password: string, email: string, profilePicture?: string, bgPicture?: string) {
 	const usernameAlreadyExist = await prisma.user.findFirst({
 		where: {
 			username: username,
@@ -91,7 +94,7 @@ export async function updateUserDb (id: number, username: string, password: stri
 	if (emailAlreadyExist)
 		throw new Error(`The email \"${email}\" already exists for a user`);
 
-	const updateUser: { username: string, password?: string, email: string, profilePicture?: string } = {
+	const updateUser: { username: string, password?: string, email: string, profilePicture?: string, bgPicture?: string } = {
 		username: username,
 		email: email,
 	};
@@ -99,6 +102,8 @@ export async function updateUserDb (id: number, username: string, password: stri
 		updateUser.password = password;
 	if (profilePicture)
 		updateUser.profilePicture = profilePicture;
+	if (bgPicture)
+		updateUser.bgPicture = bgPicture;
 	const user = await prisma.user.update({
 		where: {
 			id: id,

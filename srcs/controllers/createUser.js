@@ -68,17 +68,14 @@ export const verifFormRegister = async (req, reply) => {
 export const checkUserBack = async (req, reply) => {
 	let language = req.cookies.userLanguage;
 	let jsonLanguage = await getLanguageWithoutBody(language);
-	console.log(req.body)
 	try {
 		// Utiliser req.parts() pour traiter les fichiers et les champs
 		const uploadDir = path.join(__dirname, './uploads');
 		if (!fs.existsSync(uploadDir)) {
 			fs.mkdirSync(uploadDir, { recursive: true });
 		}
-		console.log("ici")
-		let { fields, fileBuffer, fileName } = await parseRequestParts(req, reply);
+		let { fields, fileBufferProfil, fileProfil, fileBufferBg, fileBg } = await parseRequestParts(req, reply);
 		if (!fields) return;
-		console.log("ccccccc")
 
 		const password = fields.password;
 		const username = fields.username;
@@ -98,19 +95,26 @@ export const checkUserBack = async (req, reply) => {
 			return reply.send({ message: response, code: true });
 		}
 
-		console.log(fileName)
-
-		if (!fileName) {
-			fileName = `temp_${Date.now()}.png`;
-			const filePath = path.join(__dirname, './uploads', username + fileName);
+		if (!fileProfil) {
+			fileProfil = `temp_${Date.now()}profil.png`;
+			const filePath = path.join(__dirname, './uploads', username + fileProfil);
 			fs.copyFileSync(path.join(__dirname, "./public/images/flamme.png"), filePath);
 		} else {
-			const filePath = path.join(__dirname, './uploads', username + fileName);
-			fs.writeFileSync(filePath, fileBuffer);
+			const filePath = path.join(__dirname, './uploads', username + fileProfil);
+			fs.writeFileSync(filePath, fileBufferProfil);
+		}
+
+		if (!fileBg) {
+			fileBg = `temp_${Date.now()}bg.png`;
+			const filePath = path.join(__dirname, './uploads', username + fileBg);
+			fs.copyFileSync(path.join(__dirname, "./public/images/profil_bg.jpeg"), filePath);
+		} else {
+			const filePath = path.join(__dirname, './uploads', username + fileBg);
+			fs.writeFileSync(filePath, fileBufferBg);
 		}
 
 		const hashedPassword = await app.bcrypt.hash(password);
-		await createUser(username, hashedPassword, email, '/uploads/' + username + fileName);
+		await createUser(username, hashedPassword, email, '/uploads/' + username + fileProfil, '/uploads/' + username + fileBg);
 		return loginUser(req, reply, password, username);
 	} catch (error) {
 		return reply.send({message: error.message});

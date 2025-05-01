@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
-.header__wrapper header {
+/* .header__wrapper header {
 	background: url("../images/profil_bg.jpeg") no-repeat 50% 20% / cover;
 	min-height: calc(100px + 15vw);
-}
+} */
 
 .header__wrapper .user__infos__container .user__infos {
 	padding: 25px 20px;

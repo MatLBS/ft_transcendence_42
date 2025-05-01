@@ -1,7 +1,10 @@
 <%- include('../components/navbar.html') %>
 <div class="header__wrapper">
 	<button id="open-friends" class="btn-abs"><%= jsonLanguage.profil.friends %></button>
-	<header></header>
+	<header
+		class="bg-cover bg-center bg-no-repeat"
+		style="background-image: url('<%= user.bgPicture %>'); min-height: calc(100px + 15vw);">
+	</header>
 	<div class="user__infos__container items-center">
 		<div class="user__infos">
 			<div class="img__container">

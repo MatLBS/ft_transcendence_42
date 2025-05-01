@@ -81,7 +81,6 @@ function registerUser() {
 	if (bg_picture)
 		formData.append('bg_picture', bg_picture);
 	formData.append('verif_email', verif_email);
-	console.log("formData", formData);
 	fetch('/registerUser', {
 		method: 'POST',
 		body: formData,
@@ -195,7 +194,6 @@ function previewImage(idPreview: string, idInput: string) {
 
 			reader.onload = function (e) {
 				const imagePreview = document.getElementById(idPreview);
-				console.log(imagePreview)
 				if (!imagePreview) return;
 				(imagePreview as HTMLImageElement).src = e?.target?.result as string;
 			};

@@ -237,8 +237,25 @@
 
 #upload_icon_profil {
 	position: absolute;
-	bottom: 4px;
-	right: 90px;
+	bottom: -20px;
+	right: 120px;
+}
+
+#upload_icon_bg {
+	position: absolute;
+	bottom: -5px;
+	right: 50px;
+}
+
+.profil_image {
+	position: absolute;
+	top: 90px;
+}
+
+.background_image {
+	width: 250px;
+	height: 130px;
+	object-fit: cover;
 }
 
 
