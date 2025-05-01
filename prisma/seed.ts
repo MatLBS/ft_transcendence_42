@@ -4,8 +4,6 @@ import { PrismaClient } from '@prisma/client'
 export const prisma = new PrismaClient()
 
 export async function createUser (username: string, password: string, email: string, profilePicture?: string, bgPicture?: string) {
-	console.log(profilePicture)
-	console.log(bgPicture)
 	const usernameAlreadyExist = await prisma.user.findFirst({
 		where: {
 			username: username,
