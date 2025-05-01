@@ -23,7 +23,10 @@ export async function recvContent(url: string): Promise<void> {
 	if (searchInput) {
 		searchInput.value = '';
 		const searchResults = document.getElementById('search-results');
-		if (searchResults) searchResults.innerHTML = '';
+		if (searchResults) {
+			searchResults.classList.remove('results');
+			searchResults.innerHTML = '';
+		}
 	}
 	let jsonLanguage;
 	await fetch('/languages', {
@@ -81,7 +84,6 @@ function updatePageContent(data: ResponseData): void {
 		scriptElement.type = 'module';
 		scriptElement.src = data.js;
 		scriptElement.id = 'js';
-		// scriptElement.defer = true;
 		document.body.appendChild(scriptElement);
 	}
 
@@ -130,6 +132,12 @@ function seeTarget(e: MouseEvent): void {
 			handleLanguage(e);
 		if (target.matches('#search-input')) {
 			handleSearch();
+		}
+		if (target.closest('#burger')) {
+			const burgerMenu = document.getElementById('burger-menu');
+			if (burgerMenu) {
+				burgerMenu.classList.toggle('open-mobile');
+			}
 		}
 	}
 }
@@ -191,6 +199,7 @@ function handleSearch(): void {
 			const searchResults = document.getElementById('search-results');
 			if (!searchResults) return;
 			if (searchValue.length < 1) {
+				searchResults.classList.remove('results');
 				searchResults.innerHTML = '';
 				return;
 			}
@@ -203,6 +212,7 @@ function handleSearch(): void {
 				.then((response: Response) => response.json())
 				.then((data: { users: Array<{ profilePicture: string, username: string; }> }) => {
 					searchResults.innerHTML = '';
+					searchResults.classList.add('results');
 					data.users.slice(0, 3).forEach((user) => {
 						const userElement = document.createElement('div');
 						userElement.classList.add('user-result');
