@@ -117,13 +117,17 @@ export async function updateResultTournamentGame(req, reply) {
 
 export async function getWinnerTournament(req, reply) {
 	try {
+		let winnerObject = {}
 		const id = await getMaxId("tournament");
 		const tournament = await getTournamentById(id);
 		const players = await findUsersTournament(id);
 		const winner = players.filter(player => player.NbVictory === tournament.nbRounds);
-		if (winner.length === 0)
-			return reply.send(false);
-		reply.send(true);
+		if (winner.length === 0) {
+			winnerObject["winner"] = false;
+			return reply.send(winnerObject);
+		}
+		winnerObject["winner"] = winner;
+		reply.send(winnerObject);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}

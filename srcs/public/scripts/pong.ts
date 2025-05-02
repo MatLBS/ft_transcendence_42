@@ -148,10 +148,15 @@ class FirstPersonController {
 					credentials: 'include',
 				});
 				const data = await response.json();
-				Isfinished = data;
+				Isfinished = data.winner;
 				if (Isfinished === false) {
 					const eventNextMatch = new Event('eventNextMatch');
 					window.dispatchEvent(eventNextMatch);
+				} else {
+					const eventWinnerTournament = new CustomEvent('eventWinnerTournament',
+						{ detail: data.winner }
+					);
+					window.dispatchEvent(eventWinnerTournament);
 				}
 			} catch (error) {
 				console.error('Error:', error);

@@ -1,4 +1,5 @@
 import { language } from '../main.js';
+import { generateConfetti } from "./vanillaConfetti.min.js";
 
 // Ajoute un gestionnaire d'événements global pour la délégation
 const appDiv = document.getElementById("app");
@@ -384,3 +385,28 @@ buttonNextMatch?.addEventListener('click', () => {
 	const divNextMatchButton = document.getElementById('divNextMatchButton');
 	divNextMatchButton?.classList.toggle('open');
 });
+
+window.addEventListener('eventWinnerTournament', ((event: Event) => {
+	const customEvent = event as CustomEvent;
+
+	const renderCanvas = document.getElementById('renderCanvas') as HTMLInputElement | null;
+	const winnerTournamentPage = document.getElementById('winnerTournamentPage') as HTMLInputElement | null;
+	const winnerName = document.getElementById('winnerName') as HTMLInputElement | null;
+
+	renderCanvas?.classList.add('hidden');
+	winnerTournamentPage?.classList.toggle('open');
+	winnerName!.innerText += customEvent.detail[0].name;
+
+	const confettiConfig = {
+		colorsArray: ["rgba(255, 255, 163, 1)", "rgba(0, 0, 185, 1)"],
+		velocity: 0.05,
+		quantity: 500,
+		minSize: 8,
+		maxSize: 24,
+		minOpacity: 0.5,
+		maxOpacity: 1,
+		infiniteLoop: false
+	  };
+	const canvasId = "vanillaConfettiCanvas";
+	generateConfetti(confettiConfig, canvasId); // Pass canvasId if not default
+}) as EventListener);
