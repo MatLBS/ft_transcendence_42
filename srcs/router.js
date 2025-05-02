@@ -10,7 +10,7 @@ import { checkUserBack, verifFormRegister } from './controllers/createUser.js';
 import { login, verifLogin } from './controllers/loginUser.js';
 import { getPost } from './controllers/getPost.js';
 import { getLanguage } from './controllers/getLanguage.js';
-import { getHome } from './controllers/getHome.js';
+import { getHome, handleFavicon } from './controllers/getHome.js';
 import { getPage } from './controllers/getPage.js';
 import { logout, quit } from './controllers/logout.js';
 import { refresh } from './controllers/tokens.js';
@@ -25,8 +25,6 @@ import {solo} from './controllers/solo.js';
 import { createSoloGame, updateResultSoloGame } from './controllers/createSolo.js';
 import { createLocalGame, updateResultLocalGame } from './controllers/createLocal.js';
 import { getMatchsResults, getExternalMatchsResults } from './controllers/getMatchs.js';
-
-
 import { getErrorPage } from './controllers/errorPage.js';
 import { search } from './controllers/search.js';
 import { getUserProfile } from './controllers/getUserProfile.js';
@@ -82,6 +80,8 @@ export default async function userRoutes(app) {
 	app.post('/url', getPost);
 	app.post('/languages', getLanguage);
 
+	app.get('/favicon.ico', handleFavicon);
+
 	// app.post('/users/:page', getUserProfile);
 	app.get('/users/:page', getPage);
 
@@ -99,7 +99,7 @@ export default async function userRoutes(app) {
 	app.get('/deleteFriends/:page', deleteFriends);
 
 	app.get('/logout', logout);
-	app.get('/quit', quit);
+
 	app.post('/quit', quit);
 
 	app.post('/search', search);

@@ -49,7 +49,12 @@ export async function recvContent(url: string): Promise<void> {
 		body: JSON.stringify({ url, jsonLanguage }),
 	})
 		.then((response: Response) => response.json())
-		.then(updatePageContent)
+		.then((data: ResponseData) => {
+			if (data.content == null)
+				return;
+			if (data)
+				updatePageContent(data);
+		})
 		.catch((error: unknown) => {
 			console.error('Erreur lors de la récupération du contenu:', error);
 		});

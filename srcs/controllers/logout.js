@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 export const logout = async (req, reply) => {
 	const response = await authenticateUser(req);
 	if (response.status !== 200) {
-		return reply.send({ status: response.status });
+		return reply.redirect('/login');
 	}
 	await logUser(response.user.id, false);
 	reply

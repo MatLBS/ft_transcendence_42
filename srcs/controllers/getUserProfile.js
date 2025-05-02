@@ -1,5 +1,4 @@
 import { findUser } from '../dist/prisma/seed.js';
-import { getErrorPage } from './errorPage.js';
 import ejs from 'ejs';
 import { authenticateUser } from "./tokens.js";
 import { isFriend } from '../dist/prisma/friends.js';
