@@ -9,6 +9,7 @@ import { json } from 'stream/consumers';
 import { getUserProfile } from './getUserProfile.js';
 import { getFollowedUsers } from '../dist/prisma/friends.js';
 import { errorPage } from './errorPage.js';
+import { send } from 'process';
 
 // Vérifie si une page nécessite une connexion
 const needLogin = (file) => ["profil", "game", "update"].includes(file);
@@ -20,7 +21,7 @@ const redirectToLogin = async (req, reply) => {
 	const jsonLanguage = req.body.jsonLanguage;
 	const css = routes.login.css;
 	const js = routes.login.js;
-	const content = await ejs.renderFile(path.join(__dirname, 'views', '/login.ejs'), { jsonLanguage });
+	const content = await ejs.renderFile(path.join(__dirname, 'views', '/login.ejs'), { jsonLanguage, isConnected: false });
 	return reply.send({ content, css, js, isConnected: false });
 }
 
@@ -28,15 +29,16 @@ const redirectToHome = async (req, reply) => {
 	const jsonLanguage = req.body.jsonLanguage;
 	const css = routes.home.css;
 	const js = routes.home.js;
-	const content = await ejs.renderFile(path.join(__dirname, 'views', '/home.ejs'), { jsonLanguage });
+	const content = await ejs.renderFile(path.join(__dirname, 'views', '/home.ejs'), { jsonLanguage, isConnected: true });
 	return reply.send({ content, css, js, isConnected: true });
 }
 
 export const getPost = async (req, reply) => {
 	let file = req.body.url.split("/");
-	if (file[1] === "users") {
+	if (file[1] === "users")
 		return getUserProfile(req, reply, file[2]);
-	}
+	if (file[2] || file[2] == "")
+		return reply.send({ content: null });
 	file = file.pop() || "home";
 	const jsonLanguage = req.body.jsonLanguage;
 
@@ -45,19 +47,16 @@ export const getPost = async (req, reply) => {
 	try {
 		// Authentification de l'utilisateur
 		response = await authenticateUser(req);
-		if (response.status !== 200) {
-			if (needLogin(file)) {
-				return await redirectToLogin(req, reply);
-			}
-		} else {
+		if (response.status === 200 && (user = await findUserById(response.user.id))) {
 			isConnected = true;
 			if (dontNeedLogin(file))
 				return await redirectToHome(req, reply);
-			user = await findUserById(response.user.id);
-			if (!user)
-				return await errorPage(req, reply, response, 403);
 			user.google = response.user.google;
 			friends = await getFollowedUsers(user.id);
+		} else {
+			if (needLogin(file)) {
+				return await redirectToLogin(req, reply);
+			}
 		}
 
 		// Recherche de la route correspondante
