@@ -96,6 +96,7 @@ i18next
 			"nextMatch": "Next match",
 			"validate": "Validate",
 			"enter": "enter a name",
+			"congrats": "Congratulations to the Champion"
 	  	  },
 	  	  "update": {
 	  		"title": "Update",
@@ -217,7 +218,8 @@ i18next
 			"player": "Jugador",
 			"nextMatch": "Próximo partido",
 			"validate": "Validar",
-			"enter": "introduce un nombre"
+			"enter": "introduce un nombre",
+			"congrats": "Felicitaciones al Campeón"
 		  },
 	  	  "update": {
 	  		"title": "Actualizar",
@@ -339,7 +341,8 @@ i18next
 			"player": "Jogador",
 			"nextMatch": "Próxima partida",
 			"validate": "Validar",
-			"enter": "digite um nome"
+			"enter": "digite um nome",
+			"congrats": "Parabéns ao Campeão"
 		  },
 	  	  "update": {
 	  		"title": "Atualizar",
@@ -462,6 +465,7 @@ i18next
 			"nextMatch": "Prochain match",
 			"validate": "Valider",
 			"enter": "entrez un nom",
+			"congrats": "Félicitations au Champion"
 		  },
 	  	  "update": {
 	  		"title": "Mettre à jour",
