@@ -92,6 +92,8 @@ export async function updateResultTournamentGame(req, reply) {
 		const response = await authenticateUser(req);
 		if (response.status === 200)
 			user = await findUserById(response.user.id);
+		if (!user)
+			return;
 		const winner = req.body.winner.trim();
 		const loser = req.body.loser.trim();
 		const winnerScore = req.body.winnerScore;

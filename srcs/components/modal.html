@@ -1,9 +1,9 @@
 <div id="modal" class="modal hidden">
-	<div class="modal-content">
+	<div class="modal-content bg-white p-5 rounded-xl">
 		<span id="close-modal" class="close-button">&times;</span>
-		<p id="error_mail"></p>
-		<p>entrer votre code recu par mail</p>
+		<p id="error_mail" class="text-red-600"></p>
+		<p><%= jsonLanguage.modal.enter %></p>
 		<input id="verif_email" type="text" placeholder="">
-		<button id="modal_button" >Confirmez</button>
+		<button id="modal_button" class="text-black" ><%= jsonLanguage.modal.confirm %></button>
 	</div>
 </div>

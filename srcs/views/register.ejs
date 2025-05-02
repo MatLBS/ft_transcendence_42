@@ -1,40 +1,45 @@
 <%- include('../components/navbar.html') %>
-<div class="login">
-	<img src="../public/images/login&register-bg.png" alt="login image" class="login__img">
+<section class="wrapper">
+	<div id="stars"></div>
+	<div id="stars2"></div>
+	<div id="stars3"></div>
+	<div id="title">
+	</div>
+</section>
+<div class="register">
+	<div action="" class="register__form">
+		<h1 class="register__title"><%= jsonLanguage.register.title %></h1>
+		<div id="error_input" class="text-red-600"></div>
 
-	<div action="" class="login__form">
-		<h1 class="login__title"><%= jsonLanguage.register.title %></h1>
-		<div id="error_input" class="mb-2 text-red-600"></div>
-
-		<div class="login__content">
+		<div class="register__content">
 			<div>
 				<i class="bx bx-lock-alt"></i>
-				<div class="login__box">
-					<div class="login__box-input">
-						<input type="text" id="username" required class="login__input" placeholder="">
-						<label for="" class="login__label"><%= jsonLanguage.register.username %></label>
+				<div class="register__box">
+					<div class="register__box-input">
+						<input type="text" id="username" required class="register__input" placeholder="">
+						<label for="" class="register__label"><%= jsonLanguage.register.username %></label>
 					</div>
 				</div>
 			</div>
 
-			<div class="login__content">
+			<div class="register__content">
 				<div>
 					<i class="bx bx-lock-alt"></i>
-					<div class="login__box">
-						<div class="login__box-input">
-							<input type="email" id="email" required class="login__input" placeholder="">
-							<label for="" class="login__label"><%= jsonLanguage.register.email %></label>
+					<div class="register__box">
+						<div class="register__box-input">
+							<input type="email" id="email" required class="register__input" placeholder="">
+							<label for="" class="register__label"><%= jsonLanguage.register.email %></label>
 						</div>
 					</div>
 				</div>
 
-				<div class="login__box flex align-center">
+				<div class="register__box flex align-center">
 					<div class="w-11/12">
-						<i class="ri-lock-2-line login__icon"></i>
-						<div class="login__box-input">
-							<input type="password" required class="login__input" id="password" placeholder="">
-							<label for="" class="login__label"><%= jsonLanguage.register.password %></label>
-							<i class="ri-eye-off-line login__eye"></i>
+						<i class="ri-lock-2-line register__icon"></i>
+						<div class="register__box-input">
+							<input type="password" required class="register__input" id="password" placeholder="">
+							<label for="" class="register__label"><%= jsonLanguage.register.password %></label>
+							<i class="ri-eye-off-line register__eye"></i>
 						</div>
 					</div>
 					<div class="w-1/12 flex items-center justify-center">
@@ -42,26 +47,36 @@
 					</div>
 				</div>
 
-				<div class="login__content">
+				<div class="register__content">
 					<div>
 						<i class="bx bx-lock-alt"></i>
-						<div class="login__box-input">
-							<input type="file" id="profile_picture" class="login__input" name="profile_picture" accept="image/*">
+						<div class="register__box-input">
+							<input type="file" id="profile_picture" class="register__input hidden" name="profile_picture" accept="image/*">
+							<input type="file" id="bg_picture" class="register__input hidden" name="bg_picture" accept="image/*">
 						</div>
 					</div>
 				</div>
 
-				<div class="flex justify-center">
+				<div class="flex justify-center relative pb-2">
 					<img
-						id="preview_image"
-						class="profile-image rounded-full w-auto"
+						src="../public/images/profil_bg.jpeg"
+						id="preview_image_bg"
+						class="background_image profile-image rounded-xl relative"
 						style="max-width: 200px;"
 					/>
+					<img
+						src="../public/images/flamme.png"
+						id="preview_image_profil"
+						class="profil_image profile-image rounded-full h-16 w-auto"
+						style="max-width: 200px;"
+					/>
+					<span class="material-symbols-outlined bg-gray-500 rounded-full hover:scale-125" id="upload_icon_profil">add</span>
+					<span class="material-symbols-outlined bg-gray-500 rounded-full hover:scale-125" id="upload_icon_bg">add</span>
 				</div>
 			</div>
 
-			<button id="confirm_button" class="login__button text-black text-center"><%= jsonLanguage.register.button %></button>
-			<button id="register_button_google" class="login__button text-black text-center">Google Sign-in</button>
+			<button id="confirm_button" class="register__button text-black text-center"><%= jsonLanguage.register.button %></button>
+			<button id="register_button_google" class="register__button text-black text-center">Google Sign-in</button>
 		</div>
 	</div>
 </div>

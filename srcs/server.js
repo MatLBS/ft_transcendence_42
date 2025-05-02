@@ -145,7 +145,7 @@ app.register(cors, {
 app.register(fastifyMultipart, {
 	limits: {
 		fileSize: 10 * 1024 * 1024, // 10MB max file size
-		files: 1, // Max number of files
+		files: 5, // Max number of files
 	},
 	attachFieldsToBody: false, // Ne pas attacher les champs au body, nous les traiterons avec req.parts()
 });

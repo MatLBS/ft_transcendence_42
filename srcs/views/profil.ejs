@@ -1,7 +1,10 @@
 <%- include('../components/navbar.html') %>
 <div class="header__wrapper">
 	<button id="open-friends" class="btn-abs"><%= jsonLanguage.profil.friends %></button>
-	<header></header>
+	<header
+		class="bg-cover bg-center bg-no-repeat"
+		style="background-image: url('<%= user.bgPicture %>'); min-height: calc(100px + 15vw);">
+	</header>
 	<div class="user__infos__container items-center">
 		<div class="user__infos">
 			<div class="img__container">
@@ -15,6 +18,7 @@
 				<%= user.username %>
 			</h2>
 		</div>
+		<a class="my edit" href="/update"><span class="material-symbols-outlined hover:bg-gray-200 rounded-full p-2">edit</span></a>
 	</div>
 	<h2 class="stats__title text-center pb-5"><%= jsonLanguage.profil.statistics %></h2>
 	<div class="stats flex justify-center align-center gap-16">
@@ -91,7 +95,6 @@
 		</div>
 	</div>
 </div>
-<a class="my" href="/update"><%= jsonLanguage.profil.update %></a>
 
 <div id="container">
 	<h1 id="friend-title"><%= jsonLanguage.profil.listFriends %></h1>

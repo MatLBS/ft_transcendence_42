@@ -123,7 +123,10 @@ i18next
 			"prevPassword": "The previous password is required.",
 			"wrongPrevPassword": "The previous password is incorrect.",
 			"diffPassword": "The new password must be different from the previous one.",
-
+		  },
+		  "modal": {
+			"enter": "Enter the password send you by email",
+			"confirm": "Confirm",
 		  }
 	  	}
 	    },
@@ -242,6 +245,10 @@ i18next
 			"prevPassword": "Se requiere la contraseña anterior.",
 			"wrongPrevPassword": "La contraseña anterior es incorrecta.",
 			"diffPassword": "La nueva contraseña debe ser diferente de la anterior."
+		  },
+		  "modal": {
+			"enter": "Introduzca la contraseña enviada por correo electrónico",
+			"confirm": "Confirmar"
 		  }
 	  	}
 	    },
@@ -360,6 +367,10 @@ i18next
 			"prevPassword": "A senha anterior é obrigatória.",
 			"wrongPrevPassword": "A senha anterior está incorreta.",
 			"diffPassword": "A nova senha deve ser diferente da anterior."
+		  },
+		  "modal": {
+			"enter": "Digite a senha enviada por e-mail",
+			"confirm": "Confirmar"
 		  }
 	  	}
 	    },
@@ -478,6 +489,10 @@ i18next
 			"prevPassword": "Le mot de passe précédent est requis.",
 			"wrongPrevPassword": "Le mot de passe précédent est incorrect.",
 			"diffPassword": "Le nouveau mot de passe doit être différent du précédent."
+		  },
+		  "modal": {
+			"enter": "Entrez le mot de passe envoyé par e-mail",
+			"confirm": "Confirmer"
 		  }
 	  	}
 	    }
