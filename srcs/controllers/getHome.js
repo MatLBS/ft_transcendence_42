@@ -15,3 +15,7 @@ export const getHome = async (req, reply) => {
 		return reply.view("index.ejs");
 	}
 }
+
+export const handleFavicon = async (req, reply) => {
+	return;
+}
