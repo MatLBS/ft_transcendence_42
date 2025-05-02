@@ -61,7 +61,7 @@ const handleFileUpload = async (fileName, fileBuffer, user) => {
 export const updateUserTwoFA = async (req, reply) => {
 
 	try {
-		let { fields, fileBuffer, fileName } = await parseRequestParts(req, reply);
+		let { fields, fileBufferProfil, fileProfil, fileBufferBg, fileBg } = await parseRequestParts(req, reply);
 		if (!fields) return;
 
 		const { response, user } = await verifUpdate(req, reply, fields);
@@ -78,15 +78,17 @@ export const updateUserTwoFA = async (req, reply) => {
 			return reply.send({ message: responseCode, code: true });
 		}
 
-		if (fileName) {
-			fileName = await handleFileUpload(fileName, fileBuffer, user);
-		}
+		if (fileProfil)
+			fileProfil = await handleFileUpload(fileProfil, fileBufferProfil, user);
+
+		if (fileBg)
+			fileBg = await handleFileUpload(fileBg, fileBufferBg, user);
 
 		let hashedPassword = "";
 		if (newPassword !== "")
 			hashedPassword = await app.bcrypt.hash(newPassword);
 
-		await updateUserDb(response.user.id, username, hashedPassword, email, fileName);
+		await updateUserDb(response.user.id, username, hashedPassword, email, fileProfil, fileBg);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
@@ -132,7 +134,7 @@ export const updateUser = async (req, reply) => {
 
 export const updateUserGoogle = async (req, reply) => {
 
-	let { fields, fileBuffer, fileName } = await parseRequestParts(req, reply);
+	let { fields, fileBufferProfil, fileProfil, fileBufferBg, fileBg } = await parseRequestParts(req, reply);
 	if (!fields) return;
 
 	const username = fields.username;
@@ -151,12 +153,12 @@ export const updateUserGoogle = async (req, reply) => {
 	if (username.length < 3 || username.length > 20)
 		return reply.send({message : "The username must be between 3 and 20 characters."});
 
-	if (fileName) {
-		fileName = await handleFileUpload(fileName, fileBuffer, user);
-	}
-
+	if (fileProfil)
+		fileProfil = await handleFileUpload(fileProfil, fileBufferProfil, user);
+	if (fileBg)
+		fileBg = await handleFileUpload(fileBg, fileBufferBg, user);
 	try {
-		await updateUserGoogleDb(response.user.id, username, fileName);
+		await updateUserGoogleDb(response.user.id, username, fileProfil, fileBg);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}

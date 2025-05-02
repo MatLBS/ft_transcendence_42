@@ -33,7 +33,7 @@ export async function createUser (username: string, password: string, email: str
 	})
 }
 
-export async function createUserGoogle (username: string, email: string, profilePicture: string) {
+export async function createUserGoogle (username: string, email: string, profilePicture: string, bgPicture?: string) {
 	let usernameAlreadyExist: any;
 	let i: number = 0;
 	while (true) {
@@ -62,6 +62,7 @@ export async function createUserGoogle (username: string, email: string, profile
 			username: username,
 			email: email,
 			profilePicture: profilePicture,
+			bgPicture: bgPicture || null,
 			isOnline: false,
 		},
 	})
@@ -112,7 +113,7 @@ export async function updateUserDb (id: number, username: string, password: stri
 		throw new Error(`User do not exits in the database.`)
 }
 
-export async function updateUserGoogleDb (id: number, username: string, profilePicture?: string) {
+export async function updateUserGoogleDb (id: number, username: string, profilePicture?: string, bgPicture?: string) {
 	const usernameAlreadyExist = await prisma.user.findFirst({
 		where: {
 			username: username,
@@ -125,11 +126,13 @@ export async function updateUserGoogleDb (id: number, username: string, profileP
 	if (usernameAlreadyExist)
 		throw new Error(`The username \"${username}\" already exists`);
 
-	const updateUser: { username: string, profilePicture?: string } = {
+	const updateUser: { username: string, profilePicture?: string, bgPicture?: string} = {
 		username: username,
 	};
 	if (profilePicture)
 		updateUser.profilePicture = profilePicture;
+	if (bgPicture)
+		updateUser.bgPicture = bgPicture;
 	const user = await prisma.user.update({
 		where: {
 			id: id,
