@@ -124,7 +124,12 @@ export const googleCallback = async (req, reply) => {
 		if (tokens.id_token) {
 			const decoded = jwt.decode(tokens.id_token);
 			const img = await uploadImageFromUrl(decoded.picture, decoded.given_name);
-			await createUserGoogle(decoded.given_name, decoded.email, img);
+			const bgPicture =`temp_${Date.now()}bg.png`;
+
+			const filePath = path.join(__dirname, './uploads', decoded.given_name + bgPicture);
+			fs.copyFileSync(path.join(__dirname, "./public/images/profil_bg.jpeg"), filePath);
+
+			await createUserGoogle(decoded.given_name, decoded.email, img, '/uploads/' + decoded.given_name + bgPicture);
 			return loginUserGoogle(req, reply, decoded.email);
 		}
 	} else {

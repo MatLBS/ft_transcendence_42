@@ -46,6 +46,21 @@ if (appDiv) {
 	});
 }
 
+function appendFormData(username: string, email: string, previousPassword: string, newPassword: string, profile_picture?: File, bg_picture?: File): FormData {
+	const formData = new FormData();
+	formData.append('username', username);
+	formData.append('email', email);
+	formData.append('previousPassword', previousPassword);
+	formData.append('newPassword', newPassword);
+	if (profile_picture) {
+		formData.append('profile_picture', profile_picture);
+	}
+	if (bg_picture) {
+		formData.append('bg_picture', bg_picture);
+	}
+	return formData;
+}
+
 function updateWithEmail() {
 	const error_input = document.getElementById('error_input');
 	const error_mail = document.getElementById('error_mail');
@@ -59,15 +74,10 @@ function updateWithEmail() {
 	const verif_email = getInputValue('verif_email');
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
+	const bg_pictureElement = document.getElementById('bg_picture') as HTMLInputElement | null;
+	const bg_picture = bg_pictureElement?.files?.[0];
 
-	const formData = new FormData();
-	formData.append('username', username);
-	formData.append('email', email);
-	formData.append('previousPassword', previousPassword);
-	formData.append('newPassword', newPassword);
-	if (profile_picture) {
-		formData.append('profile_picture', profile_picture);
-	}
+	const formData = appendFormData(username, email, previousPassword, newPassword, profile_picture, bg_picture);
 	formData.append('verif_email', verif_email);
 
 	fetch('/updateTwoFA', {
@@ -81,6 +91,63 @@ function updateWithEmail() {
 			navigateTo("/profil");
 		} else {
 			error_mail.innerHTML = data.message;
+		}
+	})
+}
+
+async function validateForm() {
+	const error_input = document.getElementById('error_input');
+	const previousPassword = getInputValue('prev_password');
+	const newPassword = getInputValue('new_password');
+	const email = getInputValue('email');
+	const username = getInputValue('username');
+
+	if (!error_input)
+		return;
+
+	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
+	const profile_picture = profile_pictureElement?.files?.[0];
+	const bg_pictureElement = document.getElementById('bg_picture') as HTMLInputElement | null;
+	const bg_picture = bg_pictureElement?.files?.[0];
+
+	let jsonLanguage;
+	await fetch('/languages', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ language }),
+	})
+		.then(async (response) => {
+			jsonLanguage = await response.json();
+		})
+		.catch((error: unknown) => {
+			console.error('Erreur lors de la récupération du contenu:', error);
+		});
+
+	const formResponse = verifyForm(username, email, newPassword, jsonLanguage);
+	if (formResponse.message !== "ok" && !formResponse.password) {
+		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
+		return;
+	}
+
+	const formData = appendFormData(username, email, previousPassword, newPassword, profile_picture, bg_picture);
+	fetch('/updateUser', {
+		method: 'POST',
+		credentials: 'include',
+		body: formData,
+	})
+	.then(async (response) => {
+		const data = await response.json();
+		if (data.message === "ok") {
+			navigateTo("/profil");
+		} else {
+			if (data.email) {
+				const modal = document.getElementById('modal');
+				if (modal)
+					modal.classList.remove('hidden');
+			} else {
+				error_input.innerHTML = `<p>` + data.message + `</p>`;
+			}
 		}
 	})
 }
@@ -115,12 +182,16 @@ function validateFormGoogle() {
 	const username = getInputValue('username');
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
+	const bg_pictureElement = document.getElementById('bg_picture') as HTMLInputElement | null;
+	const bg_picture = bg_pictureElement?.files?.[0];
 
 	const formData = new FormData();
 	formData.append('username', username);
 	if (profile_picture) {
 		formData.append('profile_picture', profile_picture);
 	}
+	if (bg_picture)
+		formData.append('bg_picture', bg_picture);
 
 	fetch('/updateUserGoogle', {
 		method: 'POST',
@@ -133,72 +204,6 @@ function validateFormGoogle() {
 			navigateTo("/profil");
 		} else {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
-		}
-	})
-}
-
-async function validateForm() {
-	const error_input = document.getElementById('error_input');
-	const previousPassword = getInputValue('prev_password');
-	const newPassword = getInputValue('new_password');
-	const email = getInputValue('email');
-	const username = getInputValue('username');
-
-	if (!error_input)
-		return;
-
-	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
-	const profile_picture = profile_pictureElement?.files?.[0];
-	const bg_pictureElement = document.getElementById('bg_picture') as HTMLInputElement | null;
-	const bg_picture = bg_pictureElement?.files?.[0];
-
-	let jsonLanguage;
-	await fetch('/languages', {
-		method: 'POST',
-		credentials: 'include',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ language }),
-	})
-		.then(async (response) => {
-			jsonLanguage = await response.json();
-		})
-		.catch((error: unknown) => {
-			console.error('Erreur lors de la récupération du contenu:', error);
-		});
-
-	const formResponse = await verifyForm(username, email, newPassword, jsonLanguage);
-	if (formResponse.message !== "ok" && !formResponse.password) {
-		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
-		return;
-	}
-
-	const formData = new FormData();
-	formData.append('username', username);
-	formData.append('email', email);
-	formData.append('previousPassword', previousPassword);
-	formData.append('newPassword', newPassword);
-	if (profile_picture)
-		formData.append('profile_picture', profile_picture);
-	if (bg_picture)
-		formData.append('bg_picture', bg_picture);
-
-	fetch('/updateUser', {
-		method: 'POST',
-		credentials: 'include',
-		body: formData,
-	})
-	.then(async (response) => {
-		const data = await response.json();
-		if (data.message === "ok") {
-			navigateTo("/profil");
-		} else {
-			if (data.email) {
-				const modal = document.getElementById('modal');
-				if (modal)
-					modal.classList.remove('hidden');
-			} else {
-				error_input.innerHTML = `<p>` + data.message + `</p>`;
-			}
 		}
 	})
 }
