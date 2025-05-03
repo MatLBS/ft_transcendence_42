@@ -12,10 +12,10 @@ import { errorPage } from './errorPage.js';
 import { send } from 'process';
 
 // Vérifie si une page nécessite une connexion
-const needLogin = (file) => ["profil", "game", "update"].includes(file);
+export const needLogin = (file) => ["profil", "game", "update"].includes(file);
 
 // Vérifie si une page nécessite que le user ne soit pas connecté
-const dontNeedLogin = (file) => ["login", "register"].includes(file);
+export const dontNeedLogin = (file) => ["login", "register"].includes(file);
 
 const redirectToLogin = async (req, reply) => {
 	const jsonLanguage = req.body.jsonLanguage;
@@ -75,7 +75,8 @@ export const getPost = async (req, reply) => {
 				.setCookie('access_token', response.newAccessToken, {
 					httpOnly: false,
 					secure: false,
-					sameSite: 'Strict'
+					sameSite: 'Strict',
+					path: "/",
 				})
 				.send({ content, css, js, isConnected });
 		} else {

@@ -12,11 +12,11 @@
 			<li><a class="my" href="/"> <%= jsonLanguage.index.home %> </a></li>
 			<li><a class="my" href="/about"> <%= jsonLanguage.index.about %> </a></li>
 			<% if (isConnected) { %>
-			<li class="connected"><a class="my" href="/game"> <%= jsonLanguage.index.game %> </a></li>
-			<li class="connected"><a class="my profile" href="/profil"> <%= jsonLanguage.index.profil %> </a></li>
-			<li class="connected"><a class="logout" href="/login"> <%= jsonLanguage.index.logout %> </a></li>
+			<li><a class="my" href="/game"> <%= jsonLanguage.index.game %> </a></li>
+			<li><a class="my profile" href="/profil"> <%= jsonLanguage.index.profil %> </a></li>
+			<li><a class="logout" href="/login"> <%= jsonLanguage.index.logout %> </a></li>
 			<% } else { %>
-			<li class="disconnected"><a class="my" href="/login"> <%= jsonLanguage.index.login %> </a></li>
+			<li><a class="my" href="/login"> <%= jsonLanguage.index.login %> </a></li>
 			<% } %>
 		</ul>
 

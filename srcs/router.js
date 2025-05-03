@@ -10,8 +10,7 @@ import { checkUserBack, verifFormRegister } from './controllers/createUser.js';
 import { login, verifLogin } from './controllers/loginUser.js';
 import { getPost } from './controllers/getPost.js';
 import { getLanguage } from './controllers/getLanguage.js';
-import { getHome, handleFavicon } from './controllers/getHome.js';
-import { getPage } from './controllers/getPage.js';
+import { handleFavicon, getPage } from './controllers/getPage.js';
 import { logout, quit } from './controllers/logout.js';
 import { refresh } from './controllers/tokens.js';
 import { tournament } from './controllers/tournament.js';
@@ -25,7 +24,7 @@ import {solo} from './controllers/solo.js';
 import { createSoloGame, updateResultSoloGame } from './controllers/createSolo.js';
 import { createLocalGame, updateResultLocalGame } from './controllers/createLocal.js';
 import { getMatchsResults, getExternalMatchsResults } from './controllers/getMatchs.js';
-import { getErrorPage } from './controllers/errorPage.js';
+import { getErrorPageDirect } from './controllers/errorPage.js';
 import { search } from './controllers/search.js';
 import { getUserProfile } from './controllers/getUserProfile.js';
 import { addFriends, deleteFriends } from './controllers/handleFriends.js';
@@ -75,7 +74,7 @@ export default async function userRoutes(app) {
 
 	app.register(fastifyFormbody)
 
-	app.get('/', getHome);
+	app.get('/', getPage);
 	app.get('/:page', getPage);
 	app.post('/url', getPost);
 	app.post('/languages', getLanguage);
@@ -124,5 +123,5 @@ export default async function userRoutes(app) {
 	app.get('/getExternalMatchsResults/:page', getExternalMatchsResults);
 	app.get('/getWinnerTournament', getWinnerTournament);
 
-	app.setNotFoundHandler(getErrorPage);
+	app.setNotFoundHandler(getErrorPageDirect);
 }

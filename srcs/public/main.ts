@@ -91,26 +91,6 @@ function updatePageContent(data: ResponseData): void {
 		scriptElement.id = 'js';
 		document.body.appendChild(scriptElement);
 	}
-
-	// Met à jour l'affichage des éléments connectés/déconnectés
-	hideElements(data.isConnected);
-}
-
-// Affiche ou masque les éléments en fonction de l'état de connexion de l'utilisateur
-function hideElements(isConnected: boolean): void {
-	const toggleDisplay = (selector: string, display: string) => {
-		document.querySelectorAll(selector).forEach((el) => {
-			(el as HTMLElement).style.display = display;
-		});
-	};
-
-	if (isConnected) {
-		toggleDisplay('.disconnected', 'none');
-		toggleDisplay('.connected', 'block');
-	} else {
-		toggleDisplay('.connected', 'none');
-		toggleDisplay('.disconnected', 'block');
-	}
 }
 
 // Gère les clics sur les liens dynamiques avec délégation d'événements
@@ -241,7 +221,7 @@ function handleSearch(): void {
 // Initialise l'application
 function start(): void {
 	console.log('Démarrage...');
-	recvContent(window.location.pathname);
+	// recvContent(window.location.pathname);
 	handleLinks();
 	handlePopState();
 }

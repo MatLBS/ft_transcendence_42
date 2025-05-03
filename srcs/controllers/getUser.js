@@ -1,6 +1,6 @@
 import { authenticateUser } from "./tokens.js";
 import { findUser, findUserById } from "../dist/prisma/seed.js";
-import { getErrorPage } from "./errorPage.js";
+// import { getErrorPage } from "./errorPage.js";
 
 export const getUser = async (req , reply) => {
 	const response = await authenticateUser(req);
