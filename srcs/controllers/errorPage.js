@@ -1,18 +1,19 @@
 import ejs from 'ejs';
-import { __dirname, routes } from "../router.js";
+import { __dirname } from "../router.js";
 import path from 'path';
 import { getLanguageWithoutBody } from "./getLanguage.js"
 import { authenticateUser } from "../controllers/tokens.js";
 import { findUserById } from "../dist/prisma/seed.js";
 
-export const addErrorContent = async (contentAdd, file) => {
+export const addErrorContent = async (contentAdd) => {
 	const content = await ejs.renderFile(path.join(__dirname, 'views', '/index.ejs'));
 	let updatedContent = content.replace('app">', `app">${contentAdd}`);
 	updatedContent = updatedContent.replace('</head>', `<link id="css" rel="stylesheet" href="/public/style/error_page/error.css">\n</head>`);
 	return updatedContent;
 }
 
-export const getErrorPage = async (req, reply) => {
+// Fonction pour charger une page d'erreur si url dirrecte
+export const getErrorPageDirect = async (req, reply) => {
 	let jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
 	let response = await authenticateUser(req);
 	let isConnected = false, user = null;
@@ -28,7 +29,7 @@ export const getErrorPage = async (req, reply) => {
 		.send(content);
 };
 
-// Fonction pour charger une page d'erreur
+// Fonction pour charger une page d'erreur dans recvcontent
 export const errorPage = async (req, reply, response, errorCode) => {
 	let isConnected = false, user = null;
 	if (response.status === 200 && (user = await findUserById(response.user.id)))
@@ -41,7 +42,8 @@ export const errorPage = async (req, reply, response, errorCode) => {
 			.setCookie('access_token', response.newAccessToken, {
 				httpOnly: false,
 				secure: false,
-				sameSite: 'Strict'
+				sameSite: 'Strict',
+				path: "/",
 			})
 			.code(errorCode).send({ content, css, isConnected });
 	} else {
