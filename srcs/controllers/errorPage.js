@@ -23,7 +23,7 @@ export const getErrorPageDirect = async (req, reply) => {
 	const contentAdd = await ejs.renderFile(path.join(__dirname, 'views/error_page/404.ejs'), { jsonLanguage, isConnected });
 	const content = await addErrorContent(contentAdd);
 	return reply
-		.code(200)
+		.code(404)
 		.type('text/html')
 		.header('Content-Type', 'text/html; charset=utf-8')
 		.send(content);

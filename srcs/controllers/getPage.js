@@ -117,7 +117,7 @@ const generatePage = async (req, reply, file) => {
 	let jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
 	({ response, user, isConnected, friends } = await handleAuthentication(req, reply, file));
 
-	let content = "";
+	let content = "", code = 200;
 	const route = routes[file];
 	if (route) {
 		content = await ejs.renderFile(path.join(route.dir, route.file), { user, jsonLanguage, friends, isConnected});
@@ -127,6 +127,7 @@ const generatePage = async (req, reply, file) => {
 		content = await profilPage(jsonLanguage, response, file, isConnected);
 	} else {
 		content = await errorContent(jsonLanguage, isConnected);
+		code = 404;
 	}
 	if (response.status === 200 && response.newAccessToken) {
 		reply
@@ -138,7 +139,7 @@ const generatePage = async (req, reply, file) => {
 			})
 	}
 	return reply
-		.code(200)
+		.code(code)
 		.type('text/html')
 		.header('Content-Type', 'text/html; charset=utf-8')
 		.send(content);

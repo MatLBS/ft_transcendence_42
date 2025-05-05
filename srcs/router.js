@@ -65,7 +65,7 @@ export default async function userRoutes(app) {
 	app.register(fastifyStatic, {
 		root: path.join(__dirname, './uploads'),
 		prefix: '/uploads/',
-		decorateReply: false // évite les conflits avec l'autre instance fastifyStatic
+		decorateReply: false,
 	});
 
 	app.register(fastifyView, {
