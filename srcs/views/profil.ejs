@@ -138,11 +138,11 @@
 			<li class="friend-card">
 				<div class="avatar">
 					<img src="<%= friend.profilePicture %>" alt="Photo de profil de <%= friend.username %>">
-					<span class="status <%= friend.isOnline ? 'online' : 'offline' %>"></span>
+					<span data-id="<%= friend.id %>" class="status <%= friend.isOnline ? 'online' : 'offline' %>"></span>
 				</div>
 				<div class="info">
 					<h2><%= friend.username %></h2>
-					<p class="sub-text"><%= friend.isOnline ? 'En ligne' : 'Hors ligne' %></p>
+					<p data-id="<%= friend.id %>" class="sub-text"><%= friend.isOnline ? 'En ligne' : 'Hors ligne' %></p>
 				</div>
 				<button class="btn remove-friend" data-username="<%= friend.username %>">
 					<svg width="16" height="16" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm2 4h14v2H5v-2zm2 4h10v2H7v-2z"/></svg>

@@ -48,16 +48,16 @@ export async function removeFollow(followerId: number, followedId: number): Prom
 	}
 }
 
-/**
- * Récupère tous les utilisateurs suivis par un utilisateur.
- * @param followerId - L'ID de l'utilisateur qui suit.
- * @returns Une liste des utilisateurs suivis ou un message d'erreur.
- */
 type Friend = {
 	username: string;
 	profilePicture: string | null;
 	isOnline: boolean;
 };
+/**
+ * Récupère tous les utilisateurs suivis par un utilisateur.
+ * @param followerId - L'ID de l'utilisateur qui suit.
+ * @returns Une liste des utilisateurs suivis ou un message d'erreur.
+ */
 export async function getFollowedUsers(followerId: number): Promise<Friend[]> {
 	try {
 		const followedUsers = await prisma.follow.findMany({
@@ -65,6 +65,7 @@ export async function getFollowedUsers(followerId: number): Promise<Friend[]> {
 			include: {
 				followed: {
 					select: {
+						id: true,
 						username: true,
 						profilePicture: true,
 						isOnline: true,
@@ -75,6 +76,30 @@ export async function getFollowedUsers(followerId: number): Promise<Friend[]> {
 		return followedUsers.map((follow : any) => follow.followed);
 	} catch (error) {
 		console.error("Erreur lors de la récupération des utilisateurs suivis :", error);
+		return [];
+	}
+}
+
+/**
+ * Récupère tous les utilisateurs qui suivent un utilisateur donné.
+ * @param followedId - L'ID de l'utilisateur suivi.
+ * @returns Une liste des utilisateurs qui suivent l'utilisateur donné ou un message d'erreur.
+ */
+export async function getFollowers(followedId: number): Promise<Friend[]> {
+	try {
+		const followers = await prisma.follow.findMany({
+			where: { followedId },
+			include: {
+				follower: {
+					select: {
+						id: true,
+					},
+				},
+			},
+		});
+		return followers.map((follow : any) => follow.follower);
+	} catch (error) {
+		console.error("Erreur lors de la récupération des utilisateurs qui suivent :", error);
 		return [];
 	}
 }

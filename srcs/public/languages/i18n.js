@@ -305,7 +305,7 @@ i18next
 				"profil": "Perfil",
 				"logout": "Sair",
 				"login": "Entrar",
-				"flag": "🇧🇷",
+				"flag": "🇵🇹",
 			  },
 			  "localParty": {
 				"label": "Digite um nome para o segundo jogador...",
