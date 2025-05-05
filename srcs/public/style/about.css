@@ -227,3 +227,9 @@ body:has([value="zoom-scroll"]:checked) .content {
     visibility: hidden;
   }
 }
+
+@media (max-width: 800px) {
+  #dynamic-txts ul li {
+	font-size: 2rem;
+  }
+}
