@@ -1,0 +1,33 @@
+{
+	"title": "Node.js Monitoring",
+	"tags": ["nodejs", "prometheus"],
+	"timezone": "browser",
+	"panels": [
+	  {
+		"title": "HTTP Requests",
+		"type": "graph",
+		"gridPos": {"x":0,"y":0,"w":12,"h":8},
+		"datasource": "Prometheus",
+		"targets": [
+		  {
+			"expr": "rate(http_requests_total[5m])",
+			"legendFormat": "{{method}} {{route}}",
+			"refId": "A"
+		  }
+		]
+	  },
+	  {
+		"title": "Error Rate",
+		"type": "stat",
+		"gridPos": {"x":12,"y":0,"w":12,"h":8},
+		"datasource": "Prometheus",
+		"targets": [
+		  {
+			"expr": "sum(rate(http_requests_total{status_code=~'4..|5..'}[5m])) / sum(rate(http_requests_total[5m]))",
+			"format": "percent",
+			"refId": "A"
+		  }
+		]
+	  }
+	]
+  }

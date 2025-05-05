@@ -28,6 +28,7 @@ import { getErrorPageDirect } from './controllers/errorPage.js';
 import { search } from './controllers/search.js';
 import { getUserProfile } from './controllers/getUserProfile.js';
 import { addFriends, deleteFriends } from './controllers/handleFriends.js';
+import { httpRequestCounter } from './server.js';
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -71,7 +72,7 @@ export default async function userRoutes(app) {
 		engine: { ejs: ejs },
 		root: path.join(__dirname, "views"),
 	});
-
+	
 	app.register(fastifyFormbody)
 
 	app.get('/', getPage);
@@ -124,4 +125,22 @@ export default async function userRoutes(app) {
 	app.get('/getWinnerTournament', getWinnerTournament);
 
 	app.setNotFoundHandler(getErrorPageDirect);
+
+	app.get('/test/error', async (request, reply) => {
+		httpRequestCounter.inc({
+		  method: 'GET',
+		  route: '/test/error',
+		  status_code: 500
+		});
+		reply.code(500).send({ error: "Internal server error" });
+	  });
+	  
+	  app.get('/test/bad-request', async (request, reply) => {
+		httpRequestCounter.inc({
+		  method: 'GET',
+		  route: '/test/bad-request',
+		  status_code: 400
+		});
+		reply.code(400).send({ error: "Bad request" });
+	  });
 }

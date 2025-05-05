@@ -5,14 +5,60 @@ import fastifyBcrypt from 'fastify-bcrypt';
 import fastifyCookie from '@fastify/cookie';
 import fastifyMultipart from '@fastify/multipart';
 import cors from '@fastify/cors';
+import { collectDefaultMetrics, register, Counter, Histogram } from 'prom-client';
+
+// Créer les métriques
+export const httpRequestCounter = new Counter({
+  name: 'http_requests_total',
+  help: 'Total HTTP requests',
+  labelNames: ['method', 'route', 'status_code']
+});
+
+export const httpRequestDuration = new Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  labelNames: ['method', 'route', 'status_code'],
+  buckets: [0.1, 0.5, 1, 2, 5]
+});
 
 export const app = Fastify({
-	// logger: true,
+  // logger: true,
+});
+
+// Middleware pour collecter les métriques
+app.addHook('onRequest', async (request, reply) => {
+  request.startTime = process.hrtime();
+});
+
+app.addHook('onResponse', async (request, reply) => {
+  const duration = process.hrtime(request.startTime);
+  const durationInSeconds = duration[0] + duration[1] / 1e9;
+  
+  httpRequestCounter.inc({
+    method: request.method,
+    route: request.routerPath || request.url,
+    status_code: reply.statusCode
+  });
+  
+  httpRequestDuration.observe({
+    method: request.method,
+    route: request.routerPath || request.url,
+    status_code: reply.statusCode
+  }, durationInSeconds);
 });
 
 app.register(fastifyCookie);
 
 app.register(fastifyBcrypt);
+
+// Enable default system metrics
+collectDefaultMetrics({ timeout: 5000 });
+
+// Create a metrics endpoint
+app.get('/metrics', async (req, res) => {
+  res.header('Content-Type', register.contentType);
+  res.send(await register.metrics());
+});
 
 app.register(cors, {
 	origin: ["https://accounts.google.com", "http://localhost:3000"], // Add allowed origins

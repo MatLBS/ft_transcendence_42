@@ -1,0 +1,20 @@
+groups:
+- name: node-alerts
+  rules:
+  - alert: HighErrorRate
+    expr: sum(rate(http_requests_total{status_code=~"5.."}[5m])) > 0.05
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High error rate on {{ $labels.job }}"
+      description: "5xx error rate is {{ $value }}"
+
+  - alert: ServiceDown
+    expr: up == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Service {{ $labels.job }} down"
+      description: "{{ $labels.instance }} has been down for more than 1 minute"
