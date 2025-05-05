@@ -157,6 +157,17 @@ function getDailyWinLoss(localMatches: MatchData[], userId: number): DailyResult
 	}));
 }
 
+function addPoints(pointsScored: number, pointsAllowed:number, i: number, typeMatches: any, userId: number) {
+	if (typeMatches[i].winnerId === userId) {
+		pointsScored += typeMatches[i].winnerScore;
+		pointsAllowed += typeMatches[i].loserScore;
+	} else {
+		pointsAllowed += typeMatches[i].winnerScore;
+		pointsScored += typeMatches[i].loserScore;
+	}
+	return { pointsScored, pointsAllowed }
+}
+
 export async function displayGlobal(root:string){
 
 	let gamesWinSolo = 0;
@@ -186,33 +197,16 @@ export async function displayGlobal(root:string){
 		userId = data.userId || 0;
 		for (let i = 0; i < localMatches.length; i++) {
 			localMatches[i].winnerId === userId ? gamesWinLocal++ : gamesLoseLocal++;
-			if (localMatches[i].winnerId === userId) {
-				pointsScored += localMatches[i].winnerScore;
-				pointsAllowed += localMatches[i].loserScore;
-			} else {
-				pointsAllowed += localMatches[i].winnerScore;
-				pointsScored += localMatches[i].loserScore;
-			}
+			({ pointsScored, pointsAllowed } = addPoints(pointsScored, pointsAllowed, i, localMatches, userId));
+			
 		}
 		for (let i = 0; i < soloMatches.length; i++) {
 			soloMatches[i].winnerId === userId ? gamesWinSolo++ : gamesLoseSolo++;
-			if (soloMatches[i].winnerId === userId) {
-				pointsScored += soloMatches[i].winnerScore;
-				pointsAllowed += soloMatches[i].loserScore;
-			} else {
-				pointsAllowed += soloMatches[i].winnerScore;
-				pointsScored += soloMatches[i].loserScore;
-			}
+			({ pointsScored, pointsAllowed } = addPoints(pointsScored, pointsAllowed, i, soloMatches, userId));
 		}
 		for (let i = 0; i < tournamentMatches.length; i++) {
 			tournamentMatches[i].winnerId === userId ? gamesWinTournament++ : gamesLoseTournament++;
-			if (tournamentMatches[i].winnerId === userId) {
-				pointsScored += tournamentMatches[i].winnerScore;
-				pointsAllowed += tournamentMatches[i].loserScore;
-			} else {
-				pointsAllowed += tournamentMatches[i].winnerScore;
-				pointsScored += tournamentMatches[i].loserScore;
-			}
+			({ pointsScored, pointsAllowed } = addPoints(pointsScored, pointsAllowed, i, tournamentMatches, userId));
 		}
 	});
 	const gamesWin = gamesWinSolo + gamesWinLocal + gamesWinTournament;
