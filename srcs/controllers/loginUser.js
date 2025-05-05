@@ -64,12 +64,14 @@ export const loginUser = async (req, reply, password, username) => {
 		.setCookie('access_token', accessToken, {
 			httpOnly: false,
 			secure: false,
-			sameSite: 'lax'
+			sameSite: 'lax',
+			path: "/",
 		})
 		.setCookie('refresh_token', refreshToken, {
 			httpOnly: true,
 			secure: false,
-			sameSite: 'lax'
+			sameSite: 'lax',
+			path: "/",
 		})
 		.send({ message: "ok" });
 }
@@ -101,7 +103,7 @@ export const loginUserGoogle = async (req, reply, email) => {
 		.setCookie('access_token', accessToken, {
 			httpOnly: false,
 			secure: false,
-			sameSite: 'Strict',
+			sameSite: 'lax',
 			path: "/",
 		})
 		.setCookie('refresh_token', refreshToken, {
