@@ -221,7 +221,6 @@ function handleSearch(): void {
 // Initialise l'application
 function start(): void {
 	console.log('Démarrage...');
-	// recvContent(window.location.pathname);
 	handleLinks();
 	handlePopState();
 }

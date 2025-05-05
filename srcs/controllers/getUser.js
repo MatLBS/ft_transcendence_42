@@ -1,6 +1,5 @@
 import { authenticateUser } from "./tokens.js";
 import { findUser, findUserById } from "../dist/prisma/seed.js";
-// import { getErrorPage } from "./errorPage.js";
 
 export const getUser = async (req , reply) => {
 	const response = await authenticateUser(req);
@@ -22,7 +21,6 @@ export const getExternalUser = async (req , reply) => {
 			username = req.url.split("/").pop();
 			user = await findUser(username);
 			if (!user) {
-				// return await getErrorPage(req, reply);
 				return ({ status: 404 });
 			}
 		} catch (error) {

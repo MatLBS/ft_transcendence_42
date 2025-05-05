@@ -1,5 +1,5 @@
 import ejs from 'ejs';
-import { __dirname, routes } from "../router.js";
+import { __dirname } from "../router.js";
 import path from 'path';
 import { getLanguageWithoutBody } from "./getLanguage.js"
 import { authenticateUser } from "../controllers/tokens.js";

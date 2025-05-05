@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 import ejs from 'ejs';
 import { routes } from "../router.js";
@@ -9,7 +8,6 @@ import { json } from 'stream/consumers';
 import { getUserProfile } from './getUserProfile.js';
 import { getFollowedUsers } from '../dist/prisma/friends.js';
 import { errorPage } from './errorPage.js';
-import { send } from 'process';
 
 // Vérifie si une page nécessite une connexion
 export const needLogin = (file) => ["profil", "game", "update"].includes(file);
