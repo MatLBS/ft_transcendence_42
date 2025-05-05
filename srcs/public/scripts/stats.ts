@@ -52,7 +52,7 @@ function displayStats(typeMatch: Array<any>, match__history: HTMLInputElement | 
 		dateCell.classList.add('w-1/6', 'max-w-48', 'overflow-hidden');
 
 		if (i % 2 === 0)
-			divParent.classList.add('bg-gray-100');
+			divParent.classList.add('bg-gray-500', 'rounded-xl');
 
 		divParent.appendChild(typeCell);
 		divParent.appendChild(winnerCell);
@@ -165,6 +165,8 @@ export async function displayGlobal(root:string){
 	let gamesLoseSolo = 0;
 	let gamesLoseLocal = 0;
 	let gamesLoseTournament = 0;
+	let pointsScored = 0;
+	let pointsAllowed = 0;
 
 	let userName: string = '';
 	let userId: number = 0; // Initialize with a default value
@@ -182,12 +184,36 @@ export async function displayGlobal(root:string){
 		tournamentMatches = data.matchs.tournament;
 		userName = data.user;
 		userId = data.userId || 0;
-		for (let i = 0; i < localMatches.length; i++)
+		for (let i = 0; i < localMatches.length; i++) {
 			localMatches[i].winnerId === userId ? gamesWinLocal++ : gamesLoseLocal++;
-		for (let i = 0; i < soloMatches.length; i++)
+			if (localMatches[i].winnerId === userId) {
+				pointsScored += localMatches[i].winnerScore;
+				pointsAllowed += localMatches[i].loserScore;
+			} else {
+				pointsAllowed += localMatches[i].winnerScore;
+				pointsScored += localMatches[i].loserScore;
+			}
+		}
+		for (let i = 0; i < soloMatches.length; i++) {
 			soloMatches[i].winnerId === userId ? gamesWinSolo++ : gamesLoseSolo++;
-		for (let i = 0; i < tournamentMatches.length; i++)
+			if (soloMatches[i].winnerId === userId) {
+				pointsScored += soloMatches[i].winnerScore;
+				pointsAllowed += soloMatches[i].loserScore;
+			} else {
+				pointsAllowed += soloMatches[i].winnerScore;
+				pointsScored += soloMatches[i].loserScore;
+			}
+		}
+		for (let i = 0; i < tournamentMatches.length; i++) {
 			tournamentMatches[i].winnerId === userId ? gamesWinTournament++ : gamesLoseTournament++;
+			if (tournamentMatches[i].winnerId === userId) {
+				pointsScored += tournamentMatches[i].winnerScore;
+				pointsAllowed += tournamentMatches[i].loserScore;
+			} else {
+				pointsAllowed += tournamentMatches[i].winnerScore;
+				pointsScored += tournamentMatches[i].loserScore;
+			}
+		}
 	});
 	const gamesWin = gamesWinSolo + gamesWinLocal + gamesWinTournament;
 	const gamesLose = gamesLoseSolo + gamesLoseLocal + gamesLoseTournament;
@@ -196,6 +222,27 @@ export async function displayGlobal(root:string){
 	const weeklyTournamentWin = getDailyWinLoss(tournamentMatches,userId );
 	if (gamesWin + gamesLose === 0)
 		return;
+
+	const totalMatches = gamesWin + gamesLose;
+	const totalGames = document.getElementById('totalGames') as HTMLCanvasElement | null;
+	const totalGamesValue = totalGames!.querySelectorAll('p')[1];
+	totalGamesValue.textContent = totalMatches.toString();
+
+	const totalWins = document.getElementById('totalWins') as HTMLCanvasElement | null;
+	const totalWinsValue = totalWins!.querySelectorAll('p')[1];
+	totalWinsValue.textContent = gamesWin.toString();
+
+	const totalLosses = document.getElementById('totalLosses') as HTMLCanvasElement | null;
+	const totalLossesValue = totalLosses!.querySelectorAll('p')[1];
+	totalLossesValue.textContent = gamesLose.toString();
+
+	const nbPointsScored = document.getElementById('pointsScored') as HTMLCanvasElement | null;
+	const pointsScoredValue = nbPointsScored!.querySelectorAll('p')[1];
+	pointsScoredValue.textContent = pointsScored.toString();
+
+	const nbPointsAllowed = document.getElementById('pointsAllowed') as HTMLCanvasElement | null;
+	const pointsAllowedValue = nbPointsAllowed!.querySelectorAll('p')[1];
+	pointsAllowedValue.textContent = pointsAllowed.toString();
 
 	const last7Days = Array.from({ length: 7 }, (_, i) => {
 		const date = new Date();
