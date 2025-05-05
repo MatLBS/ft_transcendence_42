@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
-/* .header__wrapper header {
-	background: url("../images/profil_bg.jpeg") no-repeat 50% 20% / cover;
-	min-height: calc(100px + 15vw);
-} */
+body,
+.content {
+  background-color: var(--color-background, #1a1a2e);
+}
 
 .header__wrapper .user__infos__container .user__infos {
 	padding: 25px 20px;
@@ -15,13 +15,13 @@
 
 .header__wrapper .user__infos__container .user__infos .img__container {
 	position: absolute;
-	top: -200px;
+	top: -10em;
 	left: 50%;
 	transform: translatex(-50%);
 }
 .header__wrapper .user__infos__container .user__infos .img__container img {
 	width: auto;
-	height: 360px;
+	height: 20em;
 	object-fit: cover;
 	border-radius: 50%;
 	display: block;
@@ -69,6 +69,26 @@ h2 {
 
 .none {
 	display: none !important;
+}
+
+#match__history, #match__stats, #graphs {
+	background-color: #484849;
+	border-radius: 10px;
+	color: white;
+}
+
+#match__stats {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+#match__stats #pointsAllowed {
+	margin-bottom: 1rem;
+}
+
+#username, #email {
+	color: #FC6D6D;
 }
 
 #container {
@@ -236,6 +256,15 @@ h2 {
 	color: darken(#ff4d4f, 10%);
 }
 
+#totalGames,
+#totalWins,
+#totalLosses,
+#pointsScored,
+#pointsAllowed {
+  margin: 0 auto;
+  width: 50%;
+}
+
 /* Corrigez le style du bouton close-friends */
 #close-friends {
 	position: absolute;
@@ -299,5 +328,22 @@ canvas {
 
 .edit {
 	position: absolute;
-	right: 42vw;
+	right: 20em;
+	top: 5em;
+}
+
+@media (max-width: 800px) {
+	.stats {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	#match__history, #statsAndGraphs {
+		width: 100%;
+	}
+	.edit {
+		position: absolute;
+		right: 1em;
+	}
 }

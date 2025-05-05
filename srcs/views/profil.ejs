@@ -5,7 +5,7 @@
 		class="bg-cover bg-center bg-no-repeat"
 		style="background-image: url('<%= user.bgPicture %>'); min-height: calc(100px + 15vw);">
 	</header>
-	<div class="user__infos__container items-center">
+	<div class="user__infos__container items-center text-white">
 		<div class="user__infos">
 			<div class="img__container">
 				<img
@@ -14,15 +14,22 @@
 					style="max-width: 400px;"
 				/>
 			</div>
-			<h2 id="username" class="underline">
-				<%= user.username %>
-			</h2>
+			<h2 id="hidden"></h2>
+			<a class="my edit" href="/update"><span class="material-symbols-outlined hover:bg-gray-500 rounded-full p-2">edit</span></a>
 		</div>
-		<a class="my edit" href="/update"><span class="material-symbols-outlined hover:bg-gray-200 rounded-full p-2">edit</span></a>
 	</div>
-	<h2 class="stats__title text-center pb-5"><%= jsonLanguage.profil.statistics %></h2>
-	<div class="stats flex justify-center align-center gap-16">
-		<div id="match__history" class="w-2/5 border-2 border-gray-300">
+	<div class="text-white flex justify-center align-center gap-16 mb-5">
+		<div>
+			<p id="username"><%= jsonLanguage.profil.username %></p>
+			<p class="underline"><%= user.username %></p>
+		</div>
+		<div>
+			<p id="email"><%= jsonLanguage.profil.email %></p>
+			<p class="underline"><%= user.email %></p>
+		</div>
+	</div>
+	<div class="stats flex justify-center align-center gap-8 pb-10">
+		<div id="match__history" class="w-2/5">
 			<h2 class="text-center p-5"><%= jsonLanguage.profil.matchHistory %></h2>
 			<div class="flex justify-around align-center text-center underline m-2">
 				<p class="w-1/6"><%= jsonLanguage.profil.type %></p>
@@ -32,62 +39,87 @@
 				<p class="w-1/6">Date</p>
 			</div>
 		</div>
-		<div id="graphs" class="w-2/5 border-2 border-gray-300">
-			<h2 class="text-center p-5"><%= jsonLanguage.profil.graphics %></h2>
-			<div class="">
-				<div>
-					<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
-						<div class="text-center m-5 underline"><%= jsonLanguage.profil.global %></div>
-						<span class="material-icons pl-5" id="global">expand_more</span>
-					</div>
-					<div class="flex justify-center items-center" id="divGlobal">
-						<div class="chart-wrapper">
-							<canvas id="globalBarChart"></canvas>
-						</div>
-						<div class="chart-wrapper">
-							<canvas id="globalChart" ></canvas>
-						</div>
-					</div>
+		<div class="w-2/5" id="statsAndGraphs">
+			<div id="match__stats" class="mb-8">
+				<h2 class="stats__title text-center pt-5"><%= jsonLanguage.profil.statistics %></h2>
+				<div id="totalGames" class="flex justify-between">
+					<p><%= jsonLanguage.profil.totalGames %></p>
+					<p>0</p>
 				</div>
-				<div>
-					<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
-						<p class="underline"><%= jsonLanguage.profil.local %></p>
-						<span class="material-icons pl-5" id="local">expand_more</span>
-					</div>
-					<div class="hidden flex justify-center items-center" id="divLocal">
-						<div class="chart-wrapper">
-							<canvas id="localBarChart"></canvas>
-						</div>
-						<div class="chart-wrapper">
-							<canvas id="localChart" ></canvas>
-						</div>
-					</div>
+				<div id="totalWins" class="flex justify-between">
+					<p><%= jsonLanguage.profil.wins %></p>
+					<p>0</p>
 				</div>
-				<div>
-					<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
-						<p class="text-center m-5 underline"><%= jsonLanguage.profil.solo %></p>
-						<span class="material-icons pl-5" id="solo">expand_more</span>
-					</div>
-					<div class="hidden flex justify-center items-center" id="divSolo">
-						<div class="chart-wrapper">
-							<canvas id="soloBarChart"></canvas>
-						</div>
-						<div class="chart-wrapper">
-							<canvas id="soloChart" ></canvas>
-						</div>
-					</div>
+				<div id="totalLosses" class="flex justify-between">
+					<p><%= jsonLanguage.profil.losses %></p>
+					<p>0</p>
 				</div>
+				<div id="pointsScored" class="flex justify-between">
+					<p><%= jsonLanguage.profil.pointsScored %></p>
+					<p>0</p>
+				</div>
+				<div id="pointsAllowed" class="flex justify-between">
+					<p><%= jsonLanguage.profil.pointsAllowed %></p>
+					<p>0</p>
+				</div>
+			</div>
+			<div id="graphs">
+				<h2 class="text-center p-5"><%= jsonLanguage.profil.graphics %></h2>
 				<div>
-					<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
-						<p class="text-center m-5 underline"><%= jsonLanguage.profil.tournament %></p>
-						<span class="material-icons pl-5" id="tournament">expand_more</span>
-					</div>
-					<div class="hidden flex justify-center items-center" id="divTournament">
-						<div class="chart-wrapper">
-							<canvas id="tournamentBarChart"></canvas>
+					<div>
+						<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
+							<div class="text-center m-5 underline"><%= jsonLanguage.profil.global %></div>
+							<span class="material-icons pl-5" id="global">expand_more</span>
 						</div>
-						<div class="chart-wrapper">
-							<canvas id="tournamentChart" ></canvas>
+						<div class="flex justify-center items-center" id="divGlobal">
+							<div class="chart-wrapper">
+								<canvas id="globalBarChart"></canvas>
+							</div>
+							<div class="chart-wrapper">
+								<canvas id="globalChart" ></canvas>
+							</div>
+						</div>
+					</div>
+					<div>
+						<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
+							<p class="underline"><%= jsonLanguage.profil.local %></p>
+							<span class="material-icons pl-5" id="local">expand_more</span>
+						</div>
+						<div class="hidden flex justify-center items-center" id="divLocal">
+							<div class="chart-wrapper">
+								<canvas id="localBarChart"></canvas>
+							</div>
+							<div class="chart-wrapper">
+								<canvas id="localChart" ></canvas>
+							</div>
+						</div>
+					</div>
+					<div>
+						<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
+							<p class="text-center m-5 underline"><%= jsonLanguage.profil.solo %></p>
+							<span class="material-icons pl-5" id="solo">expand_more</span>
+						</div>
+						<div class="hidden flex justify-center items-center" id="divSolo">
+							<div class="chart-wrapper">
+								<canvas id="soloBarChart"></canvas>
+							</div>
+							<div class="chart-wrapper">
+								<canvas id="soloChart" ></canvas>
+							</div>
+						</div>
+					</div>
+					<div>
+						<div class="flex justify-center items-center rounded-full p-2 text-center my-5">
+							<p class="text-center m-5 underline"><%= jsonLanguage.profil.tournament %></p>
+							<span class="material-icons pl-5" id="tournament">expand_more</span>
+						</div>
+						<div class="hidden flex justify-center items-center" id="divTournament">
+							<div class="chart-wrapper">
+								<canvas id="tournamentBarChart"></canvas>
+							</div>
+							<div class="chart-wrapper">
+								<canvas id="tournamentChart" ></canvas>
+							</div>
 						</div>
 					</div>
 				</div>

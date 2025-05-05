@@ -8,7 +8,7 @@ import cors from '@fastify/cors';
 import websocket from '@fastify/websocket';
 
 export const app = Fastify({
-	// logger: true,
+	logger: true,
 });
 
 app.register(fastifyCookie);

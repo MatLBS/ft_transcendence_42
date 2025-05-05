@@ -47,7 +47,7 @@ body {
   left: 0;
   height: 100%;
   width: 100%;
-  background: #000000;
+  background: #1a1a2e;
   border-left: 2px solid #FC6D6D;
   animation: typing 3s steps(20) infinite;
 }
@@ -69,7 +69,7 @@ html {
 
 body,
 .content {
-  background-color: var(--color-background, rgb(0, 0, 0));
+  background-color: var(--color-background, #1a1a2e);
 }
 
 main {
