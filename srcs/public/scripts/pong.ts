@@ -879,7 +879,7 @@ document.addEventListener('click', async (event) => {
 });
 
 class RemoteGame extends FirstPersonController {
-	private ws: WebSocket;
+	private ws!: WebSocket;
 	private lastUpdateTime: number = 0;
 	private stateBuffer: Array<GameState> = [];
 	private opponentPosition: number = 0;
@@ -890,8 +890,13 @@ class RemoteGame extends FirstPersonController {
 	}
   
 	private initNetwork() {
-	  this.ws = new WebSocket('wss://your-server/ws');
-	  
+	  this.ws = new WebSocket('ws://localhost:3000/ws');
+
+	  // Add error handler
+	  this.ws.onerror = (error) => {
+		console.error('WebSocket Error:', error);
+		this.handleDisconnection();
+	  };
 	  this.ws.onmessage = (event) => {
 		const data: NetworkMessage = JSON.parse(event.data);
 		this.handleNetworkMessage(data);
@@ -903,13 +908,14 @@ class RemoteGame extends FirstPersonController {
 	}
   
 	private handleNetworkMessage(data: NetworkMessage) {
-	  switch (data.type) {
-		case 'STATE_UPDATE':
-		  this.stateBuffer.push(data.payload);
-		  break;
-		case 'INPUT_UPDATE':
-		  this.opponentPosition = data.position;
-		  break;
+		switch (data.type) {
+			case 'STATE_UPDATE':
+				this.stateBuffer.push(data.payload);
+				this.ball.position.copyFrom(data.payload.ballPosition);
+				break;
+			case 'INPUT_UPDATE':
+			this.opponentPosition = data.position;
+			break;
 	  }
 	}
   
@@ -920,16 +926,19 @@ class RemoteGame extends FirstPersonController {
 	}
   
 	private interpolateOpponentPosition() {
-	  // Use state buffer for smooth interpolation
-	  if (this.stateBuffer.length > 0) {
-		const targetState = this.stateBuffer.shift()!;
-		this.paddle2.position.x = this.lerp(
-		  this.paddle2.position.x,
-		  targetState.opponentPosition,
-		  0.2
-		);
+		// Use at least 3 states for better interpolation
+		if (this.stateBuffer.length >= 3) {
+		  const [prevState, currentState, nextState] = this.stateBuffer;
+		  const now = Date.now();
+		  // Implement proper interpolation using timestamps
+		  this.paddle2.position.x = this.lerp(
+			this.paddle2.position.x,
+			currentState.opponentPosition,
+			0.2
+		  );
+		  this.stateBuffer = [nextState]; // Keep only latest relevant state
+		}
 	  }
-	}
   
 	private sendPlayerInput() {
 	  if (Date.now() - this.lastUpdateTime > 50) { // 20 updates/sec

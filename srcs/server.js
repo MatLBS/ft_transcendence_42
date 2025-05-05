@@ -12,8 +12,8 @@ export const app = Fastify({
 	// logger: true,
 });
 
-app.register(fastifyCookie);
 app.register(websocket);
+app.register(fastifyCookie);
 
 // Game state storage
 const activeGames = new Map();
@@ -68,6 +68,21 @@ app.get('/ws', { websocket: true }, (connection, req) => {
 	});
   });
 
+  function handlePlayerInput(room, playerId, position) {
+	// Update player position
+	const player = room.players.find(p => p.id === playerId);
+	if (player) {
+	  player.position = position;
+	}
+	
+	// Immediately relay input to opponent (optional)
+	const opponent = room.players.find(p => p.id !== playerId);
+	opponent.socket.send(JSON.stringify({
+	  type: 'INPUT_UPDATE',
+	  position: position
+	}));
+  }
+
 function handleMatchmaking(socket) {
   matchmakingQueue.push(socket);
   
@@ -97,7 +112,7 @@ function createGameRoom(player1Socket, player2Socket) {
 	});
   
 	activeGames.set(roomId, newRoom);
-  
+	startGameLoop(roomId);
 	newRoom.players.forEach((player, index) => {
 	  player.socket.send(JSON.stringify({
 		type: 'GAME_START',
@@ -106,6 +121,42 @@ function createGameRoom(player1Socket, player2Socket) {
 	  }));
 	});
   }
+
+  function startGameLoop(roomId) {
+	const room = activeGames.get(roomId);
+	if (!room) return;
+  
+	// Game loop interval (60Hz)
+	const interval = setInterval(() => {
+	  if (!activeGames.has(roomId)) {
+		clearInterval(interval);
+		return;
+	  }
+  
+	  // Update ball position (simple example)
+	  room.ballPosition.x += room.ballVelocity.x;
+	  room.ballPosition.z += room.ballVelocity.z;
+  
+	  // Collision detection with paddles (pseudo-code)
+	  room.players.forEach(player => {
+		if (checkPaddleCollision(room.ballPosition, player.position)) {
+		  room.ballVelocity.x *= -1;
+		}
+	  });
+  
+	  // Broadcast state to both players
+	  room.players.forEach(player => {
+		player.socket.send(JSON.stringify({
+		  type: 'STATE_UPDATE',
+		  payload: {
+			ballPosition: room.ballPosition,
+			opponentPosition: room.players.find(p => p.id !== player.id)?.position
+		  }
+		}));
+	  });
+	}, 16); // ~60 updates/sec
+  }
+  
   
   // Modified cleanupDisconnectedPlayer
   function cleanupDisconnectedPlayer(roomId, disconnectedPlayerId) {
