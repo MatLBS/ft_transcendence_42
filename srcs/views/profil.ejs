@@ -21,11 +21,11 @@
 	</div>
 	<div class="text-white flex justify-center align-center gap-16 mb-5">
 		<div>
-			<p id="username">Username</p>
+			<p id="username"><%= jsonLanguage.profil.username %></p>
 			<p class="underline"><%= user.username %></p>
 		</div>
 		<div>
-			<p id="email">Email</p>
+			<p id="email"><%= jsonLanguage.profil.email %></p>
 			<p class="underline"><%= user.email %></p>
 		</div>
 	</div>
@@ -44,23 +44,23 @@
 			<div id="match__stats" class="mb-8">
 				<h2 class="stats__title text-center pt-5"><%= jsonLanguage.profil.statistics %></h2>
 				<div id="totalGames" class="flex justify-between">
-					<p>Total Games 🎮</p>
+					<p><%= jsonLanguage.profil.totalGames %></p>
 					<p>0</p>
 				</div>
 				<div id="totalWins" class="flex justify-between">
-					<p>Wins 📈</p>
+					<p><%= jsonLanguage.profil.wins %></p>
 					<p>0</p>
 				</div>
 				<div id="totalLosses" class="flex justify-between">
-					<p>Losses 📉</p>
+					<p><%= jsonLanguage.profil.losses %></p>
 					<p>0</p>
 				</div>
 				<div id="pointsScored" class="flex justify-between">
-					<p>Points Scored ⚽</p>
+					<p><%= jsonLanguage.profil.pointsScored %></p>
 					<p>0</p>
 				</div>
 				<div id="pointsAllowed" class="flex justify-between">
-					<p>Points Allowed 🥅</p>
+					<p><%= jsonLanguage.profil.pointsAllowed %></p>
 					<p>0</p>
 				</div>
 			</div>
