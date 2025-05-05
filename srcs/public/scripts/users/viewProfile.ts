@@ -80,11 +80,17 @@ async function handleFriends(action: string) {
 }
 
 window.addEventListener('users', async (event: Event) => {
+	displayStats();
+});
+
+async function displayStats() {
 	const titleErrorElements = document.getElementsByClassName('title-error');
 	if (titleErrorElements.length != 0)
-		return ;
+		return;
 	const urlParts = window.location.pathname.split('/');
 	const username = urlParts[urlParts.length - 1];
 	await displayMatches(`/getExternalMatchsResults/${username}`);
 	await displayGlobal(`/getExternalMatchsResults/${username}`);
-});
+}
+
+displayStats();

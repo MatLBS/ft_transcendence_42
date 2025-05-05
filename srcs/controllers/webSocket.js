@@ -1,0 +1,52 @@
+import { app } from "../server.js";
+import { authenticateUser } from "./tokens.js";
+import { getFollowers } from "../dist/prisma/friends.js";
+import { findUserById } from "../dist/prisma/seed.js";
+
+export const sendStatus = async (userId, status) => {
+	const user = await findUserById(userId);
+	if ((!user) || (user.isOnline && status === "online") || (!user.isOnline && status === "offline")) {
+		return;
+	}
+
+	const friends = await getFollowers(userId);
+	if (!friends) {
+		return;
+	}
+	friends.forEach((friend) => {
+		const client = app.wsClients.get(friend.id);
+		if (client) {
+			client.send(JSON.stringify({
+				type: 'status',
+				friendId: userId,
+				status: status,
+			}));
+		}
+	});
+};
+
+export const webSocketConnect = async (socket, req) => {
+	try {
+		const response = await authenticateUser(req);
+
+		if (response.status !== 200) {
+			console.log('Unauthorized access attempt');
+			return;
+		}
+		const userId = response.user.id;
+
+		app.wsClients.set(userId, socket);
+
+		socket.on('close', () => {
+			app.wsClients.delete(userId);
+		});
+
+		socket.on('error', (err) => {
+			console.error(`WebSocket error for user ${userId}:`, err);
+			socket.close(1011, 'Internal error');
+		});
+	}
+	catch (error) {
+		console.error('Error establishing WebSocket connection:', error);
+	}
+}

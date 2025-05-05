@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { logUser } from '../dist/prisma/seed.js';
+import { sendStatus } from './webSocket.js';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ export const authenticateUser = async (req) => {
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 		req.user = decoded;
+		await sendStatus(req.user.id, "online");
 		await logUser(req.user.id, true);
 		return { status: 200, user: req.user };
 	} catch (err) {
