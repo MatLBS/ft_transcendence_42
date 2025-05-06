@@ -21,10 +21,12 @@
 		</ul>
 
 			<!-- Search bar -->
+			<% if (isConnected) { %>
 			<div class="search-container">
 				<input type="text" id="search-input" placeholder="Rechercher..." autocomplete="off" class="rounded px-2 py-1 text-black" />
 				<ul id="search-results"></ul>
 			</div>
+			<% } %>
 	</div>
 
 	<!-- Language selector (always visible) -->

@@ -102,10 +102,10 @@ interface MatchData {
 	winner: string;
 	winnerScore: number;
 	winnerId : number;
-	looserId : number; 
-  }
+	looserId : number;
+}
 
-  interface DailyResult {
+interface DailyResult {
 	date: string;
 	wins: number;
 	losses: number;
@@ -198,7 +198,7 @@ export async function displayGlobal(root:string){
 		for (let i = 0; i < localMatches.length; i++) {
 			localMatches[i].winnerId === userId ? gamesWinLocal++ : gamesLoseLocal++;
 			({ pointsScored, pointsAllowed } = addPoints(pointsScored, pointsAllowed, i, localMatches, userId));
-			
+
 		}
 		for (let i = 0; i < soloMatches.length; i++) {
 			soloMatches[i].winnerId === userId ? gamesWinSolo++ : gamesLoseSolo++;
@@ -331,7 +331,7 @@ export async function displayGlobal(root:string){
 			cutout: '70%',
 			circumference : 360,
 			responsive: true,
-    		maintainAspectRatio: false,
+			maintainAspectRatio: false,
 			animation: {
 				animateRotate: true,
 			},
@@ -422,7 +422,7 @@ export async function displayGlobal(root:string){
 			cutout: '70%',
 			circumference : 360,
 			responsive: true,
-    		maintainAspectRatio: false,
+			maintainAspectRatio: false,
 			animation: {
 				animateRotate: true,
 			},
@@ -512,7 +512,7 @@ export async function displayGlobal(root:string){
 			cutout: '70%',
 			circumference : 360,
 			responsive: true,
-    		maintainAspectRatio: false,
+			maintainAspectRatio: false,
 			animation: {
 				animateRotate: true,
 			},
@@ -602,7 +602,7 @@ export async function displayGlobal(root:string){
 			cutout: '70%',
 			circumference : 360,
 			responsive: true,
-    		maintainAspectRatio: false,
+			maintainAspectRatio: false,
 			animation: {
 				animateRotate: true,
 			},

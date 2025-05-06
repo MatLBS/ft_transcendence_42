@@ -1,14 +1,17 @@
-import { findUser } from '../dist/prisma/seed.js';
+import { findUser, findUserById } from '../dist/prisma/seed.js';
 import ejs from 'ejs';
 import { authenticateUser } from "./tokens.js";
 import { isFriend } from '../dist/prisma/friends.js';
 import { errorPage } from './errorPage.js';
 
 export const getUserProfile = async (req, reply, username) => {
+	const response = await authenticateUser(req);
+	if (!response.status === 200 || !(user = await findUserById(response.user.id))) {
+		return await errorPage(req, reply, response, 401);
+	}
 	const jsonLanguage = req.body.jsonLanguage;
 	const { page } = req.params;
 	const finalPage = page ?? username;
-	const response = await authenticateUser(req);
 	const user = await findUser(finalPage);
 	if (!user)
 		return await errorPage(req, reply, response, 404);
