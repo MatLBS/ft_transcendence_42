@@ -1,0 +1,130 @@
+{
+	"title": "Node.js Monitoring",
+	"tags": ["nodejs", "prometheus"],
+	"timezone": "browser",
+	"panels": [
+	  {
+		"id": 1,
+		"title": "HTTP Requests (2xx vs 4xx/5xx)",
+		"type": "graph",
+		"gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+		"datasource": "Prometheus",
+		"targets": [
+		  {
+			"expr": "sum(rate(http_requests_total{status_code=~\"2..\"}[5m])) by (method, route)",
+			"legendFormat": "2xx {{method}} {{route}}",
+			"refId": "A"
+		  },
+		  {
+			"expr": "sum(rate(http_requests_total{status_code=~\"4..|5..\"}[5m])) by (method, route)",
+			"legendFormat": "4xx/5xx {{method}} {{route}}",
+			"refId": "B"
+		  }
+		]
+	  },
+	  {
+		"id": 2,
+		"title": "Error Rate",
+		"type": "stat",
+		"gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+		"datasource": "Prometheus",
+		"targets": [
+		  {
+			"expr": "sum(rate(http_requests_total{status_code=~'4..|5..'}[5m])) / sum(rate(http_requests_total[5m]))",
+			"format": "percentunit",
+			"refId": "A"
+		  }
+		]
+	  },
+	  {
+		"id": 3,
+		"title": "HTTP Requests by Status Class",
+		"type": "graph",
+		"gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+		"datasource": "Prometheus",
+		"targets": [
+		  {
+			"expr": "sum(rate(http_requests_total{status_code=~\"2..\"}[5m]))",
+			"legendFormat": "2xx Success",
+			"refId": "A"
+		  },
+		  {
+			"expr": "sum(rate(http_requests_total{status_code=~\"4..\"}[5m]))",
+			"legendFormat": "4xx Client Errors",
+			"refId": "B"
+		  },
+		  {
+			"expr": "sum(rate(http_requests_total{status_code=~\"5..\"}[5m]))",
+			"legendFormat": "5xx Server Errors",
+			"refId": "C"
+		  }
+		]
+	  },
+	  {
+		"id": 4,
+		"title": "Node.js Process Memory in Bytes",
+		"type": "graph",
+		"gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+		"datasource": "Prometheus",
+		"targets": [
+		  {
+			"expr": "nodejs_heap_size_used_bytes",
+			"legendFormat": "Heap Used",
+			"refId": "A"
+		  },
+		  {
+			"expr": "process_resident_memory_bytes",
+			"legendFormat": "RSS",
+			"refId": "B"
+		  }
+		]
+	  },
+	  {
+		"id": 5,
+		"title": "Event Loop Lag (ms)",
+		"type": "stat",
+		"gridPos": { "x": 0, "y": 16, "w": 12, "h": 4 },
+		"datasource": "Prometheus",
+		"targets": [
+		  {
+			"expr": "nodejs_eventloop_lag_seconds * 1000",
+			"legendFormat": "99th pct",
+			"refId": "A"
+		  }
+		],
+		"options": {
+		  "unit": "ms"
+		}
+	  },
+	  {
+		"id": 6,
+		"title": "CPU Usage %",
+		"type": "gauge",
+		"gridPos": { "x": 12, "y": 16, "w": 12, "h": 4 },
+		"datasource": "Prometheus",
+		"targets": [
+		  {
+			"expr": "100 * avg(irate(process_cpu_seconds_total[1m]))",
+			"legendFormat": "",
+			"refId": "A"
+		  }
+		],
+		"fieldConfig": {
+		  "defaults": {
+			"custom": {
+			  "displayName": ""
+			},
+			"unit": "percent",
+			"decimals": 1
+		  }
+		},
+		"options": {
+		  "min": 0,
+		  "max": 100,
+		  "reduceOptions": { "calcs": ["last"] },
+		  "orientation": "horizontal"
+		}
+	  }
+	]
+  }
+  

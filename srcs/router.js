@@ -72,7 +72,7 @@ export default async function userRoutes(app) {
 		engine: { ejs: ejs },
 		root: path.join(__dirname, "views"),
 	});
-
+	
 	app.register(fastifyFormbody)
 
 	app.get('/', getPage);
@@ -126,4 +126,12 @@ export default async function userRoutes(app) {
 	app.get('/getWinnerTournament', getWinnerTournament);
 
 	app.setNotFoundHandler(getErrorPageDirect);
+
+	app.get('/test/error', async (request, reply) => {
+		reply.code(500).send({ error: "Internal server error" });
+	  });
+	  
+	  app.get('/test/bad-request', async (request, reply) => {
+		reply.code(400).send({ error: "Bad request" });
+	  });
 }

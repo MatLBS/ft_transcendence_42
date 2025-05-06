@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import userRoutes from './router.js';
+import { setupMetrics } from './controllers/metricsPrometheus.js';
 import {__dirname} from './router.js';
 import fastifyBcrypt from 'fastify-bcrypt';
 import fastifyCookie from '@fastify/cookie';
@@ -7,10 +8,13 @@ import fastifyMultipart from '@fastify/multipart';
 import cors from '@fastify/cors';
 import websocket from '@fastify/websocket';
 
+
+
 export const app = Fastify({
-	// logger: true,
+  // logger: true,
 });
 
+setupMetrics(app);
 app.register(fastifyCookie);
 
 app.register(fastifyBcrypt);
