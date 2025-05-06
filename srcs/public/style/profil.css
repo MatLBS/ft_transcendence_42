@@ -145,7 +145,7 @@ h2 {
 
 .btn-fix{
 	position: fixed;
-	top: 25px;
+	top: 100px;
 	right: 7vw;
 }
 
@@ -253,7 +253,7 @@ h2 {
 }
 
 .btn:hover {
-	color: darken(#ff4d4f, 10%);
+	color: #ff0000;
 }
 
 #totalGames,
@@ -261,8 +261,8 @@ h2 {
 #totalLosses,
 #pointsScored,
 #pointsAllowed {
-  margin: 0 auto;
-  width: 50%;
+	margin: 0 auto;
+	width: 50%;
 }
 
 /* Corrigez le style du bouton close-friends */

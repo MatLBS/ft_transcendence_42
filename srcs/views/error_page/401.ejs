@@ -2,11 +2,11 @@
 <div class="container">
 	<div class="error-emoji">🔐</div>
 	<div class="error-code">401</div>
-	<h1 class="error-title">Identification requise pour accéder à cette zone !</h1>
-	<p class="error-message">Veuillez vous authentifier pour poursuivre votre exploration spatiale.</p>
+	<h1 class="error-title"><%= jsonLanguage.unauthorized.title %></h1>
+	<p class="error-message"><%= jsonLanguage.unauthorized.message %></p>
 	<br>
 	<div class="action-buttons">
-		<a href="/login" class="my home-btn">Se connecter</a>
-		<a href="/" class="my home-btn">Retour à l'accueil</a>
+		<a href="/login" class="my home-btn"><%= jsonLanguage.login.button %></a>
+		<a href="/" class="my home-btn"><%= jsonLanguage.notFound.help %></a>
 	</div>
 </div>

@@ -19,7 +19,7 @@ export const googleAuth = async (req, reply) => {
 	}
 	const clientId = process.env.GOOGLE_CLIENT_ID; // doit correspondre à l’ID client dans Google Cloud Console
 	const scope = encodeURIComponent("openid email profile");
-	const state = crypto.randomUUID();; // optionnel, pour prévenir des attaques CSRF
+	const state = crypto.randomUUID(); // optionnel, pour prévenir des attaques CSRF
 	const responseType = "code";
 
 

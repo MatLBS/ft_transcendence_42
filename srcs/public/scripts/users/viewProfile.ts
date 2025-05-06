@@ -79,9 +79,8 @@ async function handleFriends(action: string) {
 	recvContent(`/users/${username}`);
 }
 
-window.addEventListener('users', async (event: Event) => {
-	displayStats();
-});
+window.addEventListener('users', displayStats);
+window.addEventListener('load', displayStats);
 
 async function displayStats() {
 	const titleErrorElements = document.getElementsByClassName('title-error');
@@ -93,4 +92,3 @@ async function displayStats() {
 	await displayGlobal(`/getExternalMatchsResults/${username}`);
 }
 
-displayStats();

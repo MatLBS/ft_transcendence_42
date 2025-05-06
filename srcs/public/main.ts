@@ -24,7 +24,7 @@ export async function recvContent(url: string): Promise<void> {
 		const searchResults = document.getElementById('search-results');
 		if (searchResults) {
 			searchResults.classList.remove('results');
-			searchResults.innerHTML = '';
+			clearSearchResults();
 		}
 	}
 	let jsonLanguage;
@@ -90,6 +90,7 @@ function updatePageContent(data: ResponseData): void {
 		scriptElement.id = 'js';
 		document.body.appendChild(scriptElement);
 	}
+	window.scrollTo(0, 0);
 }
 
 // Gère les clics sur les liens dynamiques avec délégation d'événements
@@ -184,7 +185,7 @@ function handleSearch(): void {
 			if (!searchResults) return;
 			if (searchValue.length < 1) {
 				searchResults.classList.remove('results');
-				searchResults.innerHTML = '';
+				clearSearchResults();
 				return;
 			}
 			fetch('/search', {
@@ -195,17 +196,10 @@ function handleSearch(): void {
 			})
 				.then((response: Response) => response.json())
 				.then((data: { users: Array<{ profilePicture: string, username: string; }> }) => {
-					searchResults.innerHTML = '';
+					clearSearchResults();
 					searchResults.classList.add('results');
 					data.users.slice(0, 3).forEach((user) => {
-						const userElement = document.createElement('div');
-						userElement.classList.add('user-result');
-						userElement.innerHTML = `
-							<a href="/users/${user.username}" class="user-link my">
-								<img src="${user.profilePicture}" alt="${user.username}'s profile picture" class="profile-picture" />
-								<p>${user.username}</p>
-							</a>
-						`;
+						const userElement = createUserResult(user);
 						searchResults.appendChild(userElement);
 					});
 					handleLinks();
@@ -215,6 +209,37 @@ function handleSearch(): void {
 				});
 		});
 	}
+}
+
+function clearSearchResults(): void {
+	const searchResults = document.getElementById('search-results');
+	if (searchResults) {
+		while (searchResults.firstChild) {
+			searchResults.removeChild(searchResults.firstChild);
+		}
+	}
+}
+
+function createUserResult(user: { profilePicture: string; username: string }): HTMLElement {
+	const userElement = document.createElement('div');
+	userElement.classList.add('user-result');
+	const userLink = document.createElement('a');
+	userLink.href = `/users/${user.username}`;
+	userLink.classList.add('user-link', 'my');
+
+	const profilePicture = document.createElement('img');
+	profilePicture.src = user.profilePicture;
+	profilePicture.alt = `${user.username}'s profile picture`;
+	profilePicture.classList.add('profile-picture');
+
+	const usernameParagraph = document.createElement('p');
+	usernameParagraph.textContent = user.username;
+
+	userLink.appendChild(profilePicture);
+	userLink.appendChild(usernameParagraph);
+	userElement.appendChild(userLink);
+
+	return userElement;
 }
 
 // Initialise l'application
