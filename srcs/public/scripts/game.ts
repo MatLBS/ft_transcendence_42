@@ -72,7 +72,9 @@ if (appDiv) {
 		if(target.tagName === 'BUTTON' && target.id ==='buttonNextMatch')
 		{
 			const divNextMatchButton = document.getElementById('divNextMatchButton');
+			const renderCanvas = document.getElementById('renderCanvas');
 			divNextMatchButton?.classList.add('hidden');
+			renderCanvas?.classList.remove('hidden')
 		}
 	});
 }
@@ -163,7 +165,7 @@ async function soloClick() {
 			// Ajoute le fichier CSS pour le mode local
 			const linkElement = document.createElement('link');
 			linkElement.rel = 'stylesheet';
-			linkElement.href = 'public/style/local.css';
+			linkElement.href = 'public/style/solo.css';
 			linkElement.id = 'css';
 			document.head.appendChild(linkElement);
 		});
@@ -266,9 +268,9 @@ async function handleTournamentSettingsClick(e: MouseEvent) {
 				tempDiv.className = 'flex justify-center align-center w-full';
 
 				if (i === 0) {
-					tempDiv.innerHTML += `<input type="text" id="playerName" name="playerName" value="${userLogIn}" readonly class="border-2 border-gray-500 w-[50%] rounded-full bg-gray-200 text-center">`;
+					tempDiv.innerHTML += `<input type="text" id="playerName" name="playerName" value="${userLogIn}" readonly class="border-2 border-gray-500 w-[50%] rounded-full bg-gray-200 text-center text-black">`;
 				} else {
-					tempDiv.innerHTML += `<input type="text" id="playerName" name="playerName" placeholder="${jsonLanguage!.tournament.enter}..." class="border-2 border-gray-500 w-[50%] rounded-full">`;
+					tempDiv.innerHTML += `<input type="text" id="playerName" name="playerName" placeholder="${jsonLanguage!.tournament.enter}..." class="border-2 border-gray-500 w-[50%] rounded-full text-black">`;
 				}
 
 				playerContainer.appendChild(tempDiv);
@@ -359,7 +361,6 @@ async function handleTournamentSettingsClick(e: MouseEvent) {
 		}
 }
 
-const buttonNextMatch = document.getElementById('buttonNextMatch');
 
 window.addEventListener('eventNextMatch', async (event) => {
 	let data;
@@ -370,20 +371,17 @@ window.addEventListener('eventNextMatch', async (event) => {
 	.then(async (response) => {
 		data = await response.json();
 	})
-
-	const divMessage = document.createElement('div');
-	divMessage.innerHTML = data?.[0] + " will play against " + data?.[1];
+	
+	
+	const firstSquare = document.getElementById('firstSquare') as HTMLInputElement | null;
+	const otherSquare = document.getElementById('otherSquare') as HTMLInputElement | null;
+	const renderCanvas = document.getElementById('renderCanvas') as HTMLInputElement | null;
+	
+	renderCanvas?.classList.add('hidden');
+	firstSquare!.innerHTML = data?.[0] ?? '';
+	otherSquare!.innerHTML = data?.[1] ?? '';
 	const divNextMatchButton = document.getElementById('divNextMatchButton');
-	if (divNextMatchButton?.firstChild)
-		divNextMatchButton.removeChild(divNextMatchButton.firstChild);
-	if (divNextMatchButton)
-		divNextMatchButton.insertBefore(divMessage, divNextMatchButton.firstChild);
 	divNextMatchButton?.classList.remove('hidden');
-});
-
-buttonNextMatch?.addEventListener('click', () => {
-	const divNextMatchButton = document.getElementById('divNextMatchButton');
-	divNextMatchButton?.classList.toggle('open');
 });
 
 window.addEventListener('eventWinnerTournament', ((event: Event) => {
