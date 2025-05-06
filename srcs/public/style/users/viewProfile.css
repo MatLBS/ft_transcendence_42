@@ -1,19 +1,8 @@
-.chart-wrapper {
-	width: 250px;
-	height: 250px;
-	margin: auto;
-	position: relative;
-  }
-canvas {
-	width: 100% !important;
-	height: 100% !important;
-}
-
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
-.header__wrapper header {
-	background: url("../../images/profil_bg.jpeg") no-repeat 50% 20% / cover;
-	min-height: calc(100px + 15vw);
+body,
+.content {
+  background-color: var(--color-background, #1a1a2e);
 }
 
 .header__wrapper .user__infos__container .user__infos {
@@ -26,13 +15,13 @@ canvas {
 
 .header__wrapper .user__infos__container .user__infos .img__container {
 	position: absolute;
-	top: -200px;
+	top: -10em;
 	left: 50%;
 	transform: translatex(-50%);
 }
 .header__wrapper .user__infos__container .user__infos .img__container img {
 	width: auto;
-	height: 360px;
+	height: 20em;
 	object-fit: cover;
 	border-radius: 50%;
 	display: block;
@@ -82,19 +71,129 @@ h2 {
 	display: none !important;
 }
 
+#match__history, #match__stats, #graphs {
+	background-color: #484849;
+	border-radius: 10px;
+	color: white;
+}
+
+#match__stats {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+#match__stats #pointsAllowed {
+	margin-bottom: 1rem;
+}
+
+#username, #email {
+	color: #FC6D6D;
+}
+
 #container {
 	position: fixed;
 	top: 0;
 	right: -320px;
-	width: 300px;
-	height: 100%;
+	width: clamp(260px, 25vw, 300px);
+	height: 100vh;
 	background: #fff;
-	box-shadow: -4px 0 8px rgba(0,0,0,0.1);
+	box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
 	padding: 1rem;
 	box-sizing: border-box;
 	transition: right 0.3s ease;
 	overflow-y: auto;
 	z-index: 1000;
+}
+
+/* Pour les tablettes */
+@media (max-width: 900px) {
+	#container {
+		right: -70vw;
+		width: 65vw;
+		padding: 0.75rem;
+	}
+}
+
+/* Pour les petits écrans (mobiles) */
+@media (max-width: 600px) {
+	#container {
+		right: -92vw;
+		width: 90vw;
+		padding: 0.5rem;
+	}
+}
+
+#container.open-friends {
+	right: 0;
+}
+
+.close-friends {
+	background: transparent;
+	border: none;
+	font-size: 1.5rem;
+	line-height: 1;
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+}
+
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.btn-fix{
+	position: fixed;
+	top: 25px;
+	right: 7vw;
+}
+
+.btn-abs {
+	position: absolute;
+	top: 160px;
+	right: 7vw;
+}
+
+#open-friends {
+	background: #f0ecec;
+	padding: 0.5rem 1rem;
+	border-radius: 8px;
+	cursor: pointer;
+	z-index: 1000;
+}
+
+#open-friends:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.258);
+}
+
+#open-friends:active {
+	transform: translateY(1px);
+}
+
+#friend-title {
+	margin-bottom: 1.5rem;
+	text-align: center;
+}
+
+.friends-list {
+	list-style: none;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 1.5rem;
+}
+
+.friend-card {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	position: relative;
+	transition: transform 0.2s ease;
 }
 
 .avatar {
@@ -157,6 +256,15 @@ h2 {
 	color: darken(#ff4d4f, 10%);
 }
 
+#totalGames,
+#totalWins,
+#totalLosses,
+#pointsScored,
+#pointsAllowed {
+  margin: 0 auto;
+  width: 50%;
+}
+
 /* Corrigez le style du bouton close-friends */
 #close-friends {
 	position: absolute;
@@ -212,8 +320,24 @@ h2 {
 	height: 250px;
 	margin: auto;
 	position: relative;
-  }
+}
 canvas {
 	width: 100% !important;
 	height: 100% !important;
+}
+
+@media (max-width: 800px) {
+	.stats {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	#match__history, #statsAndGraphs {
+		width: 100%;
+	}
+	.edit {
+		position: absolute;
+		right: 1em;
+	}
 }
