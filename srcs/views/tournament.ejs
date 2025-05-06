@@ -1,7 +1,7 @@
 <div id="custom-select" class="w-full mt-5">
 	<input type="hidden" value="0" id="hiddenValue">
 	<div class="flex justify-center align-center">
-		<div class="flex justify-center align-center w-[25%]">
+		<div class="flex justify-center align-center" id="nbPlayers">
 			<div id="custom-default" class="flex justify-center items-center [100%] rounded-full p-2 text-white">
 				<%= jsonLanguage.tournament.nbPlayers %>
 				<span class="material-icons pl-5" id="expandTournament">expand_more</span>
@@ -32,7 +32,7 @@
 	<div><button id="buttonNextMatch" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4"><%= jsonLanguage.tournament.nextMatch %></button></div>
 </div>
 <div class="flex justify-center align-center">
-	<canvas id="renderCanvas" tabindex="1" width="1200" height="600" canva-game="solo"></canvas>
+	<canvas id="renderCanvas" tabindex="1" canva-game="solo"></canvas>
 </div>
 <div class="flex justify-center align-center mt-20">
 	<div id="winnerTournamentPage" class="hidden">
