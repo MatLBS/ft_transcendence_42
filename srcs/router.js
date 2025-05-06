@@ -28,6 +28,7 @@ import { getErrorPageDirect } from './controllers/errorPage.js';
 import { search } from './controllers/search.js';
 import { getUserProfile } from './controllers/getUserProfile.js';
 import { addFriends, deleteFriends } from './controllers/handleFriends.js';
+import { webSocketConnect } from './controllers/webSocket.js';
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -64,7 +65,7 @@ export default async function userRoutes(app) {
 	app.register(fastifyStatic, {
 		root: path.join(__dirname, './uploads'),
 		prefix: '/uploads/',
-		decorateReply: false // évite les conflits avec l'autre instance fastifyStatic
+		decorateReply: false,
 	});
 
 	app.register(fastifyView, {
@@ -81,7 +82,6 @@ export default async function userRoutes(app) {
 
 	app.get('/favicon.ico', handleFavicon);
 
-	// app.post('/users/:page', getUserProfile);
 	app.get('/users/:page', getPage);
 
 	app.post('/registerUser', checkUserBack);
@@ -89,6 +89,8 @@ export default async function userRoutes(app) {
 
 	app.post('/login', login);
 	app.post('/verifLogin', verifLogin);
+
+	app.get('/ws', { websocket: true }, webSocketConnect);
 
 	app.post('/updateUser', updateUser);
 	app.post('/updateUserGoogle', updateUserGoogle);

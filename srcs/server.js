@@ -6,6 +6,7 @@ import fastifyBcrypt from 'fastify-bcrypt';
 import fastifyCookie from '@fastify/cookie';
 import fastifyMultipart from '@fastify/multipart';
 import cors from '@fastify/cors';
+import websocket from '@fastify/websocket';
 
 
 
@@ -17,6 +18,9 @@ setupMetrics(app);
 app.register(fastifyCookie);
 
 app.register(fastifyBcrypt);
+
+app.register(websocket);
+app.decorate('wsClients', new Map());
 
 app.register(cors, {
 	origin: ["https://accounts.google.com", "http://localhost:3000"], // Add allowed origins

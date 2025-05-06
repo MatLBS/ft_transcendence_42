@@ -32,7 +32,7 @@ body {
 }
 @keyframes slide {
   100%{
-    top: -270px;
+	top: -270px;
   }
 }
 #dynamic-txts li span {
@@ -47,16 +47,16 @@ body {
   left: 0;
   height: 100%;
   width: 100%;
-  background: #000000;
+  background: #1a1a2e;
   border-left: 2px solid #FC6D6D;
   animation: typing 3s steps(20) infinite;
 }
 @keyframes typing {
   40%, 60%{
-    left: calc(100% + 30px);
+	left: calc(100% + 30px);
   }
   100%{
-    left: 0;
+	left: 0;
   }
 }
 
@@ -69,7 +69,7 @@ html {
 
 body,
 .content {
-  background-color: var(--color-background, rgb(0, 0, 0));
+  background-color: var(--color-background, #1a1a2e);
 }
 
 main {
@@ -105,27 +105,27 @@ main {
 
 @keyframes indicate {
   0% {
-    --color-indicator: var(--color-primary);
-    transform: translateY(0);
+	--color-indicator: var(--color-primary);
+	transform: translateY(0);
   }
 
   25% {
-    --color-indicator: var(--color-yellow);
+	--color-indicator: var(--color-yellow);
   }
 
   50% {
-    --color-indicator: var(--color-secondary);
+	--color-indicator: var(--color-secondary);
   }
 
   75% {
-    --color-indicator: var(--color-red);
+	--color-indicator: var(--color-red);
   }
 
   100% {
-    --color-indicator: var(--color-purple);
-    transform: translateY(
-      calc(var(--indicator-total-height) - var(--indicator-size))
-    );
+	--color-indicator: var(--color-purple);
+	transform: translateY(
+	  calc(var(--indicator-total-height) - var(--indicator-size))
+	);
   }
 }
 
@@ -143,21 +143,21 @@ main {
 
 @keyframes fade-scroll {
   0% {
-    opacity: 1;
+	opacity: 1;
   }
 
   100% {
-    opacity: 0;
+	opacity: 0;
   }
 }
 
 /* Change animation based on radio checked */
 body:has([value="horizontal-scroll"]:checked) .content {
   /* 
-    The only reason we're repeat these two properties instead of simply 
-    setting `animation-name` is so the polyfill will pick them up 
-    They're flaky though and tend to get stuck. You might need to
-    refresh the page and select an option before scrolling
+	The only reason we're repeat these two properties instead of simply 
+	setting `animation-name` is so the polyfill will pick them up 
+	They're flaky though and tend to get stuck. You might need to
+	refresh the page and select an option before scrolling
   */
   animation: horizontal-scroll ease-in-out both;
   animation-timeline: --section;
@@ -177,53 +177,71 @@ body:has([value="zoom-scroll"]:checked) .content {
 /* Very cool, try it */
 @keyframes horizontal-scroll {
   0% {
-    transform: translate3d(100%, 0%, 0);
+	transform: translate3d(100%, 0%, 0);
   }
 
   50% {
-    transform: none;
+	transform: none;
   }
 
   100% {
-    transform: translate3d(-100%, 0%, 0);
+	transform: translate3d(-100%, 0%, 0);
   }
 }
 
 /* Befuddling, try it */
 @keyframes backwards-scroll {
   0% {
-    transform: translate3d(0%, -100%, 0);
+	transform: translate3d(0%, -100%, 0);
   }
 
   50% {
-    transform: none;
+	transform: none;
   }
 
   100% {
-    transform: translate3d(0%, 100%, 0);
+	transform: translate3d(0%, 100%, 0);
   }
 }
 
 /* WIP */
 @keyframes zoom-scroll {
   0% {
-    filter: blur(10rem);
-    transform: scale(0);
-    opacity: 0;
-    visibility: hidden;
+	filter: blur(10rem);
+	transform: scale(0);
+	opacity: 0;
+	visibility: hidden;
   }
 
   50% {
-    filter: blur(0);
-    transform: none;
-    opacity: 1;
-    visibility: visible;
+	filter: blur(0);
+	transform: none;
+	opacity: 1;
+	visibility: visible;
   }
 
   100% {
-    filter: blur(3rem);
-    transform: scale(1.5);
-    opacity: 0;
-    visibility: hidden;
+	filter: blur(3rem);
+	transform: scale(1.5);
+	opacity: 0;
+	visibility: hidden;
+  }
+}
+
+@media (max-width: 800px) {
+  #dynamic-txts ul li, .static-txt  {
+	  font-size: 2rem !important;
+  }
+
+  #dynamic-txts li span::after{
+	content: "";
+	position: absolute;
+	/* left: 0; */
+	bottom: 20px;
+	height: 50%;
+	width: 100%;
+	background: #1a1a2e;
+	border-left: 2px solid #FC6D6D;
+	animation: typing 3s steps(20) infinite;
   }
 }

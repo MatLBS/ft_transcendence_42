@@ -93,6 +93,23 @@ export async function removeFriends(username: string) {
 	recvContent(`/profil`);
 }
 
+let ws: WebSocket;
+export async function handleStatus() {
+	ws = new WebSocket('ws://localhost:3000/ws');
+
+	ws.onmessage = (event) => {
+		const data = JSON.parse(event.data);
+		if (data.status && data.friendId) {
+			const imgStatusElement = document.querySelector(`.status[data-id="${data.friendId}"]`);
+			const textStatusElement = document.querySelector(`.sub-text[data-id="${data.friendId}"]`);
+			if (imgStatusElement && textStatusElement) {
+				textStatusElement.textContent = data.status === 'online' ? 'En ligne' : 'Hors ligne';
+				imgStatusElement.className = `status ${data.status}`;
+			}
+		}
+	}
+}
+
 window.addEventListener("scroll", () => {
 	const button = document.getElementById("open-friends");
 		if (!button) return;
@@ -109,4 +126,9 @@ window.addEventListener("scroll", () => {
 window.addEventListener('profil', async (event: Event) => {
 	await displayMatches("getMatchsResults");
 	await displayGlobal("getMatchsResults");
+	await handleStatus();
 });
+
+await displayMatches("getMatchsResults");
+await displayGlobal("getMatchsResults");
+await handleStatus();
