@@ -93,4 +93,60 @@ async function displayStats() {
 	await displayGlobal(`/getExternalMatchsResults/${username}`);
 }
 
+let ws: WebSocket;
+export async function hangleNewGames() {
+	const urlParts = window.location.pathname.split('/');
+	const username = urlParts[urlParts.length - 1];
+	ws = new WebSocket(`ws://localhost:3000/wsNewGame/${username}`,);
+
+	ws.onmessage = (event) => {
+		const data = JSON.parse(event.data);
+		if (data.lastMatch){
+			if (data.lastMatch.winnerId !== 0)
+				data.lastMatch.winner = data.username;
+			if (data.lastMatch.loserId !== 0)
+				data.lastMatch.loser = data.username;
+			const divParent = document.createElement('div');
+			const match__history = document.getElementById('match__history') as HTMLInputElement | null;
+			divParent.classList.add('flex', 'justify-around', 'align-center', 'text-center', 'm-2');
+
+			const typeCell = document.createElement('p');
+			typeCell.textContent = data.type;
+			typeCell.classList.add('w-1/6', 'max-w-48', 'overflow-hidden');
+
+			const winnerCell = document.createElement('p');
+			winnerCell.textContent = data.lastMatch.winner;
+			winnerCell.classList.add('w-1/6', 'max-w-48', 'overflow-hidden');
+
+			const loserCell = document.createElement('p');
+			loserCell.textContent = data.lastMatch.loser;
+			loserCell.classList.add('w-1/6', 'max-w-48', 'overflow-hidden');
+
+			const scoreCell = document.createElement('p');
+			scoreCell.textContent = `${data.lastMatch.winnerScore} - ${data.lastMatch.loserScore}`;
+			scoreCell.classList.add('w-1/6', 'max-w-48', 'overflow-hidden');
+
+			const dateCell = document.createElement('p');
+			const matchDate = new Date(data.lastMatch.matchDate);
+			const formattedDateTime = matchDate.toLocaleString('en-GB', {
+				day: '2-digit',
+				month: '2-digit',
+				year: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit',
+			});
+			dateCell.textContent = formattedDateTime;
+			dateCell.classList.add('w-1/6', 'max-w-48', 'overflow-hidden');
+
+			divParent.appendChild(typeCell);
+			divParent.appendChild(winnerCell);
+			divParent.appendChild(loserCell);
+			divParent.appendChild(scoreCell);
+			divParent.appendChild(dateCell);
+			match__history?.appendChild(divParent);
+		}
+	}
+}
+
 displayStats();
+hangleNewGames();

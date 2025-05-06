@@ -28,7 +28,7 @@ import { getErrorPageDirect } from './controllers/errorPage.js';
 import { search } from './controllers/search.js';
 import { getUserProfile } from './controllers/getUserProfile.js';
 import { addFriends, deleteFriends } from './controllers/handleFriends.js';
-import { webSocketConnect } from './controllers/webSocket.js';
+import { webSocketConnect, webSocketConnectNewGame } from './controllers/webSocket.js';
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -91,6 +91,7 @@ export default async function userRoutes(app) {
 	app.post('/verifLogin', verifLogin);
 
 	app.get('/ws', { websocket: true }, webSocketConnect);
+	app.get('/wsNewGame/:page', { websocket: true }, webSocketConnectNewGame);
 
 	app.post('/updateUser', updateUser);
 	app.post('/updateUserGoogle', updateUserGoogle);

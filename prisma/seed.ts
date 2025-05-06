@@ -295,6 +295,7 @@ export async function fillLocalDb(id: number, winner: string, loser: string, win
 			loserId: loserId
 		}
 	});
+	return localParty;
 }
 
 export async function updateUserLanguageDB(id: number, newLanguage: string) {
@@ -359,6 +360,7 @@ export async function fillSoloDb(id: number, winner: string, loser: string, winn
 			loserId: loserId
 		}
 	});
+	return soloParty;
 }
 
 export async function fillTournamentDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number, winnerId: number, loserId: number) {
@@ -383,7 +385,7 @@ export async function fillTournamentDb(id: number, winner: string, loser: string
 			nbMatchesPlayedRound: { increment: 1 }
 		}
 	})
-	await prisma.tournamentMatches.create({
+	const matchTournament = await prisma.tournamentMatches.create({
 		data: {
 			tournamentId: id,
 			winner: winner,
@@ -407,6 +409,7 @@ export async function fillTournamentDb(id: number, winner: string, loser: string
 				nbMatchesPlayedRound: 0,
 			}
 		});
+	return matchTournament;
 }
 
 export async function getTournamentById(id: number) {
