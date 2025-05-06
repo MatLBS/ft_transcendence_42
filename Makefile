@@ -5,26 +5,22 @@ CONTAINER_NAME = ft_transcendence_42_container
 include .env
 export $(shell sed 's/=.*//' .env)
 
-all: build run
+all: build up
 
 build:
-	@docker build --build-arg PORT=$(PORT) --no-cache -t $(IMAGE_NAME) .
+	@docker-compose build
 
-run:
-	@docker run -p ${PORT}:${PORT} --name $(CONTAINER_NAME) \
-		-e NGROK_AUTHTOKEN=$(NGROK_AUTHTOKEN) \
-		-e PORT=$(PORT) \
-		-v "$(PWD)":/usr/src/app -v /usr/src/app/node_modules $(IMAGE_NAME)
+up:
+	@docker-compose up -d
 
-it:
-	@docker build -t $(IMAGE_NAME) .
-	@docker run --rm -it -p ${PORT}:${PORT} --name $(CONTAINER_NAME) -v "$(PWD)":/usr/src/app -v /usr/src/app/node_modules $(IMAGE_NAME) sh
+down:
+	@docker-compose down
 
-fclean:
-	@docker stop $(CONTAINER_NAME)
-	@docker rm $(CONTAINER_NAME)
-	@docker rmi $(IMAGE_NAME)
-	@docker system prune -f
+fclean: down
+	@docker system prune -af
+	@docker volume prune -f
+	@rm -rf prometheus/data grafana/data
+
 
 re: fclean all
 
