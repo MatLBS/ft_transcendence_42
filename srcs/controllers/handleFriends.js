@@ -58,7 +58,7 @@ export const deleteFriends = async (req, reply) => {
 
 		const deleteFriends = await removeFollow(response.user.id, user.id);
 		if (deleteFriends.ok) {
-			return reply.send({ ok: true, message: "ami supprimée de vos contact" });
+			return reply.send({ ok: true, message: "L'ami a été supprimé de vos contact" });
 		}
 		reply.send({ message: "Erreur lors de la suppression de l'ami" });
 	} catch (error) {
