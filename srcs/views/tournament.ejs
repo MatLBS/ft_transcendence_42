@@ -2,29 +2,37 @@
 	<input type="hidden" value="0" id="hiddenValue">
 	<div class="flex justify-center align-center">
 		<div class="flex justify-center align-center w-[25%]">
-			<div id="custom-default" class="flex justify-center items-center [100%] rounded-full p-2">
+			<div id="custom-default" class="flex justify-center items-center [100%] rounded-full p-2 text-white">
 				<%= jsonLanguage.tournament.nbPlayers %>
 				<span class="material-icons pl-5" id="expandTournament">expand_more</span>
 			</div>
 		</div>
 	</div>
 	<div class="flex justify-center align-center">
-		<ul id="custom-options" class="list-inside rounded-lg mt-2 hidden w-[25%] text-center border-2 border-gray-500">
-			<li data-value="4"  class=" hover:bg-gray-200">4</li>
-			<li data-value="8"  class="hover:bg-gray-200 ">8</li>
-			<li data-value="16"  class="hover:bg-gray-200">16</li>
+		<ul id="custom-options" class="list-inside rounded-lg mt-2 hidden w-[25%] text-center border-2 border-gray-500 text-white">
+			<li data-value="4"  class="hover:bg-gray-500">4</li>
+			<li data-value="8"  class="hover:bg-gray-500 ">8</li>
+			<li data-value="16"  class="hover:bg-gray-500">16</li>
 		</ul>
 	</div>
 </div>
-<div class="flex justify-center">
+<div class="flex justify-center text-white">
 	<div id="playerNames" class="flex flex-wrap justify-center w-[60%]"></div>
 </div>
 <div id="divButton" class="flex justify-center hover:scale-110"></div>
 <div id="divNextMatchButton" class="text-center hidden">
+	<div class="flex align-center justify-center gap-8">
+		<div class="square" id="firstSquare"></div>
+		<div class="vs mt-20">
+			<span class="v">V</span>
+			<span class="s">S</span>
+		</div>
+		<div class="square reverse"id="otherSquare"></div>
+	</div>
 	<div><button id="buttonNextMatch" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4"><%= jsonLanguage.tournament.nextMatch %></button></div>
 </div>
 <div class="flex justify-center align-center">
-	<canvas id="renderCanvas" tabindex="1" width="900" height="600" canva-game="solo"></canvas>
+	<canvas id="renderCanvas" tabindex="1" width="1200" height="600" canva-game="solo"></canvas>
 </div>
 <div class="flex justify-center align-center mt-20">
 	<div id="winnerTournamentPage" class="hidden">
