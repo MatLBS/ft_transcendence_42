@@ -129,7 +129,10 @@
 </div>
 
 <div id="container">
-	<h1 id="friend-title"><%= jsonLanguage.profil.listFriends %></h1>
+	<div class="flex justify-around align-center">
+		<span class="material-symbols-outlined hover:bg-gray-500" id="openChat">chat</span>
+		<h1 id="friend-title"><%= jsonLanguage.profil.listFriends %></h1>
+	</div>
 	<button id="close-friends">X</button>
 	<ul class="friends-list">
 	<% friends.forEach(friend => { %>
@@ -151,4 +154,35 @@
 		</a>
 	<% }); %>
 	</ul>
+</div>
+
+
+<div id="liveChat" class="hidden">
+	<div id="totalChat" class="chat-wrapper">
+		<button id="close-chat">X</button>
+		<ul class="chat-list">
+			<% friends.forEach(friend => { %>
+				<li class="chat-card">
+					<div class="avatar">
+						<img src="<%= friend.profilePicture %>" alt="Photo de profil de <%= friend.username %>">
+					</div>
+					<div class="info">
+						<h2><%= friend.username %></h2>
+						<p class="last-message">Dernier message...</p>
+					</div>
+				</li>
+			<% }); %>
+			<% if (friends.length === 0) { %>
+				<p>Ajoutez des amis pour commencer à discuter !</p>
+			<% } %>
+		</ul>
+		<div class="conversation">
+			<div class="messages-chat">
+			</div>
+			<div class="message-input">
+				<input type="text-chat" placeholder="Écrire un message..." />
+				<button id="send-chat">Envoyer</button>
+			</div>
+		</div>
+	</div>
 </div>

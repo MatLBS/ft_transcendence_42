@@ -22,6 +22,9 @@ model User {
 
   following      Follow[] @relation("UserFollows")
   followers      Follow[] @relation("UserFollowed")
+  user1          Conversation[] @relation("User1Conversations")
+  user2          Conversation[] @relation("User2Conversations")
+  messages       Message[]
 }
 
 model Follow {
@@ -100,4 +103,31 @@ model Solo {
   winnerScore  Int?
   loserScore  Int?
   matchDate     DateTime   @default(now())
+}
+
+model Conversation {
+  id         Int        @id @default(autoincrement())
+
+  user1      User       @relation("User1Conversations", fields: [user1Id], references: [id])
+  user1Id    Int
+
+  user2      User       @relation("User2Conversations", fields: [user2Id], references: [id])
+  user2Id    Int
+
+  messages   Message[]
+  createdAt  DateTime   @default(now())
+  updateAt   DateTime   @updatedAt
+
+  @@unique([user1Id, user2Id])
+}
+
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  content        String
+  sender         User         @relation(fields: [senderId], references: [id])
+  senderId       Int
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId Int
+  createdAt      DateTime     @default(now())
 }

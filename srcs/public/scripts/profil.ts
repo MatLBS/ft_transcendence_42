@@ -77,7 +77,74 @@ if (appDiv) {
 			if (friends) friends.classList.remove('open-friends');
 			return;
 		}
+		if (target.tagName === 'SPAN' && target.id === 'openChat') {
+			const chat = document.getElementById('liveChat');
+			if (chat) chat.classList.toggle('openLiveCHat');
+			handleMessages();
+		}
+		if (target.tagName === 'BUTTON' && target.id === 'close-chat') {
+			const chat = document.getElementById('liveChat');
+			if (chat) chat.classList.toggle('openLiveCHat');
+			return;
+		}
 	});
+}
+
+interface Message {
+	content: string
+	conversationId: number
+	createdAt: Date
+	id: number
+	senderId: number
+  }
+
+async function handleMessages() {
+	document.querySelectorAll('.chat-card').forEach(card => {
+		card.addEventListener('click', async () => {
+			const h2Element = card.querySelector('h2');
+			const target = h2Element ? h2Element.textContent || '' : '';
+			let messages: Message[] = [];
+			await fetch('/getAllMessages', {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ target }),
+			})
+				.then(async (response) => {
+					messages = await response.json();
+				})
+			const container = document.querySelector('.messages-chat');
+			if (!messages) {
+				container!.innerHTML = '';
+			} else {
+				const descending = messages.sort(
+					(a: Message, b: Message) => new Date (a.createdAt).getTime() - new Date (b.createdAt).getTime()
+				);
+				displayMessages(descending)
+			}
+		});
+	  });
+}
+
+async function displayMessages(descending: Array<Message>) {
+	let userId;
+	await fetch('/getUserId', {
+		method: 'GET',
+		credentials: 'include',
+	})
+		.then(async (response) => {
+			const data = await response.json();
+			userId = data.userId as number;
+		})
+	const container = document.querySelector('.messages-chat');
+	container!.innerHTML = '';
+	for (let i = 0; i < descending.length; ++i) {
+		const msgDiv = document.createElement('div');
+		msgDiv.classList.add('message');
+		descending[i].senderId === userId ? msgDiv.classList.add('sent') : msgDiv.classList.add('received');
+		msgDiv.textContent = descending[i].content;
+		container!.appendChild(msgDiv);
+	}
 }
 
 export async function removeFriends(username: string) {

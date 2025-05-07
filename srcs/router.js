@@ -18,7 +18,7 @@ import { createTournament, nextMatchTournament, updateResultTournamentGame, getW
 import { local } from './controllers/local.js';
 import { updateUserLanguage } from './controllers/updateUserLanguage.js';
 import { updateUser, updateUserGoogle, updateUserTwoFA } from './controllers/updateUser.js';
-import {getUser, getExternalUser} from './controllers/getUser.js';
+import {getUser, getExternalUser, getUserId} from './controllers/getUser.js';
 import { googleAuth, googleCallback } from './controllers/google.js';
 import {solo} from './controllers/solo.js';
 import { createSoloGame, updateResultSoloGame } from './controllers/createSolo.js';
@@ -29,6 +29,7 @@ import { search } from './controllers/search.js';
 import { getUserProfile } from './controllers/getUserProfile.js';
 import { addFriends, deleteFriends } from './controllers/handleFriends.js';
 import { webSocketConnect, webSocketConnectNewGame } from './controllers/webSocket.js';
+import { getAllMessages } from './controllers/handleMessages.js';
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -114,7 +115,8 @@ export default async function userRoutes(app) {
 	app.get('/auth/google', googleAuth);
 	app.get('/auth/google/callback', googleCallback);
 	app.post('/updateUserLanguage', updateUserLanguage);
-	app.get('/getUser',getUser);
+	app.get('/getUser', getUser);
+	app.get('/getUserId', getUserId);
 	app.get('/getExternalUser/:page',getExternalUser);
 	app.post('/solo',solo);
 	app.post('/createSolo', createSoloGame);
@@ -127,4 +129,7 @@ export default async function userRoutes(app) {
 	app.get('/getWinnerTournament', getWinnerTournament);
 
 	app.setNotFoundHandler(getErrorPageDirect);
+
+	app.post('/getAllMessages', getAllMessages);
+
 }

@@ -505,3 +505,30 @@ export async function hasAlreadyLose(playerName: string, tournamentId: number) {
 		return true;
 	return false;
 }
+
+export async function getAllMessagesDb(userLogInId: number, targetName: string) {
+	const user = await findUserById(userLogInId);
+    let target = await findUser(targetName)
+	const conversation = await prisma.conversation.findFirst ({
+		where: {
+			OR: [
+				{
+					user1Id: user!.id,
+					user2Id: target!.id,
+				},
+				{
+					user1Id: target!.id,
+					user2Id: user!.id,
+				}
+			]
+		}
+	})
+	if (!conversation)
+		return (null)
+	const messages = await prisma.message.findMany ({
+		where: {
+			conversationId: conversation!.id,
+		}
+	})
+	return (messages);
+}
