@@ -532,3 +532,39 @@ export async function getAllMessagesDb(userLogInId: number, targetName: string) 
 	})
 	return (messages);
 }
+
+export async function enterNewMessageDb(newMessage: string, userLogInId: number, targetName: string) {
+	const user = await findUserById(userLogInId);
+    let target = await findUser(targetName)
+	let conversation = await prisma.conversation.findFirst({
+		where: {
+			OR: [
+				{
+					user1Id: user!.id,
+					user2Id: target!.id,
+				},
+				{
+					user1Id: target!.id,
+					user2Id: user!.id,
+				}
+			]
+		}
+	  });
+	if (!conversation) {
+		conversation = await prisma.conversation.create({
+			data: {
+				user1Id: user!.id,
+				user2Id: target!.id
+			}
+		})
+	}
+	if (!conversation)
+		throw new Error(`Could not create conversation.`);		
+	const messages = await prisma.message.create ({
+		data: {
+			content: newMessage,
+			senderId: user!.id,
+			conversationId: conversation!.id,
+		}
+	})
+}

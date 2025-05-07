@@ -1,3 +1,4 @@
+
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -29,7 +30,7 @@ import { search } from './controllers/search.js';
 import { getUserProfile } from './controllers/getUserProfile.js';
 import { addFriends, deleteFriends } from './controllers/handleFriends.js';
 import { webSocketConnect, webSocketConnectNewGame } from './controllers/webSocket.js';
-import { getAllMessages } from './controllers/handleMessages.js';
+import { getAllMessages, enterNewMessage } from './controllers/handleMessages.js';
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -131,5 +132,6 @@ export default async function userRoutes(app) {
 	app.setNotFoundHandler(getErrorPageDirect);
 
 	app.post('/getAllMessages', getAllMessages);
+	app.post('/enterNewMessage', enterNewMessage);
 
 }

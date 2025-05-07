@@ -2,6 +2,7 @@ import { recvContent } from '../main.js';
 import { displayGlobal, displayMatches, charts} from './stats.js';
 /** @global */
 declare var Chart: any;
+let targetMessage: string;
 
 const appDiv = document.getElementById("app");
 if (appDiv) {
@@ -87,6 +88,11 @@ if (appDiv) {
 			if (chat) chat.classList.toggle('openLiveCHat');
 			return;
 		}
+		if (target.tagName === 'BUTTON' && target.id === 'send-chat') {
+			const textChat = document.getElementById('text-chat') as HTMLInputElement;
+			sendMessage(textChat!.value)
+			textChat.value = '';
+		}
 	});
 }
 
@@ -98,24 +104,35 @@ interface Message {
 	senderId: number
   }
 
+async function sendMessage(newMessage: string | null) {
+	if (newMessage?.trim().length === 0 || !newMessage || !targetMessage)
+		return
+	await fetch('/enterNewMessage', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ newMessage, targetMessage }),
+	})
+}
+
 async function handleMessages() {
 	document.querySelectorAll('.chat-card').forEach(card => {
 		card.addEventListener('click', async () => {
 			const h2Element = card.querySelector('h2');
-			const target = h2Element ? h2Element.textContent || '' : '';
+			targetMessage = h2Element ? h2Element.textContent || '' : '';
 			let messages: Message[] = [];
 			await fetch('/getAllMessages', {
 				method: 'POST',
 				credentials: 'include',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ target }),
+				body: JSON.stringify({ targetMessage }),
 			})
 				.then(async (response) => {
 					messages = await response.json();
 				})
 			const container = document.querySelector('.messages-chat');
 			if (!messages) {
-				container!.innerHTML = '';
+				container!.innerHTML = 'You don\'t have a message for now';
 			} else {
 				const descending = messages.sort(
 					(a: Message, b: Message) => new Date (a.createdAt).getTime() - new Date (b.createdAt).getTime()
