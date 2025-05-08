@@ -144,14 +144,12 @@ async function handleMessages() {
 					const descending = messages.sort(
 						(a: Message, b: Message) => new Date (a.createdAt).getTime() - new Date (b.createdAt).getTime()
 					);
-					console.log(descending)
 					displayMessages(descending)
 				}
 				if (wsTarget)
 					wsTarget.close();
 				wsTarget = new WebSocket(`ws://localhost:3000/wsMessages/${targetMessage}`);
 				wsTarget.onmessage = (event) => {
-					console.log("socket")
 					emptyConv!.innerHTML = ''
 					const data = JSON.parse(event.data);
 					if (data.newMessage && data.userLogInId && data.targetId && data.actualUser) {
