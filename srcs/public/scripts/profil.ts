@@ -135,19 +135,24 @@ async function handleMessages() {
 				})
 
 				const emptyConv = document.querySelector('#empty-conv');
+				const container = document.querySelector('.messages-chat');
 				if (!messages || messages.length === 0) {
 					emptyConv!.innerHTML = 'You don\'t have a message for now';
+					container!.innerHTML = ''
 				} else {
 					emptyConv!.innerHTML = ''
 					const descending = messages.sort(
 						(a: Message, b: Message) => new Date (a.createdAt).getTime() - new Date (b.createdAt).getTime()
 					);
+					console.log(descending)
 					displayMessages(descending)
 				}
-
+				if (wsTarget)
+					wsTarget.close();
 				wsTarget = new WebSocket(`ws://localhost:3000/wsMessages/${targetMessage}`);
 				wsTarget.onmessage = (event) => {
-					emptyConv!.innerHTML = '';
+					console.log("socket")
+					emptyConv!.innerHTML = ''
 					const data = JSON.parse(event.data);
 					if (data.newMessage && data.userLogInId && data.targetId && data.actualUser) {
 						interface MessageSocket {
@@ -168,7 +173,6 @@ async function handleMessages() {
 						textChat.value = '';
 					}
 				}
-
 		});
 	});
 }
