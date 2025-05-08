@@ -91,7 +91,6 @@ export const webSocketConnectMessages = async (socket, req) => {
 		if (!app.wsClients.has(keys)) {
 			app.wsClients.set(keys, []);
 		}
-		console.log("userID: ", userId)
 		app.wsClients.get(keys).push({
 			socket: socket,
 			userId: userId,
@@ -105,7 +104,6 @@ export const webSocketConnectMessages = async (socket, req) => {
 			} else {
 				app.wsClients.delete(keys);
 			}
-			console.log(`Socket closed for conversation ${keys}`);
 		});
 
 		socket.on('error', (err) => {

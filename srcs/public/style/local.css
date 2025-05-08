@@ -7,8 +7,9 @@
 }
 
 #renderCanvas {
-	width: 60%;
-	height: auto;
+	width: 100%;
+	max-width: 1200px;
+	aspect-ratio: 2 / 1;
 }
 
 @media (max-width: 1000px) {
