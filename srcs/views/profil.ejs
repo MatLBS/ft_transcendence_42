@@ -129,8 +129,8 @@
 </div>
 
 <div id="container">
-	<div class="flex justify-around align-center">
-		<span class="material-symbols-outlined hover:bg-gray-500" id="openChat">chat</span>
+	<div class="flex justify-around align-center ">
+		<span class="material-symbols-outlined hover:scale-110" id="openChat">chat</span>
 		<h1 id="friend-title"><%= jsonLanguage.profil.listFriends %></h1>
 	</div>
 	<button id="close-friends">X</button>
@@ -156,7 +156,6 @@
 	</ul>
 </div>
 
-
 <div id="liveChat" class="hidden">
 	<div id="totalChat" class="chat-wrapper">
 		<button id="close-chat">X</button>
@@ -177,7 +176,7 @@
 			<% } %>
 		</ul>
 		<div class="conversation">
-			<div class="messages-chat">
+			<div class="messages-chat text-center">
 			</div>
 			<div class="message-input">
 				<input id="text-chat" type="text-chat" placeholder="Écrire un message..." />

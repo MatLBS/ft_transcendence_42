@@ -1,8 +1,12 @@
+import { text } from 'stream/consumers';
 import { recvContent } from '../main.js';
 import { displayGlobal, displayMatches, charts} from './stats.js';
 /** @global */
 declare var Chart: any;
 let targetMessage: string;
+let ws: WebSocket;
+let wsTarget: WebSocket;
+
 
 const appDiv = document.getElementById("app");
 if (appDiv) {
@@ -91,7 +95,6 @@ if (appDiv) {
 		if (target.tagName === 'BUTTON' && target.id === 'send-chat') {
 			const textChat = document.getElementById('text-chat') as HTMLInputElement;
 			sendMessage(textChat!.value)
-			textChat.value = '';
 		}
 	});
 }
@@ -115,7 +118,7 @@ async function sendMessage(newMessage: string | null) {
 	})
 }
 
-async function handleMessages() {
+async function handleMessages() {	
 	document.querySelectorAll('.chat-card').forEach(card => {
 		card.addEventListener('click', async () => {
 			const h2Element = card.querySelector('h2');
@@ -131,7 +134,7 @@ async function handleMessages() {
 					messages = await response.json();
 				})
 			const container = document.querySelector('.messages-chat');
-			if (!messages) {
+			if (!messages || messages.length === 0) {
 				container!.innerHTML = 'You don\'t have a message for now';
 			} else {
 				const descending = messages.sort(
@@ -140,10 +143,33 @@ async function handleMessages() {
 				displayMessages(descending)
 			}
 		});
-	  });
+	});
 }
 
 async function displayMessages(descending: Array<Message>) {
+	wsTarget = new WebSocket(`ws://localhost:3000/wsMessages/${targetMessage}`);
+	wsTarget.onmessage = (event) => {
+		const data = JSON.parse(event.data);
+		if (data.newMessage && data.userLogInId && data.targetId && data.actualUser) {
+			interface MessageSocket {
+				content: string
+				senderId: number
+				}
+			const textChat = document.getElementById('text-chat') as HTMLInputElement;
+			const container = document.querySelector('.messages-chat');
+			const newMessage: MessageSocket = {
+				content: data.newMessage,
+				senderId: data.userLogInId,
+			};
+			const msgDiv = document.createElement('div');
+			msgDiv.classList.add('message');
+			newMessage!.senderId === data.actualUser ? msgDiv.classList.add('sent') : msgDiv.classList.add('received');
+			msgDiv.textContent = newMessage!.content;
+			container!.appendChild(msgDiv);
+			textChat.value = '';
+		}
+		
+	}
 	let userId;
 	await fetch('/getUserId', {
 		method: 'GET',
@@ -177,7 +203,6 @@ export async function removeFriends(username: string) {
 	recvContent(`/profil`);
 }
 
-let ws: WebSocket;
 export async function handleStatus() {
 	ws = new WebSocket('ws://localhost:3000/ws');
 
@@ -193,6 +218,8 @@ export async function handleStatus() {
 		}
 	}
 }
+
+
 
 window.addEventListener("scroll", () => {
 	const button = document.getElementById("open-friends");

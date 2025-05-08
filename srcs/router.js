@@ -29,7 +29,7 @@ import { getErrorPageDirect } from './controllers/errorPage.js';
 import { search } from './controllers/search.js';
 import { getUserProfile } from './controllers/getUserProfile.js';
 import { addFriends, deleteFriends } from './controllers/handleFriends.js';
-import { webSocketConnect, webSocketConnectNewGame } from './controllers/webSocket.js';
+import { webSocketConnect, webSocketConnectNewGame, webSocketConnectMessages } from './controllers/webSocket.js';
 import { getAllMessages, enterNewMessage } from './controllers/handleMessages.js';
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -94,6 +94,7 @@ export default async function userRoutes(app) {
 
 	app.get('/ws', { websocket: true }, webSocketConnect);
 	app.get('/wsNewGame/:page', { websocket: true }, webSocketConnectNewGame);
+	app.get('/wsMessages/:page', { websocket: true }, webSocketConnectMessages);
 
 	app.post('/updateUser', updateUser);
 	app.post('/updateUserGoogle', updateUserGoogle);

@@ -567,4 +567,5 @@ export async function enterNewMessageDb(newMessage: string, userLogInId: number,
 			conversationId: conversation!.id,
 		}
 	})
+	return (target!.id)
 }
