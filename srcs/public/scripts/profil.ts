@@ -118,7 +118,7 @@ async function sendMessage(newMessage: string | null) {
 	})
 }
 
-async function handleMessages() {	
+async function handleMessages() {
 	document.querySelectorAll('.chat-card').forEach(card => {
 		card.addEventListener('click', async () => {
 			const h2Element = card.querySelector('h2');
@@ -133,43 +133,47 @@ async function handleMessages() {
 				.then(async (response) => {
 					messages = await response.json();
 				})
-			const container = document.querySelector('.messages-chat');
-			if (!messages || messages.length === 0) {
-				container!.innerHTML = 'You don\'t have a message for now';
-			} else {
-				const descending = messages.sort(
-					(a: Message, b: Message) => new Date (a.createdAt).getTime() - new Date (b.createdAt).getTime()
-				);
-				displayMessages(descending)
-			}
+
+				const emptyConv = document.querySelector('#empty-conv');
+				if (!messages || messages.length === 0) {
+					emptyConv!.innerHTML = 'You don\'t have a message for now';
+				} else {
+					emptyConv!.innerHTML = ''
+					const descending = messages.sort(
+						(a: Message, b: Message) => new Date (a.createdAt).getTime() - new Date (b.createdAt).getTime()
+					);
+					displayMessages(descending)
+				}
+
+				wsTarget = new WebSocket(`ws://localhost:3000/wsMessages/${targetMessage}`);
+				wsTarget.onmessage = (event) => {
+					emptyConv!.innerHTML = '';
+					const data = JSON.parse(event.data);
+					if (data.newMessage && data.userLogInId && data.targetId && data.actualUser) {
+						interface MessageSocket {
+							content: string
+							senderId: number
+							}
+						const textChat = document.getElementById('text-chat') as HTMLInputElement;
+						const container = document.querySelector('.messages-chat');
+						const newMessage: MessageSocket = {
+							content: data.newMessage,
+							senderId: data.userLogInId,
+						};
+						const msgDiv = document.createElement('div');
+						msgDiv.classList.add('message');
+						newMessage!.senderId === data.actualUser ? msgDiv.classList.add('sent') : msgDiv.classList.add('received');
+						msgDiv.textContent = newMessage!.content;
+						container!.appendChild(msgDiv);
+						textChat.value = '';
+					}
+				}
+
 		});
 	});
 }
 
 async function displayMessages(descending: Array<Message>) {
-	wsTarget = new WebSocket(`ws://localhost:3000/wsMessages/${targetMessage}`);
-	wsTarget.onmessage = (event) => {
-		const data = JSON.parse(event.data);
-		if (data.newMessage && data.userLogInId && data.targetId && data.actualUser) {
-			interface MessageSocket {
-				content: string
-				senderId: number
-				}
-			const textChat = document.getElementById('text-chat') as HTMLInputElement;
-			const container = document.querySelector('.messages-chat');
-			const newMessage: MessageSocket = {
-				content: data.newMessage,
-				senderId: data.userLogInId,
-			};
-			const msgDiv = document.createElement('div');
-			msgDiv.classList.add('message');
-			newMessage!.senderId === data.actualUser ? msgDiv.classList.add('sent') : msgDiv.classList.add('received');
-			msgDiv.textContent = newMessage!.content;
-			container!.appendChild(msgDiv);
-			textChat.value = '';
-		}
-		
-	}
 	let userId;
 	await fetch('/getUserId', {
 		method: 'GET',

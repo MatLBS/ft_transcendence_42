@@ -75,6 +75,7 @@ export const webSocketConnectNewGame = async (socket, req) => {
 
 export const webSocketConnectMessages = async (socket, req) => {
 	try {
+		console.log("nessageSocket")
 		const response = await authenticateUser(req);
 		if (response.status !== 200) {
 			console.log('Unauthorized access attempt');
@@ -90,6 +91,7 @@ export const webSocketConnectMessages = async (socket, req) => {
 		if (!app.wsClients.has(keys)) {
 			app.wsClients.set(keys, []);
 		}
+		console.log("userID: ", userId)
 		app.wsClients.get(keys).push({
 			socket: socket,
 			userId: userId,
