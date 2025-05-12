@@ -218,7 +218,7 @@ export async function handleStatus() {
 			const imgStatusElement = document.querySelector(`.status[data-id="${data.friendId}"]`);
 			const textStatusElement = document.querySelector(`.sub-text[data-id="${data.friendId}"]`);
 			if (imgStatusElement && textStatusElement) {
-				textStatusElement.textContent = data.status === 'online' ? 'En ligne' : 'Hors ligne';
+				textStatusElement.textContent = data.status === 'online' ? 'Online' : 'Offline';
 				imgStatusElement.className = `status ${data.status}`;
 			}
 		}
@@ -230,7 +230,7 @@ export async function handleStatus() {
 window.addEventListener("scroll", () => {
 	const button = document.getElementById("open-friends");
 		if (!button) return;
-		const threshold = 120;
+	const threshold = 50;
 	if (window.scrollY > threshold) {
 			button.classList.add("btn-fix");
 			button.classList.remove("btn-abs");
@@ -240,12 +240,11 @@ window.addEventListener("scroll", () => {
 		}
 });
 
-window.addEventListener('profil', async (event: Event) => {
+async function initializeProfil() {
 	await displayMatches("getMatchsResults");
 	await displayGlobal("getMatchsResults");
 	await handleStatus();
-});
+}
 
-await displayMatches("getMatchsResults");
-await displayGlobal("getMatchsResults");
-await handleStatus();
+window.addEventListener('profil', initializeProfil);
+window.addEventListener('load', initializeProfil);

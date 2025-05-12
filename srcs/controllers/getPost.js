@@ -35,8 +35,6 @@ export const getPost = async (req, reply) => {
 	let file = req.body.url.split("/");
 	if (file[1] === "users")
 		return getUserProfile(req, reply, file[2]);
-	if (file[2] || file[2] == "")
-		return reply.send({ content: null });
 	file = file.pop() || "home";
 	const jsonLanguage = req.body.jsonLanguage;
 

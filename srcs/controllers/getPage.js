@@ -124,6 +124,8 @@ const generatePage = async (req, reply, file) => {
 		content = await addContent(content, route.css, route.js);
 	}
 	else if (file.includes("users/")) {
+		if (response.status !== 200 || !(user = await findUserById(response.user.id)))
+			return reply.redirect("/login");
 		content = await profilPage(jsonLanguage, response, file, isConnected);
 	} else {
 		content = await errorContent(jsonLanguage, isConnected);

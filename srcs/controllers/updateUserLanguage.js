@@ -10,7 +10,7 @@ export const updateUserLanguage =  async (req, reply) => {
 			secure: false,
 			sameSite: "lax",
 			path: "/",
-			maxAge: 240,
+			maxAge: 60 * 60 * 24,
 		})
 	if (response.status !== 200)
 		return;
