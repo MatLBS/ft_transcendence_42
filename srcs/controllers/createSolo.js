@@ -1,5 +1,6 @@
 import { createSoloDb, isUserExist, getMaxId, fillSoloDb, findUserById } from '../dist/prisma/seed.js';
 import { authenticateUser } from "./tokens.js";
+import { app } from "../server.js";
 
 
 export const createSoloGame = async (req, reply) => {
@@ -30,7 +31,15 @@ export async function updateResultSoloGame(req, reply) {
 			loserId = user.id;
 		}
 		const id = await getMaxId("solo");
-		await fillSoloDb(id, winner, loser, winnerScore, loserScore, winnerId, loserId);
+		const soloParty = await fillSoloDb(id, winner, loser, winnerScore, loserScore, winnerId, loserId);
+		const client = app.wsClients.get(response.user.id);
+		if (client) {
+			client.send(JSON.stringify({
+				type: 'Solo',
+				username: user.username,
+				lastMatch: soloParty,
+			}));
+		}
 	} catch (error) {
 		return reply.send({message: error.message});
 	}

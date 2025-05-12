@@ -1,7 +1,12 @@
+import { text } from 'stream/consumers';
 import { recvContent } from '../main.js';
 import { displayGlobal, displayMatches, charts} from './stats.js';
 /** @global */
 declare var Chart: any;
+let targetMessage: string;
+let ws: WebSocket;
+let wsTarget: WebSocket;
+
 
 const appDiv = document.getElementById("app");
 if (appDiv) {
@@ -77,7 +82,118 @@ if (appDiv) {
 			if (friends) friends.classList.remove('open-friends');
 			return;
 		}
+		if (target.tagName === 'SPAN' && target.id === 'openChat') {
+			const chat = document.getElementById('liveChat');
+			if (chat) chat.classList.toggle('openLiveCHat');
+			handleMessages();
+		}
+		if (target.tagName === 'BUTTON' && target.id === 'close-chat') {
+			const chat = document.getElementById('liveChat');
+			if (chat) chat.classList.toggle('openLiveCHat');
+			return;
+		}
+		if (target.tagName === 'BUTTON' && target.id === 'send-chat') {
+			const textChat = document.getElementById('text-chat') as HTMLInputElement;
+			sendMessage(textChat!.value)
+		}
 	});
+}
+
+interface Message {
+	content: string
+	conversationId: number
+	createdAt: Date
+	id: number
+	senderId: number
+  }
+
+async function sendMessage(newMessage: string | null) {
+	if (newMessage?.trim().length === 0 || !newMessage || !targetMessage)
+		return
+	await fetch('/enterNewMessage', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ newMessage, targetMessage }),
+	})
+}
+
+async function handleMessages() {
+	document.querySelectorAll('.chat-card').forEach(card => {
+		card.addEventListener('click', async () => {
+			const h2Element = card.querySelector('h2');
+			targetMessage = h2Element ? h2Element.textContent || '' : '';
+			let messages: Message[] = [];
+			await fetch('/getAllMessages', {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ targetMessage }),
+			})
+				.then(async (response) => {
+					messages = await response.json();
+				})
+
+				const emptyConv = document.querySelector('#empty-conv');
+				const container = document.querySelector('.messages-chat');
+				if (!messages || messages.length === 0) {
+					emptyConv!.innerHTML = 'You don\'t have a message for now';
+					container!.innerHTML = ''
+				} else {
+					emptyConv!.innerHTML = ''
+					const descending = messages.sort(
+						(a: Message, b: Message) => new Date (a.createdAt).getTime() - new Date (b.createdAt).getTime()
+					);
+					displayMessages(descending)
+				}
+				if (wsTarget)
+					wsTarget.close();
+				wsTarget = new WebSocket(`ws://localhost:3000/wsMessages/${targetMessage}`);
+				wsTarget.onmessage = (event) => {
+					emptyConv!.innerHTML = ''
+					const data = JSON.parse(event.data);
+					if (data.newMessage && data.userLogInId && data.targetId && data.actualUser) {
+						interface MessageSocket {
+							content: string
+							senderId: number
+							}
+						const textChat = document.getElementById('text-chat') as HTMLInputElement;
+						const container = document.querySelector('.messages-chat');
+						const newMessage: MessageSocket = {
+							content: data.newMessage,
+							senderId: data.userLogInId,
+						};
+						const msgDiv = document.createElement('div');
+						msgDiv.classList.add('message');
+						newMessage!.senderId === data.actualUser ? msgDiv.classList.add('sent') : msgDiv.classList.add('received');
+						msgDiv.textContent = newMessage!.content;
+						container!.appendChild(msgDiv);
+						textChat.value = '';
+					}
+				}
+		});
+	});
+}
+
+async function displayMessages(descending: Array<Message>) {
+	let userId;
+	await fetch('/getUserId', {
+		method: 'GET',
+		credentials: 'include',
+	})
+		.then(async (response) => {
+			const data = await response.json();
+			userId = data.userId as number;
+		})
+	const container = document.querySelector('.messages-chat');
+	container!.innerHTML = '';
+	for (let i = 0; i < descending.length; ++i) {
+		const msgDiv = document.createElement('div');
+		msgDiv.classList.add('message');
+		descending[i].senderId === userId ? msgDiv.classList.add('sent') : msgDiv.classList.add('received');
+		msgDiv.textContent = descending[i].content;
+		container!.appendChild(msgDiv);
+	}
 }
 
 export async function removeFriends(username: string) {
@@ -93,7 +209,6 @@ export async function removeFriends(username: string) {
 	recvContent(`/profil`);
 }
 
-let ws: WebSocket;
 export async function handleStatus() {
 	ws = new WebSocket('ws://localhost:3000/ws');
 
@@ -109,6 +224,8 @@ export async function handleStatus() {
 		}
 	}
 }
+
+
 
 window.addEventListener("scroll", () => {
 	const button = document.getElementById("open-friends");

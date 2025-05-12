@@ -85,6 +85,9 @@ i18next
 						"losses": "Losses 📉",
 						"pointsScored": "Points Scored ⚽",
 						"pointsAllowed": "Points Allowed 🥅",
+			"addFriends": "Add friends to start chatting!",
+			"sendMessage": "Send",
+			"writeMessage": "Write a message..."
 					},
 					"register": {
 						"title": "Register",
@@ -232,6 +235,9 @@ i18next
 						"losses": "Derrotas 📉",
 						"pointsScored": "Puntos Anotados ⚽",
 						"pointsAllowed": "Puntos Permitidos 🥅",
+				"addFriends": "¡Agrega amigos para empezar a chatear!",
+				"sendMessage": "Enviar",
+				"writeMessage": "Escribe un mensaje..."
 					},
 					"register": {
 						"title": "Registrarse",
@@ -379,6 +385,9 @@ i18next
 						"losses": "Derrotas 📉",
 						"pointsScored": "Pontos Marcados ⚽",
 						"pointsAllowed": "Pontos Sofridos 🥅",
+				"addFriends": "Adicione amigos para começar a conversar!",
+				"sendMessage": "Enviar",
+				"writeMessage": "Escreva uma mensagem..."
 					},
 					"register": {
 						"title": "Cadastro",
@@ -526,6 +535,9 @@ i18next
 						"losses": "Défaites 📉",
 						"pointsScored": "Points marqués ⚽",
 						"pointsAllowed": "Points encaissés 🥅",
+			"addFriends": "Ajoutez des amis pour commencer à discuter !",
+			"sendMessage": "Envoyer",
+			"writeMessage": "Écrire un message..."
 					},
 					"register": {
 						"title": "Inscription",

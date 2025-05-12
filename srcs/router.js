@@ -1,3 +1,4 @@
+
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -18,7 +19,7 @@ import { createTournament, nextMatchTournament, updateResultTournamentGame, getW
 import { local } from './controllers/local.js';
 import { updateUserLanguage } from './controllers/updateUserLanguage.js';
 import { updateUser, updateUserGoogle, updateUserTwoFA } from './controllers/updateUser.js';
-import {getUser, getExternalUser} from './controllers/getUser.js';
+import {getUser, getExternalUser, getUserId} from './controllers/getUser.js';
 import { googleAuth, googleCallback } from './controllers/google.js';
 import {solo} from './controllers/solo.js';
 import { createSoloGame, updateResultSoloGame } from './controllers/createSolo.js';
@@ -28,7 +29,8 @@ import { getErrorPageDirect } from './controllers/errorPage.js';
 import { search } from './controllers/search.js';
 import { getUserProfile } from './controllers/getUserProfile.js';
 import { addFriends, deleteFriends } from './controllers/handleFriends.js';
-import { webSocketConnect } from './controllers/webSocket.js';
+import { webSocketConnect, webSocketConnectNewGame, webSocketConnectMessages } from './controllers/webSocket.js';
+import { getAllMessages, enterNewMessage } from './controllers/handleMessages.js';
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -91,6 +93,8 @@ export default async function userRoutes(app) {
 	app.post('/verifLogin', verifLogin);
 
 	app.get('/ws', { websocket: true }, webSocketConnect);
+	app.get('/wsNewGame/:page', { websocket: true }, webSocketConnectNewGame);
+	app.get('/wsMessages/:page', { websocket: true }, webSocketConnectMessages);
 
 	app.post('/updateUser', updateUser);
 	app.post('/updateUserGoogle', updateUserGoogle);
@@ -113,7 +117,8 @@ export default async function userRoutes(app) {
 	app.get('/auth/google', googleAuth);
 	app.get('/auth/google/callback', googleCallback);
 	app.post('/updateUserLanguage', updateUserLanguage);
-	app.get('/getUser',getUser);
+	app.get('/getUser', getUser);
+	app.get('/getUserId', getUserId);
 	app.get('/getExternalUser/:page',getExternalUser);
 	app.post('/solo',solo);
 	app.post('/createSolo', createSoloGame);
@@ -126,6 +131,10 @@ export default async function userRoutes(app) {
 	app.get('/getWinnerTournament', getWinnerTournament);
 
 	app.setNotFoundHandler(getErrorPageDirect);
+
+	app.post('/getAllMessages', getAllMessages);
+	app.post('/enterNewMessage', enterNewMessage);
+
 
 	app.get('/test/error', async (request, reply) => {
 		reply.code(500).send({ error: "Internal server error" });

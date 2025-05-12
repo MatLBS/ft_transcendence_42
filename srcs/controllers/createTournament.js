@@ -2,6 +2,7 @@ import { createTournamentDb,  getMaxId, fillTournamentDb, getTournamentById, has
 import { findUsersTournament } from '../dist/prisma/seed.js';
 import { getUserBackend } from './getUser.js';
 import { authenticateUser } from "./tokens.js";
+import { app } from "../server.js";
 
 function getRandomNumber(playerIds) {
 	const randomIndex = Math.floor(Math.random() * playerIds.length);
@@ -109,7 +110,17 @@ export async function updateResultTournamentGame(req, reply) {
 			loserId = 0;
 		}
 		const id = await getMaxId("tournament");
-		await fillTournamentDb(id, winner, loser, winnerScore, loserScore, winnerId, loserId);
+		const tournamentParty = await fillTournamentDb(id, winner, loser, winnerScore, loserScore, winnerId, loserId);
+		if (tournamentParty.winner === user.username || tournamentParty.loser === user.username){
+			const client = app.wsClients.get(response.user.id);
+			if (client) {
+				client.send(JSON.stringify({
+					type: 'Tournament',
+					username: user.username,
+					lastMatch: tournamentParty,
+				}));
+			}
+		}
 	} catch (error) {
 		return reply.send({message: error.message});
 	}

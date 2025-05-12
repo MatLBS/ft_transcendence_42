@@ -295,6 +295,7 @@ export async function fillLocalDb(id: number, winner: string, loser: string, win
 			loserId: loserId
 		}
 	});
+	return localParty;
 }
 
 export async function updateUserLanguageDB(id: number, newLanguage: string) {
@@ -359,6 +360,7 @@ export async function fillSoloDb(id: number, winner: string, loser: string, winn
 			loserId: loserId
 		}
 	});
+	return soloParty;
 }
 
 export async function fillTournamentDb(id: number, winner: string, loser: string, winnerScore: number, loserScore: number, winnerId: number, loserId: number) {
@@ -383,7 +385,7 @@ export async function fillTournamentDb(id: number, winner: string, loser: string
 			nbMatchesPlayedRound: { increment: 1 }
 		}
 	})
-	await prisma.tournamentMatches.create({
+	const matchTournament = await prisma.tournamentMatches.create({
 		data: {
 			tournamentId: id,
 			winner: winner,
@@ -407,6 +409,7 @@ export async function fillTournamentDb(id: number, winner: string, loser: string
 				nbMatchesPlayedRound: 0,
 			}
 		});
+	return matchTournament;
 }
 
 export async function getTournamentById(id: number) {
@@ -501,4 +504,68 @@ export async function hasAlreadyLose(playerName: string, tournamentId: number) {
 	if (matches)
 		return true;
 	return false;
+}
+
+export async function getAllMessagesDb(userLogInId: number, targetName: string) {
+	const user = await findUserById(userLogInId);
+    let target = await findUser(targetName)
+	const conversation = await prisma.conversation.findFirst ({
+		where: {
+			OR: [
+				{
+					user1Id: user!.id,
+					user2Id: target!.id,
+				},
+				{
+					user1Id: target!.id,
+					user2Id: user!.id,
+				}
+			]
+		}
+	})
+	if (!conversation)
+		return (null)
+	const messages = await prisma.message.findMany ({
+		where: {
+			conversationId: conversation!.id,
+		}
+	})
+	return (messages);
+}
+
+export async function enterNewMessageDb(newMessage: string, userLogInId: number, targetName: string) {
+	const user = await findUserById(userLogInId);
+    let target = await findUser(targetName)
+	let conversation = await prisma.conversation.findFirst({
+		where: {
+			OR: [
+				{
+					user1Id: user!.id,
+					user2Id: target!.id,
+				},
+				{
+					user1Id: target!.id,
+					user2Id: user!.id,
+				}
+			]
+		}
+	  });
+	if (!conversation) {
+		conversation = await prisma.conversation.create({
+			data: {
+				user1Id: user!.id,
+				user2Id: target!.id
+			}
+		})
+	}
+	if (!conversation)
+		throw new Error(`Could not create conversation.`);		
+	const messages = await prisma.message.create ({
+		data: {
+			content: newMessage,
+			senderId: user!.id,
+			conversationId: conversation!.id,
+		}
+	})
+	return (target!.id)
 }

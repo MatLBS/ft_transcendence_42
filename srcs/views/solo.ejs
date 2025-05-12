@@ -1,9 +1,11 @@
-<div class="list-inside rounded-lg mt-10 text-center text-white" id="divSolo">
-	<%= jsonLanguage.solo.sentence %>
+<div class="w-full flex justify-center align-center">
+	<div class="list-inside rounded-lg mt-10 text-center text-white" id="divSolo">
+		<%= jsonLanguage.solo.sentence %>
+	</div>
 </div>
 <div class="flex justify-center align-center">
 	<button id="soloButton" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:scale-110"><%= jsonLanguage.solo.button %></button>
 </div>
 <div class="flex justify-center align-center">
-	<canvas id="renderCanvas" tabindex="1" width="1200" height="600" canva-game="solo"></canvas>
+	<canvas id="renderCanvas" tabindex="1" canva-game="solo"></canvas>
 </div>

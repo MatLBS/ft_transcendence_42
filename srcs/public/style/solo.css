@@ -5,3 +5,20 @@
 .none {
 	display: none !important;
 }
+
+#divSolo {
+	width: 80%;
+}
+
+#renderCanvas {
+	width: 100%;
+	max-width: 1200px;
+	aspect-ratio: 2 / 1;
+}
+
+@media (max-width: 1000px) {
+	#renderCanvas {
+		width: 90%;
+		height: auto;
+	}
+}

@@ -9,6 +9,11 @@ export const getUser = async (req , reply) => {
 	reply.send({ user: { username: username.username } });
 }
 
+export const getUserId = async (req , reply) => {
+	const response = await authenticateUser(req);
+	reply.send({ userId: response.user.id});
+}
+
 export const getUserBackend = async (req , reply) => {
 	const response = await authenticateUser(req);
 	return (response.user.username);

@@ -6,6 +6,10 @@
 	display: none !important;
 }
 
+#nbPlayers {
+	width: 80%;
+}
+
 #winnerTournamentPage {
 	text-align: center;
 	z-index: 1;
@@ -325,3 +329,20 @@
 	  transform: translate(0, 0)
 	}
   }
+
+@media (max-width: 1000px) {
+	#playerNames{
+		width: 100%;
+	}
+
+	#renderCanvas {
+		width: 90%;
+		height: auto;
+	}
+}
+
+#renderCanvas {
+	width: 100%;
+	max-width: 1200px;
+	aspect-ratio: 2 / 1;
+}
