@@ -15,7 +15,7 @@
 	background-clip: text;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
-	animation: glow 2s ease-in-out infinite alternate;
+	animation: glow_homepage 2s ease-in-out infinite alternate;
   }
 
   #rules-div {
@@ -28,7 +28,7 @@
 	width: 90%;
   }
 
-  h2 {
+  #objectives_home {
 	font-size: 1.8rem;
 	color: #90e0ef;
 	margin: 1.5rem 0;
@@ -59,7 +59,7 @@
   }
 
   /* Animation pour le titre */
-  @keyframes glow {
+  @keyframes glow_homepage {
 	from {
 	  text-shadow: 0 0 10px #00b4d8, 0 0 20px #00b4d8;
 	}
@@ -79,7 +79,7 @@
 	  width: 95%;
 	}
 	
-	h2 {
+	#rules-div h2 {
 	  font-size: 1.4rem;
 	}
   }
