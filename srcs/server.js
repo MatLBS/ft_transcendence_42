@@ -1,4 +1,6 @@
 import Fastify from 'fastify';
+import fs from 'fs';
+import path from 'path';
 import userRoutes from './router.js';
 import { setupMetrics } from './controllers/metricsPrometheus.js';
 import {__dirname} from './router.js';
@@ -8,10 +10,18 @@ import fastifyMultipart from '@fastify/multipart';
 import cors from '@fastify/cors';
 import websocket from '@fastify/websocket';
 
+const parent__dirname = path.join(__dirname, '..');
+
+// console.log(fs.existsSync(path.join(parent__dirname, "/certs/key.pem")));
+// console.log(fs.existsSync(path.join(parent__dirname, "/certs/cert.pem")));
 
 
 export const app = Fastify({
 	// logger: true,
+	https: {
+		key: fs.readFileSync(path.join(parent__dirname, "/certs/key.pem")),
+		cert: fs.readFileSync(path.join(parent__dirname, "/certs/cert.pem")),
+	},
 });
 
 setupMetrics(app);
