@@ -66,8 +66,7 @@ export const verifFormRegister = async (req, reply) => {
 		if (validationResult.message !== "ok") {
 			return reply.send({ message: validationResult.message });
 		}
-
-		if (parsedParts.fields.two_factor != 'true') {
+		if (parsedParts.fields.two_factor_register != 'true') {
 			return registerUser(req, reply, parsedParts, false);
 		}
 

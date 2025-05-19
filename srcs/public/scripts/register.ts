@@ -68,7 +68,8 @@ function registerUser() {
 	const profile_picture = profile_pictureElement?.files?.[0];
 	const bg_pictureElement = document.getElementById('bg_picture') as HTMLInputElement | null;
 	const bg_picture = bg_pictureElement?.files?.[0];
-	const two_factor = document.getElementById('two_factor') as HTMLInputElement | null;
+
+	const two_factor = document.getElementById('two_factor_register') as HTMLInputElement | null;
 
 	if (!error_input || !error_mail)
 		return;
@@ -79,9 +80,9 @@ function registerUser() {
 	formData.append('password', password);
 
 	if (two_factor && two_factor.checked) {
-		formData.append('two_factor', 'true');
+		formData.append('two_factor_register', 'true');
 	} else {
-		formData.append('two_factor', 'false');
+		formData.append('two_factor_register', 'false');
 	}
 
 	if (profile_picture)
@@ -121,7 +122,7 @@ async function validateForm() {
 	const password = getInputValue('password');
 	const email = getInputValue('email');
 	const username = getInputValue('username');
-	const two_factor = document.getElementById('two_factor') as HTMLInputElement | null;
+	const two_factor = document.getElementById('two_factor_register') as HTMLInputElement | null;
 
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
@@ -157,17 +158,15 @@ async function validateForm() {
 	formData.append('password', password);
 
 	if (two_factor && two_factor.checked) {
-		formData.append('two_factor', 'true');
+		formData.append('two_factor_register', 'true');
 	} else {
-		formData.append('two_factor', 'false');
+		formData.append('two_factor_register', 'false');
 	}
 
 	if (profile_picture)
 		formData.append('profile_picture', profile_picture);
 	if (bg_picture)
 		formData.append('bg_picture', bg_picture);
-
-	console.log("Form data:", formData);
 
 	await fetch('/verifForm', {
 		method: 'POST',
