@@ -70,7 +70,7 @@ export async function createUserGoogle (username: string, email: string, profile
 	return;
 }
 
-export async function updateUserDb (id: number, username: string, password: string, email: string, profilePicture?: string, bgPicture?: string) {
+export async function updateUserDb (id: number, username: string, password: string, email: string, twoFactor: boolean, profilePicture?: string, bgPicture?: string) {
 	const usernameAlreadyExist = await prisma.user.findFirst({
 		where: {
 			username: username,
@@ -94,9 +94,10 @@ export async function updateUserDb (id: number, username: string, password: stri
 	if (emailAlreadyExist)
 		throw new Error(`The email \"${email}\" already exists for a user`);
 
-	const updateUser: { username: string, password?: string, email: string, profilePicture?: string, bgPicture?: string } = {
+	const updateUser: { username: string, password?: string, email: string, twoFactor: boolean, profilePicture?: string, bgPicture?: string } = {
 		username: username,
 		email: email,
+		twoFactor: twoFactor,
 	};
 	if (password)
 		updateUser.password = password;

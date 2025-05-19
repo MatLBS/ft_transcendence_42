@@ -46,18 +46,20 @@ if (appDiv) {
 	});
 }
 
-function appendFormData(username: string, email: string, previousPassword: string, newPassword: string, profile_picture?: File, bg_picture?: File): FormData {
+function appendFormData(username: string, email: string, previousPassword: string, newPassword: string, two_factor: string, profile_picture?: File, bg_picture?: File): FormData {
 	const formData = new FormData();
 	formData.append('username', username);
 	formData.append('email', email);
 	formData.append('previousPassword', previousPassword);
 	formData.append('newPassword', newPassword);
+
 	if (profile_picture) {
 		formData.append('profile_picture', profile_picture);
 	}
 	if (bg_picture) {
 		formData.append('bg_picture', bg_picture);
 	}
+	formData.append('two_factor', two_factor);
 	return formData;
 }
 
@@ -76,8 +78,10 @@ function updateWithEmail() {
 	const profile_picture = profile_pictureElement?.files?.[0];
 	const bg_pictureElement = document.getElementById('bg_picture') as HTMLInputElement | null;
 	const bg_picture = bg_pictureElement?.files?.[0];
+	const two_factor = document.getElementById('two_factor_update') as HTMLInputElement | null;
+	const two_fa = two_factor?.checked ? 'true' : 'false';
 
-	const formData = appendFormData(username, email, previousPassword, newPassword, profile_picture, bg_picture);
+	const formData = appendFormData(username, email, previousPassword, newPassword, two_fa, profile_picture, bg_picture);
 	formData.append('verif_email', verif_email);
 
 	fetch('/updateTwoFA', {
@@ -101,6 +105,7 @@ async function validateForm() {
 	const newPassword = getInputValue('new_password');
 	const email = getInputValue('email');
 	const username = getInputValue('username');
+	const two_factor = document.getElementById('two_factor_update') as HTMLInputElement | null;
 
 	if (!error_input)
 		return;
@@ -130,7 +135,9 @@ async function validateForm() {
 		return;
 	}
 
-	const formData = appendFormData(username, email, previousPassword, newPassword, profile_picture, bg_picture);
+	const two_fa = two_factor?.checked ? 'true' : 'false';
+
+	const formData = appendFormData(username, email, previousPassword, newPassword, two_fa, profile_picture, bg_picture);
 	fetch('/updateUser', {
 		method: 'POST',
 		credentials: 'include',
