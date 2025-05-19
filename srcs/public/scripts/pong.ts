@@ -36,7 +36,6 @@ class FirstPersonController {
 
 		// Determine which fetch to perform
 		let fetchPromise: Promise<void>;
-
 		if (this.tournament) {
 			fetchPromise = fetch('/getNextMatchTournament', {
 				method: 'GET',

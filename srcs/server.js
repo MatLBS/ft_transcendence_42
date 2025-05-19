@@ -12,10 +12,6 @@ import websocket from '@fastify/websocket';
 
 const parent__dirname = path.join(__dirname, '..');
 
-// console.log(fs.existsSync(path.join(parent__dirname, "/certs/key.pem")));
-// console.log(fs.existsSync(path.join(parent__dirname, "/certs/cert.pem")));
-
-
 export const app = Fastify({
 	// logger: true,
 	https: {

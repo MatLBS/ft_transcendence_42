@@ -372,14 +372,13 @@ window.addEventListener('eventNextMatch', async (event) => {
 		data = await response.json();
 	})
 	
-	
 	const firstSquare = document.getElementById('firstSquare') as HTMLInputElement | null;
 	const otherSquare = document.getElementById('otherSquare') as HTMLInputElement | null;
 	const renderCanvas = document.getElementById('renderCanvas') as HTMLInputElement | null;
 	
 	renderCanvas?.classList.add('hidden');
-	firstSquare!.innerHTML = data?.[0] ?? '';
-	otherSquare!.innerHTML = data?.[1] ?? '';
+	firstSquare!.textContent = data?.[0] ?? '';
+	otherSquare!.textContent = data?.[1] ?? '';
 	const divNextMatchButton = document.getElementById('divNextMatchButton');
 	divNextMatchButton?.classList.remove('hidden');
 });

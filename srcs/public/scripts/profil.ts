@@ -148,7 +148,7 @@ async function handleMessages() {
 				}
 				if (wsTarget)
 					wsTarget.close();
-				wsTarget = new WebSocket(`ws://localhost:3000/wsMessages/${targetMessage}`);
+				wsTarget = new WebSocket(`wss://localhost:3000/wsMessages/${targetMessage}`);
 				wsTarget.onmessage = (event) => {
 					emptyConv!.innerHTML = ''
 					const data = JSON.parse(event.data);
@@ -210,7 +210,7 @@ export async function removeFriends(username: string) {
 }
 
 export async function handleStatus() {
-	ws = new WebSocket('ws://localhost:3000/ws');
+	ws = new WebSocket('wss://localhost:3000/ws');
 
 	ws.onmessage = (event) => {
 		const data = JSON.parse(event.data);

@@ -96,7 +96,7 @@ let ws: WebSocket;
 export async function hangleNewGames() {
 	const urlParts = window.location.pathname.split('/');
 	const username = urlParts[urlParts.length - 1];
-	ws = new WebSocket(`ws://localhost:3000/wsNewGame/${username}`,);
+	ws = new WebSocket(`wss://localhost:3000/wsNewGame/${username}`,);
 
 	ws.onmessage = (event) => {
 		const data = JSON.parse(event.data);
