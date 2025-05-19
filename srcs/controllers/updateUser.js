@@ -26,7 +26,7 @@ const verifUpdate = async (req, reply, fields) => {
 	if (!validPassword)
 		return reply.send({message : jsonLanguage.verify.wrongPrevPassword});
 
-	const formResponse = await verifyForm(fields.username, fields.email, fields.newPassword, jsonLanguage);
+	const formResponse = verifyForm(fields.username, fields.email, fields.newPassword, jsonLanguage);
 	if (formResponse.message !== "ok") {
 		if (fields.newPassword === "") {
 			if (!formResponse.password)
@@ -52,7 +52,8 @@ const verifUpdate = async (req, reply, fields) => {
 const handleFileUpload = async (fileName, fileBuffer, user) => {
 	fileName = '/uploads/' + user.username + fileName;
 	const unlinkFile = path.join(__dirname, './uploads', user.profilePicture);
-	if (fs.existsSync(unlinkFile)) fs.unlinkSync(unlinkFile);
+	if (fs.existsSync(unlinkFile))
+		fs.unlinkSync(unlinkFile);
 	const filePath = path.join(__dirname, fileName);
 	fs.writeFileSync(filePath, fileBuffer);
 	return fileName;
@@ -110,7 +111,7 @@ export const updateUser = async (req, reply) => {
 		return ;
 	}
 
-	if (email !== user.email) {
+	if (email !== user.email && user.twoFactor === true) {
 		const responseVerif = await verifEmail(req, reply, email, username);
 		return reply.send({ message : responseVerif, email : true});
 	}

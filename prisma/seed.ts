@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 
 export const prisma = new PrismaClient()
 
-export async function createUser (username: string, password: string, email: string, profilePicture?: string, bgPicture?: string) {
+export async function createUser (username: string, password: string, email: string, twoFactor: boolean, profilePicture?: string, bgPicture?: string) {
 	const usernameAlreadyExist = await prisma.user.findFirst({
 		where: {
 			username: username,
@@ -28,6 +28,7 @@ export async function createUser (username: string, password: string, email: str
 			profilePicture: profilePicture || null,
 			bgPicture: bgPicture || null,
 			isOnline: false,
+			twoFactor: twoFactor,
 		},
 	})
 }
@@ -63,6 +64,7 @@ export async function createUserGoogle (username: string, email: string, profile
 			profilePicture: profilePicture,
 			bgPicture: bgPicture || null,
 			isOnline: false,
+			twoFactor: false,
 		},
 	})
 	return;
@@ -559,7 +561,7 @@ export async function enterNewMessageDb(newMessage: string, userLogInId: number,
 		})
 	}
 	if (!conversation)
-		throw new Error(`Could not create conversation.`);		
+		throw new Error(`Could not create conversation.`);
 	const messages = await prisma.message.create ({
 		data: {
 			content: newMessage,
