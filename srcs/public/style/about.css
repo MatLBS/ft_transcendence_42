@@ -67,8 +67,7 @@ html {
   timeline-scope: --section, --main, --site-header;
 }
 
-body,
-.content {
+.wrapper-about {
   background-color: var(--color-background, #1a1a2e);
 }
 
