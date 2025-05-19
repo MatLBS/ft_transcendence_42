@@ -73,6 +73,7 @@ export const updateUserTwoFA = async (req, reply) => {
 		const newPassword = fields.newPassword;
 		const email = fields.email;
 		const username = fields.username;
+		const twoFactor = fields.two_factor == "true" ? true : false;
 
 		const responseCode = await verifCode(req, reply, fields.verif_email);
 		if (responseCode !== "ok") {
@@ -89,7 +90,7 @@ export const updateUserTwoFA = async (req, reply) => {
 		if (newPassword !== "")
 			hashedPassword = await app.bcrypt.hash(newPassword);
 
-		await updateUserDb(response.user.id, username, hashedPassword, email, fileProfil, fileBg);
+		await updateUserDb(response.user.id, username, hashedPassword, email, twoFactor, fileProfil, fileBg);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
@@ -105,13 +106,14 @@ export const updateUser = async (req, reply) => {
 	const newPassword = fields.newPassword;
 	const email = fields.email;
 	const username = fields.username;
+	const twoFactor = fields.two_factor == "true" ? true : false;
 
 	const { response, user } = await verifUpdate(req, reply, fields);
 	if (!response || !user) {
 		return ;
 	}
 
-	if (email !== user.email && user.twoFactor === true) {
+	if ((email !== user.email && twoFactor === true) || (twoFactor !== user.twoFactor && twoFactor === true)) {
 		const responseVerif = await verifEmail(req, reply, email, username);
 		return reply.send({ message : responseVerif, email : true});
 	}
@@ -126,7 +128,7 @@ export const updateUser = async (req, reply) => {
 		hashedPassword = await app.bcrypt.hash(newPassword);
 
 	try {
-		await updateUserDb(response.user.id, username, hashedPassword, email, fileProfil, fileBg);
+		await updateUserDb(response.user.id, username, hashedPassword, email, twoFactor, fileProfil, fileBg);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}

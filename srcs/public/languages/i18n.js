@@ -113,7 +113,8 @@ i18next
 						"email": "Email",
 						"prevPassword": "Previous Password",
 						"newPassword": "New Password",
-						"button": "Confirm"
+						"button": "Confirm",
+						"twoFA": "Activate two-factor authentication",
 					},
 					"verify": {
 						"regexEmail": "Email is required.",
@@ -264,7 +265,8 @@ i18next
 						"email": "Correo electrónico",
 						"prevPassword": "Contraseña anterior",
 						"newPassword": "Nueva contraseña",
-						"button": "Confirmar"
+						"button": "Confirmar",
+						"twoFA": "Activar autenticación de dos factores",
 					},
 					"verify": {
 						"regexEmail": "El correo electrónico es obligatorio.",
@@ -414,7 +416,8 @@ i18next
 						"email": "E-mail",
 						"prevPassword": "Senha anterior",
 						"newPassword": "Nova senha",
-						"button": "Confirmar"
+						"button": "Confirmar",
+						"twoFA": "Ativar autenticação de dois fatores",
 					},
 					"verify": {
 						"regexEmail": "E-mail é obrigatório.",
@@ -564,7 +567,8 @@ i18next
 						"email": "Email",
 						"prevPassword": "Mot de passe précédent",
 						"newPassword": "Nouveau mot de passe",
-						"button": "Confirmer"
+						"button": "Confirmer",
+						"twoFA": "Activer l'authentification à deux facteurs",
 					},
 					"verify": {
 						"regexEmail": "L'email est requis.",
