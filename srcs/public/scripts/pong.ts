@@ -3,7 +3,7 @@ import "@babylonjs/loaders";
 import * as CANNON from "cannon";
 import * as GUI from "@babylonjs/gui";
 
-const WINPOINT = 2;
+const WINPOINT = 5;
 class FirstPersonController {
 	scene!: Scene;
 	engine!: Engine;
@@ -88,7 +88,7 @@ class FirstPersonController {
 								velocity.x *= -1;
 								this.ball.physicsImpostor!.setLinearVelocity(velocity);
 							}
-						} 
+						}
 					}
 					this.createGame();
 				});
@@ -555,25 +555,25 @@ class FirstPersonController {
 			justify-content: space-between;
 			touch-action: manipulation;
 		`;
-	
+
 		// Contrôles joueur 1 (gauche)
 		const leftControls = this.createTouchButton('⬅', 's', keys);
 		const rightControls = this.createTouchButton('➡', 'w', keys);
-		
+
 		// Contrôles joueur 2 (droite)
 		const upControls = this.createTouchButton('⬆', 'arrowup', keys);
 		const downControls = this.createTouchButton('⬇', 'arrowdown', keys);
-	
+
 		const wrapperLeft = document.createElement('div');
 		wrapperLeft.append(leftControls, rightControls);
-	
+
 		const wrapperRight = document.createElement('div');
 		wrapperRight.append(upControls, downControls);
-	
+
 		controls.append(wrapperLeft, wrapperRight);
 		document.body.appendChild(controls);
 	}
-	
+
 	private createTouchButton(label: string, key: string, keys: any): HTMLElement {
 		const btn = document.createElement('button');
 		btn.textContent = label;
@@ -585,26 +585,26 @@ class FirstPersonController {
 			background: none;
 			touch-action: manipulation;
 		`;
-	
+
 		// Gestion des événements tactiles
 		btn.ontouchstart = (e) => {
 			e.preventDefault();
 			keys[key] = true;
 			btn.style.opacity = '1';
 		};
-	
+
 		btn.ontouchend = (e) => {
 			e.preventDefault();
 			keys[key] = false;
 			btn.style.opacity = '0.5';
 		};
-	
+
 		btn.ontouchcancel = (e) => {
 			e.preventDefault();
 			keys[key] = false;
 			btn.style.opacity = '0.5';
 		};
-	
+
 		return btn;
 	}
 
