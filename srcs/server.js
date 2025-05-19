@@ -11,7 +11,7 @@ import websocket from '@fastify/websocket';
 
 
 export const app = Fastify({
-  // logger: true,
+	// logger: true,
 });
 
 setupMetrics(app);

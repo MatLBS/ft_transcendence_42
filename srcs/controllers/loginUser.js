@@ -16,10 +16,14 @@ export const verifLogin = async (req, reply) => {
 	if (user.password === null) {
 		return reply.send({ message: "Please log in using Google." });
 	}
-	const validPassword = await app.bcrypt.compare(password, user.password);
 
+	const validPassword = await app.bcrypt.compare(password, user.password);
 	if (!validPassword)
 		return reply.send({ message: `Invalid password for user '${user.username}'`});
+
+	if (user.twoFactor === false) {
+		return sendToken(req, reply, user, 0);
+	}
 
 	const code = await generateCode(req, reply);
 	const response = await sendEmail(user.email, user.username, code.code);
@@ -34,11 +38,10 @@ export const verifLogin = async (req, reply) => {
 			path: "/",
 			maxAge: 240,
 		})
-		.send({ message: "ok" });
+		.send({ message: "twoFa" });
 }
 
 export const loginUser = async (req, reply, password, username) => {
-	let accessToken, refreshToken;
 	try {
 		if (!username || !password) {
 			return reply.send({message: "Missing username or password"});
@@ -54,26 +57,10 @@ export const loginUser = async (req, reply, password, username) => {
 		if (!validPassword)
 			throw new Error(`Invalid password for user '${user.username}'`);
 
-		accessToken = generateAccessToken(user, 0);
-		refreshToken = generateRefreshToken(user, 0);
-
+		return sendToken(req, reply, user, 0);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
-	return reply
-		.setCookie('access_token', accessToken, {
-			httpOnly: false,
-			secure: false,
-			sameSite: 'lax',
-			path: "/",
-		})
-		.setCookie('refresh_token', refreshToken, {
-			httpOnly: true,
-			secure: false,
-			sameSite: 'lax',
-			path: "/",
-		})
-		.send({ message: "ok" });
 }
 
 export const login = async (req, reply) => {
@@ -86,20 +73,22 @@ export const login = async (req, reply) => {
 };
 
 export const loginUserGoogle = async (req, reply, email) => {
-	let accessToken, refreshToken;
 	try {
 		const user = await findUserByEmail(email);
 		if (!user) {
 			return reply.send({ message: "email not found" });
 		}
 
-		accessToken = generateAccessToken(user, 1);
-		refreshToken = generateRefreshToken(user, 1);
-
+		return sendToken(req, reply, user, 1);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
-	return reply
+}
+
+const sendToken = async (req, reply, user, isGoogle) => {
+	const accessToken = generateAccessToken(user, isGoogle);
+	const refreshToken = generateRefreshToken(user, isGoogle);
+	reply
 		.setCookie('access_token', accessToken, {
 			httpOnly: false,
 			secure: false,
@@ -109,8 +98,8 @@ export const loginUserGoogle = async (req, reply, email) => {
 		.setCookie('refresh_token', refreshToken, {
 			httpOnly: true,
 			secure: false,
-			sameSite: 'Strict',
+			sameSite: 'lax',
 			path: "/",
 		})
-		.redirect('/profil');
+		return isGoogle === 1 ? reply.redirect('/profil') : reply.send({ message: "ok" });
 }

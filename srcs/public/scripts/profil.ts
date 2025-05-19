@@ -105,7 +105,7 @@ interface Message {
 	createdAt: Date
 	id: number
 	senderId: number
-  }
+}
 
 async function sendMessage(newMessage: string | null) {
 	if (newMessage?.trim().length === 0 || !newMessage || !targetMessage)
@@ -224,8 +224,6 @@ export async function handleStatus() {
 		}
 	}
 }
-
-
 
 window.addEventListener("scroll", () => {
 	const button = document.getElementById("open-friends");

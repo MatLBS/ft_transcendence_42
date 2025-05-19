@@ -68,6 +68,7 @@ function registerUser() {
 	const profile_picture = profile_pictureElement?.files?.[0];
 	const bg_pictureElement = document.getElementById('bg_picture') as HTMLInputElement | null;
 	const bg_picture = bg_pictureElement?.files?.[0];
+	const two_factor = document.getElementById('two_factor') as HTMLInputElement | null;
 
 	if (!error_input || !error_mail)
 		return;
@@ -76,11 +77,19 @@ function registerUser() {
 	formData.append('username', username);
 	formData.append('email', email);
 	formData.append('password', password);
+
+	if (two_factor && two_factor.checked) {
+		formData.append('two_factor', 'true');
+	} else {
+		formData.append('two_factor', 'false');
+	}
+
 	if (profile_picture)
 		formData.append('profile_picture', profile_picture);
 	if (bg_picture)
 		formData.append('bg_picture', bg_picture);
 	formData.append('verif_email', verif_email);
+
 	fetch('/registerUser', {
 		method: 'POST',
 		body: formData,
@@ -112,9 +121,13 @@ async function validateForm() {
 	const password = getInputValue('password');
 	const email = getInputValue('email');
 	const username = getInputValue('username');
+	const two_factor = document.getElementById('two_factor') as HTMLInputElement | null;
 
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
 	const profile_picture = profile_pictureElement?.files?.[0];
+
+	const bg_pictureElement = document.getElementById('bg_picture') as HTMLInputElement | null;
+	const bg_picture = bg_pictureElement?.files?.[0];
 
 	if (!error_input)
 		return;
@@ -132,7 +145,7 @@ async function validateForm() {
 			.catch((error: unknown) => {
 				console.error('Erreur lors de la récupération du contenu:', error);
 			});
-	const formResponse = await verifyForm(username, email, password, jsonLanguage);
+	const formResponse = verifyForm(username, email, password, jsonLanguage);
 	if (formResponse.message !== "ok") {
 		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
 		return;
@@ -142,19 +155,30 @@ async function validateForm() {
 	formData.append('username', username);
 	formData.append('email', email);
 	formData.append('password', password);
-	if (profile_picture) {
-		formData.append('profile_picture', profile_picture);
+
+	if (two_factor && two_factor.checked) {
+		formData.append('two_factor', 'true');
+	} else {
+		formData.append('two_factor', 'false');
 	}
+
+	if (profile_picture)
+		formData.append('profile_picture', profile_picture);
+	if (bg_picture)
+		formData.append('bg_picture', bg_picture);
+
+	console.log("Form data:", formData);
+
 	await fetch('/verifForm', {
 		method: 'POST',
 		body: formData,
 	})
 	.then(async (response) => {
 		const data = await response.json();
-		if (data.message !== "ok") {
+		if (data.message !== "ok" && data.message !== "twoFa") {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
 			return;
-		} else {
+		} else if (data.message === "twoFa") {
 			const modal = document.getElementById('modal');
 			if (modal) {
 				modal.classList.remove('hidden');
@@ -162,6 +186,11 @@ async function validateForm() {
 				if (modalButton)
 					modalButton.id = 'register_button';
 			}
+		} else {
+			const modal = document.getElementById('modal');
+			if (modal && !modal.classList.contains('hidden'))
+				modal.classList.add('hidden');
+			navigateTo('/profil');
 		}
 	})
 	.catch((error) => {

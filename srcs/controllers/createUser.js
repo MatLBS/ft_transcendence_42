@@ -9,44 +9,70 @@ import { parseRequestParts } from '../middleware/parseRequestParts.js';
 import { sendEmail, generateCode, verifCode } from './email.js';
 import { getLanguageWithoutBody } from './getLanguage.js'
 
+const isExist = async (req, username, email) => {
+	let language = req.cookies.userLanguage || "en";
+
+	const jsonLanguage = await getLanguageWithoutBody(language);
+
+	const user = await findUser(username);
+	if (user) {
+		return jsonLanguage.verify.usernameAlreadyExists ;
+	}
+
+	const userEmail = await findUserByEmail(email);
+	if (userEmail) {
+		return jsonLanguage.verify.emailAlreadyExists ;
+	}
+}
+
+const registerUser = async (req, reply, parsedParts, twoFa) => {
+	const { username, email, password } = parsedParts.fields;
+	let fileProfil = parsedParts.fileProfil;
+	let fileBg = parsedParts.fileBg;
+
+	if (!fileProfil) {
+		fileProfil = `temp_${Date.now()}profil.png`;
+		const filePath = path.join(__dirname, './uploads', username + fileProfil);
+		fs.copyFileSync(path.join(__dirname, "./public/images/flamme.png"), filePath);
+	} else {
+		const filePath = path.join(__dirname, './uploads', username + fileProfil);
+		fs.writeFileSync(filePath, parsedParts.fileBufferProfil);
+	}
+
+	if (!fileBg) {
+		fileBg = `temp_${Date.now()}bg.png`;
+		const filePath = path.join(__dirname, './uploads', username + fileBg);
+		fs.copyFileSync(path.join(__dirname, "./public/images/profil_bg.jpeg"), filePath);
+	} else {
+		const filePath = path.join(__dirname, './uploads', username + fileBg);
+		fs.writeFileSync(filePath, parsedParts.fileBufferBg);
+	}
+
+	const hashedPassword = await app.bcrypt.hash(password);
+	await createUser(username, hashedPassword, email, twoFa, '/uploads/' + username + fileProfil, '/uploads/' + username + fileBg);
+	return loginUser(req, reply, password, username);
+}
+
 export const verifFormRegister = async (req, reply) => {
-	let language = req.cookies.userLanguage;
-	if (!language)
-		language = "en"
-	let jsonLanguage = await getLanguageWithoutBody(language);
 	try {
-		const parts = req.parts();
-		let fields = {};
-		for await (const part of parts) {
-			if (part.file) {
-				if (!part.mimetype.startsWith('image/')) {
-					part.file.resume();
-					return reply.send({ message: jsonLanguage.verify.invalidFormat });
-				}
-				part.file.resume();
-			}
-			else
-				fields[part.fieldname] = part.value;
+		const uploadDir = path.join(__dirname, './uploads');
+		if (!fs.existsSync(uploadDir)) {
+			fs.mkdirSync(uploadDir, { recursive: true });
 		}
-		const email = fields.email;
-		const username = fields.username;
+		const parsedParts = await parseRequestParts(req, reply);
+		if (!parsedParts.fields) return;
 
-		const formResponse = await verifyForm(username, email, fields.password, jsonLanguage);
-		if (formResponse.message !== "ok") {
-			return reply.send({ message: formResponse.message });
+		const validationResult = await validateRegisterForm(req, parsedParts.fields);
+		if (validationResult.message !== "ok") {
+			return reply.send({ message: validationResult.message });
 		}
 
-		const user = await findUser(username);
-		if (user) {
-			return reply.send({ message: jsonLanguage.verify.usernameAlreadyExists });
-		}
-		const userEmail = await findUserByEmail(email);
-		if (userEmail) {
-			return reply.send({ message: jsonLanguage.verify.emailAlreadyExists });
+		if (parsedParts.fields.two_factor != 'true') {
+			return registerUser(req, reply, parsedParts, false);
 		}
 
 		const code = await generateCode(req, reply);
-		const response = await sendEmail(email, username, code.code);
+		const response = await sendEmail(parsedParts.fields.email, parsedParts.fields.username, code.code);
 		if (response.message !== "ok") {
 			return reply.send({ message: response.message });
 		}
@@ -58,7 +84,7 @@ export const verifFormRegister = async (req, reply) => {
 				path: "/",
 				maxAge: 240,
 			})
-			.send({ message: "ok" });
+			.send({ message: "twoFa" });
 	}
 	catch (error) {
 		return reply.send({ message: "Internal server error" });
@@ -66,57 +92,42 @@ export const verifFormRegister = async (req, reply) => {
 }
 
 export const checkUserBack = async (req, reply) => {
-	let language = req.cookies.userLanguage;
-	let jsonLanguage = await getLanguageWithoutBody(language);
 	try {
-		// Utiliser req.parts() pour traiter les fichiers et les champs
 		const uploadDir = path.join(__dirname, './uploads');
 		if (!fs.existsSync(uploadDir)) {
 			fs.mkdirSync(uploadDir, { recursive: true });
 		}
-		let { fields, fileBufferProfil, fileProfil, fileBufferBg, fileBg } = await parseRequestParts(req, reply);
-		if (!fields) return;
+		const parsedParts = await parseRequestParts(req, reply);
+		if (!parsedParts.fields) return;
 
-		const password = fields.password;
-		const username = fields.username;
-		const email = fields.email;
-
-		const user = await findUser(username);
-		if (user) {
-			return reply.send({ message: jsonLanguage.verify.usernameAlreadyExists });
-		}
-		const userEmail = await findUserByEmail(email);
-		if (userEmail) {
-			return reply.send({ message: jsonLanguage.verify.emailAlreadyExists });
+		const validationResult = await validateRegisterForm(req, parsedParts.fields);
+		if (validationResult.message !== "ok") {
+			return reply.send({ message: validationResult.message });
 		}
 
-		const response = await verifCode(req, reply, fields.verif_email);
+		const response = await verifCode(req, reply, parsedParts.fields.verif_email);
 		if (response !== "ok") {
 			return reply.send({ message: response, code: true });
 		}
 
-		if (!fileProfil) {
-			fileProfil = `temp_${Date.now()}profil.png`;
-			const filePath = path.join(__dirname, './uploads', username + fileProfil);
-			fs.copyFileSync(path.join(__dirname, "./public/images/flamme.png"), filePath);
-		} else {
-			const filePath = path.join(__dirname, './uploads', username + fileProfil);
-			fs.writeFileSync(filePath, fileBufferProfil);
-		}
-
-		if (!fileBg) {
-			fileBg = `temp_${Date.now()}bg.png`;
-			const filePath = path.join(__dirname, './uploads', username + fileBg);
-			fs.copyFileSync(path.join(__dirname, "./public/images/profil_bg.jpeg"), filePath);
-		} else {
-			const filePath = path.join(__dirname, './uploads', username + fileBg);
-			fs.writeFileSync(filePath, fileBufferBg);
-		}
-
-		const hashedPassword = await app.bcrypt.hash(password);
-		await createUser(username, hashedPassword, email, '/uploads/' + username + fileProfil, '/uploads/' + username + fileBg);
-		return loginUser(req, reply, password, username);
+		return registerUser(req, reply, parsedParts, true);
 	} catch (error) {
 		return reply.send({message: error.message});
 	}
+};
+
+const validateRegisterForm = async (req, fields) => {
+	let language = req.cookies.userLanguage || "en";
+	const jsonLanguage = await getLanguageWithoutBody(language);
+
+	const formResponse = verifyForm(fields.username, fields.email, fields.password, jsonLanguage);
+	if (formResponse.message !== "ok") {
+		return { message: formResponse.message };
+	}
+
+	const isExistResponse = await isExist(req, fields.username, fields.email);
+	if (isExistResponse) {
+		return { message: isExistResponse };
+	}
+	return { message: "ok" };
 };

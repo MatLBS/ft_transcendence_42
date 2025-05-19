@@ -65,10 +65,11 @@ async function validateForm() {
 	})
 	.then(async (response) => {
 		const data = await response.json();
-		if (data.message !== "ok") {
+		if (data.message !== "ok" && data.message !== "twoFa") {
 			error_input.innerHTML = `<p>` + data.message + `</p>`;
 			return;
-		} else {
+		}
+		else if (data.message === "twoFa") {
 			const modal = document.getElementById('modal');
 			if (modal) {
 				modal.classList.remove('hidden');
@@ -76,6 +77,12 @@ async function validateForm() {
 				if (modalButton)
 					modalButton.id = 'login_button';
 			}
+		}
+		else {
+			const modal = document.getElementById('modal');
+			if (modal && !modal.classList.contains('hidden'))
+				modal.classList.add('hidden');
+			navigateTo("/profil");
 		}
 	})
 }

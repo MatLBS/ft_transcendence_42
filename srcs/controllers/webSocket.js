@@ -14,7 +14,7 @@ export const sendStatus = async (userId, status) => {
 		return;
 	}
 	friends.forEach((friend) => {
-		const client = app.wsClients.get(friend.id);
+		const client = app.wsClients.get(friend.id + "_status");
 		if (client) {
 			client.send(JSON.stringify({
 				type: 'status',
@@ -35,7 +35,7 @@ export const webSocketConnect = async (socket, req) => {
 		}
 		const userId = response.user.id;
 
-		app.wsClients.set(userId, socket);
+		app.wsClients.set(userId + "_status", socket);
 		socket.on('close', () => {
 			app.wsClients.delete(userId);
 		});
