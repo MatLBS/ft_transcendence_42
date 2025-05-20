@@ -1,5 +1,6 @@
 import path from 'path';
 import ejs from 'ejs';
+import { getLanguageWithoutBody } from "./getLanguage.js"
 import { routes } from "../router.js";
 import { __dirname } from "../router.js";
 import { authenticateUser } from "./tokens.js";
@@ -36,7 +37,7 @@ export const getPost = async (req, reply) => {
 	if (file[1] === "users")
 		return getUserProfile(req, reply, file[2]);
 	file = file.pop() || "home";
-	const jsonLanguage = req.body.jsonLanguage;
+	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
 
 	let content = "", css = "", js = "", user = null, isConnected = false, response = "", friends = null;
 
