@@ -60,6 +60,7 @@ i18next
 						"register_a": "Register",
 						"usernameRequired": "Username is required",
 						"passwordRequired": "Password is required",
+						"google": "Google Sign-in",
 					},
 					"profil": {
 						"statistics": "Statistics",
@@ -93,7 +94,8 @@ i18next
 						"username": "Username",
 						"email": "Email",
 						"password": "Password",
-						"button": "Confirm"
+						"button": "Confirm",
+						"google": "Google Sign-in",
 					},
 					"solo": {
 						"sentence": "You will be playing on the left side, the IA on the right ! Are you ready ?",
@@ -212,6 +214,7 @@ i18next
 						"register_a": "Registrarse",
 						"usernameRequired": "El nombre de usuario es obligatorio",
 						"passwordRequired": "La contraseña es obligatoria",
+						"google": "Inicio de sesión de Google",
 					},
 					"profil": {
 						"statistics": "Estadísticas",
@@ -245,7 +248,8 @@ i18next
 						"username": "Nombre de usuario",
 						"email": "Correo electrónico",
 						"password": "Contraseña",
-						"button": "Confirmar"
+						"button": "Confirmar",
+						"google": "Inicio de sesión de Google",
 					},
 					"solo": {
 						"sentence": "¡Jugarás en el lado izquierdo, la IA en el derecho! ¿Estás listo?",
@@ -363,6 +367,7 @@ i18next
 						"register_a": "Cadastre-se",
 						"usernameRequired": "Nome de usuário é obrigatório",
 						"passwordRequired": "Senha é obrigatória",
+						"google": "Login do Google",
 					},
 					"profil": {
 						"statistics": "Estatísticas",
@@ -396,7 +401,8 @@ i18next
 						"username": "Nome de usuário",
 						"email": "E-mail",
 						"password": "Senha",
-						"button": "Confirmar"
+						"button": "Confirmar",
+						"google": "Login do Google",
 					},
 					"solo": {
 						"sentence": "Você jogará no lado esquerdo, a IA no direito! Está pronto?",
@@ -513,7 +519,8 @@ i18next
 						"register_p": "Vous n'avez pas de compte ?",
 						"register_a": "S'inscrire",
 						"usernameRequired": "Le nom d'utilisateur est requis",
-						"passwordRequired": "Le mot de passe est requis"
+						"passwordRequired": "Le mot de passe est requis",
+						"google": "Connexion avec Google"
 					},
 					"profil": {
 						"statistics": "Statistiques",
@@ -547,7 +554,8 @@ i18next
 						"username": "Nom d'utilisateur",
 						"email": "Email",
 						"password": "Mot de passe",
-						"button": "Confirmer"
+						"button": "Confirmer",
+						"google": "Connexion avec Google"
 					},
 					"solo": {
 						"sentence": "Vous jouerez du côté gauche, l'IA du côté droit ! Êtes-vous prêt ?",
