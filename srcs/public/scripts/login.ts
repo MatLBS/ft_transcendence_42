@@ -95,8 +95,8 @@ function googleLogin() {
 function Login() {
 	const error_mail = document.getElementById('error_mail');
 
-	const password = getInputValue('password');
-	const username = getInputValue('username');
+	const password = getInputValue('password_login');
+	const username = getInputValue('username_login');
 	const verif_email = getInputValue('verif_email');
 
 	if (!error_mail)
