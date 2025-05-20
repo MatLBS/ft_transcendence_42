@@ -33,7 +33,7 @@ app.register(websocket);
 app.decorate('wsClients', new Map());
 
 app.register(cors, {
-	origin: ["https://accounts.google.com", "http://localhost:3000"], // Add allowed origins
+	origin: ["https://accounts.google.com", "https://localhost:3000"], // Add allowed origins
 	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
 	credentials: true, // Allow cookies to be sent with requests
 });

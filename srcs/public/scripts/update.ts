@@ -1,4 +1,4 @@
-import { navigateTo } from '../main.js';
+import { errorInput, navigateTo } from '../main.js';
 import { getInputValue } from './utils.js';
 import { verifyForm } from '../../middleware/verify.js';
 import { language } from '../main.js';
@@ -94,7 +94,7 @@ function updateWithEmail() {
 		if (data.message === "ok") {
 			navigateTo("/profil");
 		} else {
-			error_mail.innerHTML = data.message;
+			error_mail.textContent = data.message;
 		}
 	})
 }
@@ -131,8 +131,7 @@ async function validateForm() {
 
 	const formResponse = verifyForm(username, email, newPassword, jsonLanguage);
 	if (formResponse.message !== "ok" && !formResponse.password) {
-		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
-		return;
+		return errorInput(formResponse.message);
 	}
 
 	const two_fa = two_factor?.checked ? 'true' : 'false';
@@ -153,7 +152,7 @@ async function validateForm() {
 				if (modal)
 					modal.classList.remove('hidden');
 			} else {
-				error_input.innerHTML = `<p>` + data.message + `</p>`;
+				errorInput(data.message);
 			}
 		}
 	})
@@ -210,7 +209,7 @@ function validateFormGoogle() {
 		if (data.message === "ok") {
 			navigateTo("/profil");
 		} else {
-			error_input.innerHTML = `<p>` + data.message + `</p>`;
+			errorInput(data.message);
 		}
 	})
 }

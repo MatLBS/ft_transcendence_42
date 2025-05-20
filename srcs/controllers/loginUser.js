@@ -33,7 +33,7 @@ export const verifLogin = async (req, reply) => {
 	return reply
 		.setCookie("code_id", code.codeId, {
 			httpOnly: true,
-			secure: false,
+			secure: true,
 			sameSite: "lax",
 			path: "/",
 			maxAge: 240,
@@ -90,14 +90,14 @@ const sendToken = async (req, reply, user, isGoogle) => {
 	const refreshToken = generateRefreshToken(user, isGoogle);
 	reply
 		.setCookie('access_token', accessToken, {
-			httpOnly: false,
-			secure: false,
+			httpOnly: true,
+			secure: true,
 			sameSite: 'lax',
 			path: "/",
 		})
 		.setCookie('refresh_token', refreshToken, {
 			httpOnly: true,
-			secure: false,
+			secure: true,
 			sameSite: 'lax',
 			path: "/",
 		})

@@ -10,6 +10,9 @@ export function applyLink(target: HTMLElement, e: Event): void {
 	const link = target.closest('a.my') as HTMLAnchorElement | null;
 	if (link) {
 		e.preventDefault();
+		const remove = target.closest('button.remove-friend') as HTMLButtonElement | null;
+		if (remove)
+			return;
 		const url = link.getAttribute('href');
 		if (url) {
 			navigateTo(url);

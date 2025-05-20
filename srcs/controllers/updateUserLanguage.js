@@ -6,8 +6,8 @@ export const updateUserLanguage =  async (req, reply) => {
 	const response = await authenticateUser(req);
 	reply
 		.setCookie("userLanguage", language, {
-			httpOnly: false,
-			secure: false,
+			httpOnly: true,
+			secure: true,
 			sameSite: "lax",
 			path: "/",
 			maxAge: 60 * 60 * 24,

@@ -10,7 +10,6 @@ import { __dirname } from '../router.js';
 export const googleAuth = async (req, reply) => {
 	let port = "", protocol = "https";
 	if (req.hostname === "localhost") {
-		protocol = "http";
 		port = ":3000";
 	}
 	const redirectUri = `${protocol}://${req.hostname}${port}/auth/google/callback`;
@@ -31,7 +30,7 @@ export const googleAuth = async (req, reply) => {
 
 	reply.setCookie("session_id", sessionId, {
 		httpOnly: true,
-		secure: false,
+		secure: true,
 		sameSite: "lax",
 		path: "/",
 		maxAge: 300,
@@ -51,7 +50,6 @@ export const googleAuth = async (req, reply) => {
 async function exchangeCodeForTokens(req, code) {
 	let port = "", protocol = "https";
 	if (req.hostname === "localhost") {
-		protocol = "http";
 		port = ":3000";
 	}
 	const redirectUri = `${protocol}://${req.hostname}${port}/auth/google/callback`;

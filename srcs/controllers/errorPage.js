@@ -40,8 +40,8 @@ export const errorPage = async (req, reply, response, errorCode) => {
 	if (response.status === 200 && response.newAccessToken) {
 		return reply
 			.setCookie('access_token', response.newAccessToken, {
-				httpOnly: false,
-				secure: false,
+				httpOnly: true,
+				secure: true,
 				sameSite: 'Strict',
 				path: "/",
 			})
