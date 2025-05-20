@@ -147,5 +147,4 @@ export async function hangleNewGames() {
 	}
 }
 
-displayStats();
 hangleNewGames();
