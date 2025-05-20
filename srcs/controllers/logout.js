@@ -16,21 +16,8 @@ export const logout = async (req, reply) => {
 		.send({ status: 200 });
 };
 
-const getUsernameByToken = async (token) => {
-	if (!token) {
-		return { status: 401, user: null };
-	}
-	try {
-		const decoded = jwt.verify(token, process.env.JWT_SECRET);
-		return { status: 200, user: decoded };
-	} catch (err) {
-		return { status: 403, user: null };
-	}
-};
-
 export const quit = async (req, reply) => {
-	const { token } = JSON.parse(req.body);
-	const response = await getUsernameByToken(token);
+	const response = await authenticateUser(req);
 	if (response.status !== 200) {
 		return reply.send({ status: response.status });
 	}

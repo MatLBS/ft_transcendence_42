@@ -1,4 +1,4 @@
-import { navigateTo, language } from '../main.js';
+import { navigateTo, language, errorInput } from '../main.js';
 import { getInputValue } from './utils.js';
 
 /// Fonction pour gérer les clics sur les liens dynamiques
@@ -52,12 +52,10 @@ async function validateForm() {
 	const username = getInputValue('username_login');
 
 	if (username === "") {
-		error_input.innerHTML = `<p>${jsonLanguage!.login.usernameRequired}</p>`;
-		return;
+		return errorInput(jsonLanguage!.login.usernameRequired);
 	}
 	if (password === "") {
-		error_input.innerHTML = `<p>${jsonLanguage!.login.passwordRequired}</p>`;
-		return;
+		return errorInput(jsonLanguage!.login.passwordRequired);
 	}
 	fetch('/verifLogin', {
 		method: 'POST',
@@ -66,8 +64,7 @@ async function validateForm() {
 	.then(async (response) => {
 		const data = await response.json();
 		if (data.message !== "ok" && data.message !== "twoFa") {
-			error_input.innerHTML = `<p>` + data.message + `</p>`;
-			return;
+			return errorInput(data.message);
 		}
 		else if (data.message === "twoFa") {
 			const modal = document.getElementById('modal');
@@ -96,14 +93,13 @@ function googleLogin() {
 }
 
 function Login() {
-	const error_input = document.getElementById('error_input');
 	const error_mail = document.getElementById('error_mail');
 
 	const password = getInputValue('password');
 	const username = getInputValue('username');
 	const verif_email = getInputValue('verif_email');
 
-	if (!error_input || !error_mail)
+	if (!error_mail)
 		return;
 
 	fetch('/login', {
@@ -116,12 +112,12 @@ function Login() {
 			navigateTo("/profil");
 		} else {
 			if (data.code === true) {
-				error_mail.innerHTML = data.message;
+				error_mail.textContent = data.message;
 			} else {
 				const modal = document.getElementById('modal');
 				if (modal && !modal.classList.contains('hidden'))
 					modal.classList.add('hidden');
-				error_input.innerHTML = `<p>` + data.message + `</p>`;
+				errorInput(data.message);
 			}
 		}
 	})
