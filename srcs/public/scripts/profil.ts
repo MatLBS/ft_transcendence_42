@@ -16,6 +16,7 @@ if (appDiv) {
 			const username = target.getAttribute("data-username");
 			if (username) {
 				removeFriends(username);
+				return;
 			}
 		}
 		if (target.closest('#custom-select'))  {

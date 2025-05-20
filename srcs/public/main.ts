@@ -127,6 +127,18 @@ function seeTarget(e: MouseEvent): void {
 	}
 }
 
+export async function errorInput(error: string) {
+	const error_input = document.getElementById('error_input');
+	if (!error_input)
+		return;
+	const p = document.createElement('p');
+	p.textContent = error;
+	while (error_input.firstChild) {
+		error_input.removeChild(error_input.firstChild);
+	}
+	error_input.appendChild(p);
+}
+
 async function handleLanguage(e: Event): Promise<void> {
 	const target = e.target as HTMLElement;
 	const languageDefault = document.getElementById('language-default');
@@ -251,9 +263,7 @@ function start(): void {
 
 // Gère l'événement de fermeture de la fenêtre
 window.addEventListener('beforeunload', (event: BeforeUnloadEvent) => {
-	const token = document.cookie.split('; ').find(row => row.startsWith('access_token='));
-	const tokenValue = token ? token.split('=')[1] : '';
-	navigator.sendBeacon('/quit', JSON.stringify({ token: tokenValue }));
+	navigator.sendBeacon('/quit');
 });
 
 // Lancement de l'application

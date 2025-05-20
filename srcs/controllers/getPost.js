@@ -69,8 +69,8 @@ export const getPost = async (req, reply) => {
 		if (response.status === 200 && response.newAccessToken) {
 			return reply
 				.setCookie('access_token', response.newAccessToken, {
-					httpOnly: false,
-					secure: false,
+					httpOnly: true,
+					secure: true,
 					sameSite: 'Strict',
 					path: "/",
 				})

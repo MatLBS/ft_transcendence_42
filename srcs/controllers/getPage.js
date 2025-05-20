@@ -134,8 +134,8 @@ const generatePage = async (req, reply, file) => {
 	if (response.status === 200 && response.newAccessToken) {
 		reply
 			.setCookie('access_token', response.newAccessToken, {
-				httpOnly: false,
-				secure: false,
+				httpOnly: true,
+				secure: true,
 				sameSite: 'Strict',
 				path: "/",
 			})

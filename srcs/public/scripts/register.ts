@@ -1,4 +1,4 @@
-import { navigateTo } from '../main.js';
+import { errorInput, navigateTo } from '../main.js';
 import { getInputValue } from './utils.js';
 import { verifyForm } from '../../middleware/verify.js';
 import { language } from '../main.js';
@@ -99,12 +99,12 @@ function registerUser() {
 		const data = await response.json();
 		if (data.message !== "ok") {
 			if (data.code === true) {
-				error_mail.innerHTML = data.message;
+				error_mail.textContent = data.message;
 			} else {
 				const modal = document.getElementById('modal');
 				if (modal && !modal.classList.contains('hidden'))
 					modal.classList.add('hidden');
-				error_input.innerHTML = `<p>` + data.message + `</p>`;
+				errorInput(data.message);
 			}
 			return;
 		} else {
@@ -113,7 +113,7 @@ function registerUser() {
 	})
 	.catch((error) => {
 		console.error("Network error:", error);
-		error_input.innerHTML = `<p>Erreur réseau. Veuillez réessayer plus tard.</p>`;
+		errorInput(`Erreur réseau. Veuillez réessayer plus tard.`);
 	});
 }
 
@@ -148,8 +148,7 @@ async function validateForm() {
 			});
 	const formResponse = verifyForm(username, email, password, jsonLanguage);
 	if (formResponse.message !== "ok") {
-		error_input.innerHTML = `<p>` + formResponse.message + `</p>`;
-		return;
+		return errorInput(formResponse.message);
 	}
 
 	const formData = new FormData();
@@ -175,9 +174,9 @@ async function validateForm() {
 	.then(async (response) => {
 		const data = await response.json();
 		if (data.message !== "ok" && data.message !== "twoFa") {
-			error_input.innerHTML = `<p>` + data.message + `</p>`;
-			return;
-		} else if (data.message === "twoFa") {
+			return errorInput(data.message);
+		}
+		else if (data.message === "twoFa") {
 			const modal = document.getElementById('modal');
 			if (modal) {
 				modal.classList.remove('hidden');
@@ -185,7 +184,8 @@ async function validateForm() {
 				if (modalButton)
 					modalButton.id = 'register_button';
 			}
-		} else {
+		}
+		else {
 			const modal = document.getElementById('modal');
 			if (modal && !modal.classList.contains('hidden'))
 				modal.classList.add('hidden');
@@ -194,7 +194,7 @@ async function validateForm() {
 	})
 	.catch((error) => {
 		console.error("Network error:", error);
-		error_input.innerHTML = `<p>Erreur réseau. Veuillez réessayer plus tard.</p>`;
+		errorInput(`Erreur réseau. Veuillez réessayer plus tard.`);
 	});
 }
 

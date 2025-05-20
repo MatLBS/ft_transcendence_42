@@ -25,7 +25,7 @@ export const verifEmail = async (req, reply, email, username) => {
 	reply
 		.setCookie("code_id", code.codeId, {
 			httpOnly: true,
-			secure: false,
+			secure: true,
 			sameSite: "lax",
 			path: "/",
 			maxAge: 240,
