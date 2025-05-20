@@ -48,8 +48,8 @@ async function validateForm() {
 	if (!error_input)
 		return;
 
-	const password = getInputValue('password');
-	const username = getInputValue('username');
+	const password = getInputValue('password_login');
+	const username = getInputValue('username_login');
 
 	if (username === "") {
 		return errorInput(jsonLanguage!.login.usernameRequired);
@@ -126,7 +126,7 @@ function Login() {
 //function to change password to text
 function showPassword() {
 
-	const input = document.getElementById('password') as HTMLInputElement | null;
+	const input = document.getElementById('password_login') as HTMLInputElement | null;
 	let iconEye = document.getElementById('login-eye') as HTMLInputElement | null;
 
 	if (!input || !iconEye)
