@@ -35,7 +35,7 @@ export const errorPage = async (req, reply, response, errorCode) => {
 	if (response.status === 200 && (user = await findUserById(response.user.id)))
 		isConnected = true;
 	const css = path.join('/public', `style/error_page/error.css`);
-	const jsonLanguage = req.body.jsonLanguage;
+	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
 	const content = await ejs.renderFile(path.join(__dirname, 'views', `error_page/${errorCode}.ejs`), { jsonLanguage, isConnected });
 	if (response.status === 200 && response.newAccessToken) {
 		return reply
