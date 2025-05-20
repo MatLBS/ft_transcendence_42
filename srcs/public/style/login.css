@@ -92,6 +92,10 @@
 		position: relative;
 		}
 
+		#username_login, #password_login {
+			color: white;
+		}
+
 		.login__label {
 		position: absolute;
 		left: 0;
