@@ -23,7 +23,7 @@ export const getExternalUser = async (req , reply) => {
 	let username;
 	let user;
 	try {
-			username = req.url.split("/").pop();
+			username = decodeURIComponent(req.url.split("/").pop());
 			user = await findUser(username);
 			if (!user) {
 				return ({ status: 404 });

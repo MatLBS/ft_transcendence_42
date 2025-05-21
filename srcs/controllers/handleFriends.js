@@ -6,7 +6,8 @@ import { isFriend, addFollow, removeFollow } from '../dist/prisma/friends.js';
 
 export const addFriends = async (req, reply) => {
 	try {
-		const username = req.url.split("/").pop();
+		const username = decodeURIComponent(req.url.split("/").pop());
+
 		const user = await findUser(username);
 		if (!user) {
 			return await getErrorPageDirect(req, reply);
@@ -40,7 +41,7 @@ export const addFriends = async (req, reply) => {
 
 export const deleteFriends = async (req, reply) => {
 	try {
-		const username = req.url.split("/").pop();
+		const username = decodeURIComponent(req.url.split("/").pop());
 		const user = await findUser(username);
 		if (!user) {
 			return await getErrorPage(req, reply);

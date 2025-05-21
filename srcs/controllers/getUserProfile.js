@@ -14,7 +14,7 @@ export const getUserProfile = async (req, reply, username) => {
 		}
 		const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
 		const { page } = req.params;
-		const finalPage = page ?? username;
+		const finalPage = page ?? decodeURIComponent(username);
 		const user = await findUser(finalPage);
 		if (!user)
 			return await errorPage(req, reply, response, 404);

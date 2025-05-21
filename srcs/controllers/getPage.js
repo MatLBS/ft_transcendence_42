@@ -48,7 +48,7 @@ const addContent = async (contentAdd, css, js) => {
 export const getPage = async (req, reply) => {
 	let file = req.url.split("/");
 	if (file[1] === "users")
-		return generatePage(req, reply, "users/" + file[2]);
+		return generatePage(req, reply, "users/" + file.pop());
 	file = file.pop() || "home";
 	return generatePage(req, reply, file);
 }
@@ -88,7 +88,7 @@ const errorContent = async (jsonLanguage, isConnected) => {
  */
 const profilPage = async (jsonLanguage, response, file, isConnected) => {
 	let content = "";
-	const finalPage = file.split("/").pop();
+	const finalPage = decodeURIComponent(file.split("/").pop());
 	const user = await findUser(finalPage);
 	if (!user) {
 		content = await errorContent(jsonLanguage, isConnected);
