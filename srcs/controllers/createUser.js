@@ -10,9 +10,9 @@ import { sendEmail, generateCode, verifCode } from './email.js';
 import { getLanguageWithoutBody } from './getLanguage.js'
 
 const isExist = async (req, username, email) => {
-	let language = req.cookies.userLanguage || "en";
+	// let language = req.cookies.userLanguage || "en";
 
-	const jsonLanguage = await getLanguageWithoutBody(language);
+	const jsonLanguage = await getLanguageWithoutBody(req);
 
 	const user = await findUser(username);
 	if (user) {

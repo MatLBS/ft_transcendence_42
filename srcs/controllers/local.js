@@ -8,10 +8,10 @@ import { getLanguageWithoutBody } from "./getLanguage.js"
 
 export const local = async (req, reply) => {
 
-	const response = await authenticateUser(req);
-	let language = await findUserById(response.user.id);
-	!language ? language = { language: "en" } : language = language.language;
-	const jsonLanguage = await getLanguageWithoutBody(language);
+	// const response = await authenticateUser(req);
+	// let language = await findUserById(response.user.id);
+	// !language ? language = { language: "en" } : language = language.language;
+	const jsonLanguage = await getLanguageWithoutBody(req);
 
 	const route = routes["local"];
 	const content = await ejs.renderFile(path.join(route.dir, route.file), {message: null, jsonLanguage});

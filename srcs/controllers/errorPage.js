@@ -14,7 +14,7 @@ export const addErrorContent = async (contentAdd) => {
 
 // Fonction pour charger une page d'erreur si url dirrecte
 export const getErrorPageDirect = async (req, reply) => {
-	let jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
+	let jsonLanguage = await getLanguageWithoutBody(req);
 	let response = await authenticateUser(req);
 	let isConnected = false, user = null;
 	if (response.status === 200 && (user = await findUserById(response.user.id)))
@@ -35,7 +35,7 @@ export const errorPage = async (req, reply, response, errorCode) => {
 	if (response.status === 200 && (user = await findUserById(response.user.id)))
 		isConnected = true;
 	const css = path.join('/public', `style/error_page/error.css`);
-	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
+	const jsonLanguage = await getLanguageWithoutBody(req);
 	const content = await ejs.renderFile(path.join(__dirname, 'views', `error_page/${errorCode}.ejs`), { jsonLanguage, isConnected });
 	if (response.status === 200 && response.newAccessToken) {
 		return reply

@@ -114,7 +114,7 @@ const profilPage = async (jsonLanguage, response, file, isConnected) => {
  */
 const generatePage = async (req, reply, file) => {
 	let response = null, user = null, isConnected = false, friends = null;
-	let jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
+	let jsonLanguage = await getLanguageWithoutBody(req);
 	({ response, user, isConnected, friends } = await handleAuthentication(req, reply, file));
 
 	let content = "", code = 200;
