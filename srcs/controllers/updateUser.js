@@ -10,8 +10,8 @@ import { parseRequestParts } from '../middleware/parseRequestParts.js';
 import { getLanguageWithoutBody } from './getLanguage.js'
 
 const verifUpdate = async (req, reply, fields) => {
-	let language = req.cookies.userLanguage;
-	let jsonLanguage = await getLanguageWithoutBody(language);
+	// let language = req.cookies.userLanguage;
+	let jsonLanguage = await getLanguageWithoutBody(req);
 	const response = await authenticateUser(req);
 
 	const user = await findUserById(response.user.id);
@@ -142,7 +142,7 @@ export const updateUserGoogle = async (req, reply) => {
 
 	const username = fields.username;
 
-	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
+	const jsonLanguage = await getLanguageWithoutBody(req);
 
 	const response = await authenticateUser(req);
 

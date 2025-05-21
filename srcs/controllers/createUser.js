@@ -10,9 +10,9 @@ import { sendEmail, generateCode, verifCode } from './email.js';
 import { getLanguageWithoutBody } from './getLanguage.js'
 
 const isExist = async (req, username, email) => {
-	let language = req.cookies.userLanguage || "en";
+	// let language = req.cookies.userLanguage || "en";
 
-	const jsonLanguage = await getLanguageWithoutBody(language);
+	const jsonLanguage = await getLanguageWithoutBody(req);
 
 	const user = await findUser(username);
 	if (user) {
@@ -116,8 +116,7 @@ export const checkUserBack = async (req, reply) => {
 };
 
 const validateRegisterForm = async (req, fields) => {
-	let language = req.cookies.userLanguage || "en";
-	const jsonLanguage = await getLanguageWithoutBody(language);
+	const jsonLanguage = await getLanguageWithoutBody(req);
 
 	const formResponse = verifyForm(fields.username, fields.email, fields.password, jsonLanguage);
 	if (formResponse.message !== "ok") {

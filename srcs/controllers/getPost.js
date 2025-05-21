@@ -17,7 +17,7 @@ export const needLogin = (file) => ["profil", "game", "update"].includes(file);
 export const dontNeedLogin = (file) => ["login", "register"].includes(file);
 
 const redirectToLogin = async (req, reply) => {
-	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
+	const jsonLanguage = await getLanguageWithoutBody(req);
 	const css = routes.login.css;
 	const js = routes.login.js;
 	const content = await ejs.renderFile(path.join(__dirname, 'views', '/login.ejs'), { jsonLanguage, isConnected: false });
@@ -25,7 +25,7 @@ const redirectToLogin = async (req, reply) => {
 }
 
 const redirectToHome = async (req, reply) => {
-	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
+	const jsonLanguage = await getLanguageWithoutBody(req);
 	const css = routes.home.css;
 	const js = routes.home.js;
 	const content = await ejs.renderFile(path.join(__dirname, 'views', '/home.ejs'), { jsonLanguage, isConnected: true });
@@ -37,7 +37,7 @@ export const getPost = async (req, reply) => {
 	if (file[1] === "users")
 		return getUserProfile(req, reply, file.pop());
 	file = file.pop() || "home";
-	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
+	const jsonLanguage = await getLanguageWithoutBody(req);
 
 	let content = "", css = "", js = "", user = null, isConnected = false, response = "", friends = null;
 
