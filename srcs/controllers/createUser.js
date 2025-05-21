@@ -116,8 +116,7 @@ export const checkUserBack = async (req, reply) => {
 };
 
 const validateRegisterForm = async (req, fields) => {
-	let language = req.cookies.userLanguage || "en";
-	const jsonLanguage = await getLanguageWithoutBody(language);
+	const jsonLanguage = await getLanguageWithoutBody(req);
 
 	const formResponse = verifyForm(fields.username, fields.email, fields.password, jsonLanguage);
 	if (formResponse.message !== "ok") {

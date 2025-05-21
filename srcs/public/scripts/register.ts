@@ -201,7 +201,7 @@ async function validateForm() {
 //function to change password to text
 function showPassword() {
 
-	const input = document.getElementById('password') as HTMLInputElement | null;
+	const input = document.getElementById('password_register') as HTMLInputElement | null;
 	let iconEye = document.getElementById('register-eye') as HTMLInputElement | null;
 
 	if (!input || !iconEye)
