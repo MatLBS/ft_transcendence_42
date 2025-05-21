@@ -146,7 +146,7 @@ export const updateUserGoogle = async (req, reply) => {
 
 	const response = await authenticateUser(req);
 
-	if (response.status !== 200 || !response.user.goole === 0) {
+	if (response.status !== 200 || !response.user.google === 0) {
 		return reply.send({message : jsonLanguage.verify.notAuth});
 	}
 
