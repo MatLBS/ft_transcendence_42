@@ -1,5 +1,6 @@
 import path from 'path';
 import ejs from 'ejs';
+import { getLanguageWithoutBody } from "./getLanguage.js"
 import { routes } from "../router.js";
 import { __dirname } from "../router.js";
 import { authenticateUser } from "./tokens.js";
@@ -16,7 +17,7 @@ export const needLogin = (file) => ["profil", "game", "update"].includes(file);
 export const dontNeedLogin = (file) => ["login", "register"].includes(file);
 
 const redirectToLogin = async (req, reply) => {
-	const jsonLanguage = req.body.jsonLanguage;
+	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
 	const css = routes.login.css;
 	const js = routes.login.js;
 	const content = await ejs.renderFile(path.join(__dirname, 'views', '/login.ejs'), { jsonLanguage, isConnected: false });
@@ -24,7 +25,7 @@ const redirectToLogin = async (req, reply) => {
 }
 
 const redirectToHome = async (req, reply) => {
-	const jsonLanguage = req.body.jsonLanguage;
+	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
 	const css = routes.home.css;
 	const js = routes.home.js;
 	const content = await ejs.renderFile(path.join(__dirname, 'views', '/home.ejs'), { jsonLanguage, isConnected: true });
@@ -34,9 +35,9 @@ const redirectToHome = async (req, reply) => {
 export const getPost = async (req, reply) => {
 	let file = req.body.url.split("/");
 	if (file[1] === "users")
-		return getUserProfile(req, reply, file[2]);
+		return getUserProfile(req, reply, file.pop());
 	file = file.pop() || "home";
-	const jsonLanguage = req.body.jsonLanguage;
+	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
 
 	let content = "", css = "", js = "", user = null, isConnected = false, response = "", friends = null;
 

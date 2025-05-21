@@ -59,9 +59,9 @@ function registerUser() {
 	const error_input = document.getElementById('error_input');
 	const error_mail = document.getElementById('error_mail');
 
-	const password = getInputValue('password');
-	const email = getInputValue('email');
-	const username = getInputValue('username');
+	const password = getInputValue('password_register');
+	const email = getInputValue('email_register');
+	const username = getInputValue('username_register');
 	const verif_email = getInputValue('verif_email');
 
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;
@@ -119,9 +119,9 @@ function registerUser() {
 
 async function validateForm() {
 	const error_input = document.getElementById('error_input');
-	const password = getInputValue('password');
-	const email = getInputValue('email');
-	const username = getInputValue('username');
+	const password = getInputValue('password_register');
+	const email = getInputValue('email_register');
+	const username = getInputValue('username_register');
 	const two_factor = document.getElementById('two_factor_register') as HTMLInputElement | null;
 
 	const profile_pictureElement = document.getElementById('profile_picture') as HTMLInputElement | null;

@@ -7,6 +7,7 @@ import { findUserById, updateUserLanguageDB } from "../dist/prisma/seed.js";
 export const getLanguage = async (req, reply) => {
 	let translations;
 	let language = req.body.language;
+	console.log("Language from body: ", language);
 	
 	const supportedLanguages = ["fr", "en", "es", "pt", ""];
 	if (!supportedLanguages.includes(language))

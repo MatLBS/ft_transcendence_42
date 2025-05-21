@@ -27,25 +27,12 @@ export async function recvContent(url: string): Promise<void> {
 			clearSearchResults();
 		}
 	}
-	let jsonLanguage;
-	await fetch('/languages', {
-		method: 'POST',
-		credentials: 'include',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ language }),
-	})
-		.then(async (response) => {
-			jsonLanguage = await response.json();
-		})
-		.catch((error: unknown) => {
-			console.error('Erreur lors de la récupération du contenu:', error);
-		});
 
 	await fetch('/url', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ url, jsonLanguage }),
+		body: JSON.stringify({ url }),
 	})
 		.then((response: Response) => response.json())
 		.then((data: ResponseData) => {
