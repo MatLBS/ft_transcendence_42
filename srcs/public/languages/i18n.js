@@ -119,8 +119,10 @@ i18next
 						"twoFA": "Activate two-factor authentication",
 					},
 					"verify": {
+						"notAuth": "You are not authenticated",
 						"regexEmail": "Email is required.",
 						"username": "Username is required.",
+						"characters": "Username must not contain special characters.",
 						"minimumLengthUser": "Username must be between 3 and 20 characters long.",
 						"invalidEmail": "The email is not valid.",
 						"password": "Password is required.",
@@ -273,8 +275,10 @@ i18next
 						"twoFA": "Activar autenticación de dos factores",
 					},
 					"verify": {
+						"notAuth": "No estás autenticado",
 						"regexEmail": "El correo electrónico es obligatorio.",
 						"username": "El nombre de usuario es obligatorio.",
+						"characters": "El nombre de usuario no debe contener caracteres especiales.",
 						"minimumLengthUser": "El nombre de usuario debe tener entre 3 y 20 caracteres.",
 						"invalidEmail": "El correo electrónico no es válido.",
 						"password": "La contraseña es obligatoria.",
@@ -426,8 +430,10 @@ i18next
 						"twoFA": "Ativar autenticação de dois fatores",
 					},
 					"verify": {
+						"notAuth": "Você não está autenticado",
 						"regexEmail": "E-mail é obrigatório.",
 						"username": "Nome de usuário é obrigatório.",
+						"characters": "O nome de usuário não deve conter caracteres especiais.",
 						"minimumLengthUser": "O nome de usuário deve ter entre 3 e 20 caracteres.",
 						"invalidEmail": "O e-mail não é válido.",
 						"password": "Senha é obrigatória.",
@@ -579,8 +585,10 @@ i18next
 						"twoFA": "Activer l'authentification à deux facteurs",
 					},
 					"verify": {
+						"notAuth": "Vous n'êtes pas authentifié",
 						"regexEmail": "L'email est requis.",
 						"username": "Le nom d'utilisateur est requis.",
+						"characters": "Le nom d'utilisateur ne doit pas contenir de caractères spéciaux.",
 						"minimumLengthUser": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères.",
 						"invalidEmail": "L'email n'est pas valide.",
 						"password": "Le mot de passe est requis.",

@@ -16,7 +16,7 @@ const verifUpdate = async (req, reply, fields) => {
 
 	const user = await findUserById(response.user.id);
 	if (response.status !== 200 || !user) {
-		return reply.send({message : "User not authenticated."});
+		return reply.send({message : jsonLanguage.verify.notAuth});
 	}
 
 	if (fields.previousPassword === "")
@@ -142,19 +142,24 @@ export const updateUserGoogle = async (req, reply) => {
 
 	const username = fields.username;
 
+	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
+
 	const response = await authenticateUser(req);
 
 	if (response.status !== 200 || !response.user.goole === 0) {
-		return reply.send({message : "User not authenticated."});
+		return reply.send({message : jsonLanguage.verify.notAuth});
 	}
 
 	const user = await findUserById(response.user.id);
 	if (!user) {
-		return reply.send({message : "User not authenticated."});
+		return reply.send({message : jsonLanguage.verify.notAuth});
 	}
 
-	if (username.length < 3 || username.length > 20)
-		return reply.send({message : "The username must be between 3 and 20 characters."});
+	if (username.trim().length < 3 || username.trim().length > 20)
+		return reply.send({message : jsonLanguage.verify.minimumLengthUser});
+
+	if (/[^a-zA-Z0-9_]/.test(username))
+		return reply.send({ message: jsonLanguage.verify.characters });
 
 	if (fileProfil)
 		fileProfil = await handleFileUpload(fileProfil, fileBufferProfil, user);
