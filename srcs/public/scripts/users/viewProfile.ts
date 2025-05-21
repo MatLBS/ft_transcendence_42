@@ -66,7 +66,6 @@ if (appDiv) {
 async function handleFriends(action: string) {
 	const urlParts = window.location.pathname.split('/');
 	const username = urlParts[urlParts.length - 1];
-
 	const response = await fetch(`/${action}/${username}`, {
 		method: "GET",
 		credentials: "include",

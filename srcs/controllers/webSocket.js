@@ -53,7 +53,7 @@ export const webSocketConnect = async (socket, req) => {
 export const webSocketConnectNewGame = async (socket, req) => {
 	try {
 		const urlParts = req.url.split('/');
-		const usernameToFind = urlParts[urlParts.length - 1];
+		const usernameToFind = decodeURIComponent(urlParts[urlParts.length - 1]);
 
 		const username = await findUser(usernameToFind)
 		const userId = username.id;
@@ -82,7 +82,7 @@ export const webSocketConnectMessages = async (socket, req) => {
 			return;
 		}
 		const urlParts = req.url.split('/');
-		const targetName = urlParts[urlParts.length - 1];
+		const targetName = decodeURIComponent(urlParts[urlParts.length - 1]);
 		const target = await findUser(targetName)
 		const userId = response.user.id;
 		const targetId = target.id;

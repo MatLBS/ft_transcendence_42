@@ -158,7 +158,7 @@ export const updateUserGoogle = async (req, reply) => {
 	if (username.trim().length < 3 || username.trim().length > 20)
 		return reply.send({message : jsonLanguage.verify.minimumLengthUser});
 
-	if (/[^a-zA-Z0-9_]/.test(username))
+	if (!/^[\p{L}\p{N} '-]+$/u.test(username))
 		return reply.send({ message: jsonLanguage.verify.characters });
 
 	if (fileProfil)
