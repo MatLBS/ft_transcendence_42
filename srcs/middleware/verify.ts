@@ -16,7 +16,7 @@ export function verifyForm(username: string, email: string, password: string, js
 		return { message: jsonLanguage.verify.username };
 	}
 
-	if (/[^a-zA-Z0-9_]/.test(username)) {
+	if (!/^[\p{L}\p{N} '-]+$/u.test(username)) {
 		return { message: jsonLanguage.verify.characters };
 	}
 
