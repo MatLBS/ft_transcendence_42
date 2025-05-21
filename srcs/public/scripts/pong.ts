@@ -190,7 +190,7 @@ class FirstPersonController {
 
 	CreateScene(): Scene {
 		const scene = new Scene(this.engine);
-		const hemilight = new HemisphericLight("hemilight", new Vector3(0, 1, 0), scene);
+		const hemilight = new HemisphericLight("hemilight", new Vector3(1, 1, 0), scene);
 		hemilight.intensity = 1;
 
 		const advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
@@ -265,7 +265,7 @@ class FirstPersonController {
 		const blackMaterial = new StandardMaterial("blackMat", this.scene);
 		blackMaterial.diffuseColor = new Color3(0, 0, 0);  // Noir pur
 		blackMaterial.specularColor = new Color3(0, 0, 0); // Pas de reflets
-
+		
 		// Appliquer au sol
 		ground.material = blackMaterial;
 
@@ -491,10 +491,6 @@ class FirstPersonController {
 				keys[key] = false;
 			}
 		});
-
-		/* if ('ontouchstart' in window) {
-			this.createTouchControls(keys);
-		} */
 
 		// Variables pour le delta time
 		let lastTime = performance.now();
