@@ -27,8 +27,10 @@ export const getLanguageWithoutBody = async (req) => {
 	let language;
 	const response = await authenticateUser(req);
 	if (response.status === 401){
-		language = req.cookies.userLanguage !== null ? req.cookies.userLanguage : "en";
-
+		if (req.cookies.userLanguage !== null && req.cookies.userLanguage !== undefined)
+			language = req.cookies.userLanguage;
+		else 
+			language = "en";
 	}
 	else {
 		const user = await findUserById(response.user.id);
@@ -40,7 +42,8 @@ export const getLanguageWithoutBody = async (req) => {
 	
 	const supportedLanguages = ["fr", "en", "es", "pt"];
 	if (!supportedLanguages.includes(language)) {
-		return reply.status(400).send({ error: "Language not supported" });
+		console.log("ici")
+		return { error: true, status: 400, message: "Language not supported" };
 	}
 	const translations = i18next.getResourceBundle(language, 'translation');
 	return (translations);

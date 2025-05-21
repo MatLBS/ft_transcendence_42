@@ -405,5 +405,5 @@ window.addEventListener('eventWinnerTournament', ((event: Event) => {
 		infiniteLoop: false
 	  };
 	const canvasId = "vanillaConfettiCanvas";
-	generateConfetti(confettiConfig, canvasId); // Pass canvasId if not default
+	generateConfetti(confettiConfig, canvasId);
 }) as EventListener);
