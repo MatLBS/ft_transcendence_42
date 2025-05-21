@@ -16,7 +16,7 @@ if (appDiv) {
 		if (target.tagName === "SPAN" && target.id === "login-eye") {
 			showPassword()
 		}
-		if (target.tagName === "BUTTON" && target.id === "login_button_google") {
+		if (target.closest("button#login_button_google")) {
 			googleLogin();
 		}
 		if (target.tagName === "BUTTON" && target.id === "confirm_login") {
