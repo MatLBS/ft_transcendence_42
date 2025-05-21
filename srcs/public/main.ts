@@ -13,7 +13,8 @@ interface ResponseData {
 
 export async function navigateTo(url: string): Promise<void> {
 	recvContent(url);
-	history.pushState({}, '', url);
+	if (window.location.pathname !== url)
+		history.pushState({}, '', url);
 }
 
 // Fait une requête au serveur pour récupérer le contenu de la page demandée (sans recharger la page)
