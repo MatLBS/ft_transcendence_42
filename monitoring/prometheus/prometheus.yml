@@ -7,6 +7,9 @@ scrape_configs:
     static_configs:
       - targets: ['app:3000']
     metrics_path: /metrics
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true 
 
   - job_name: 'prometheus'
     static_configs:
