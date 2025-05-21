@@ -35,7 +35,7 @@ const redirectToHome = async (req, reply) => {
 export const getPost = async (req, reply) => {
 	let file = req.body.url.split("/");
 	if (file[1] === "users")
-		return getUserProfile(req, reply, file[2]);
+		return getUserProfile(req, reply, file.pop());
 	file = file.pop() || "home";
 	const jsonLanguage = await getLanguageWithoutBody(req.cookies.userLanguage);
 

@@ -27,7 +27,6 @@ import { createLocalGame, updateResultLocalGame } from './controllers/createLoca
 import { getMatchsResults, getExternalMatchsResults } from './controllers/getMatchs.js';
 import { getErrorPageDirect } from './controllers/errorPage.js';
 import { search } from './controllers/search.js';
-import { getUserProfile } from './controllers/getUserProfile.js';
 import { addFriends, deleteFriends } from './controllers/handleFriends.js';
 import { webSocketConnect, webSocketConnectNewGame, webSocketConnectMessages } from './controllers/webSocket.js';
 import { getAllMessages, enterNewMessage } from './controllers/handleMessages.js';
@@ -74,7 +73,7 @@ export default async function userRoutes(app) {
 		engine: { ejs: ejs },
 		root: path.join(__dirname, "views"),
 	});
-	
+
 	app.register(fastifyFormbody)
 
 	app.get('/', getPage);
@@ -138,9 +137,9 @@ export default async function userRoutes(app) {
 
 	app.get('/test/error', async (request, reply) => {
 		reply.code(500).send({ error: "Internal server error" });
-	  });
-	  
-	  app.get('/test/bad-request', async (request, reply) => {
+	});
+
+	app.get('/test/bad-request', async (request, reply) => {
 		reply.code(400).send({ error: "Bad request" });
-	  });
+	});
 }
