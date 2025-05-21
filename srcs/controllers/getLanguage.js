@@ -26,11 +26,16 @@ export const getLanguage = async (req, reply) => {
 export const getLanguageWithoutBody = async (req) => {
 	let language;
 	const response = await authenticateUser(req);
-	if (response.status === 401)
-		language = req.cookies.userLanguage
+	if (response.status === 401){
+		language = req.cookies.userLanguage !== null ? req.cookies.userLanguage : "en";
+
+	}
 	else {
 		const user = await findUserById(response.user.id);
-		language = user.language !== null ? user.language : req.cookies.userLanguage
+		if (user && user.language)
+			language = user.language;
+		else
+			language = req.cookies.userLanguage || "en";
 	}
 	
 	const supportedLanguages = ["fr", "en", "es", "pt"];
