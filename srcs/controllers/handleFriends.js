@@ -1,6 +1,6 @@
 import { authenticateUser } from "./tokens.js";
 import { findUser } from "../dist/prisma/seed.js";
-import { getErrorPageDirect } from './errorPage.js';
+import { errorPageDirect } from './errorPage.js';
 import { isFriend, addFollow, removeFollow } from '../dist/prisma/friends.js';
 
 
@@ -10,12 +10,12 @@ export const addFriends = async (req, reply) => {
 
 		const user = await findUser(username);
 		if (!user) {
-			return await getErrorPageDirect(req, reply);
+			return await errorPageDirect(req, reply);
 		}
 
 		const response = await authenticateUser(req);
 		if (response.status !== 200) {
-			return await getErrorPageDirect(req, reply); // code error
+			return await errorPageDirect(req, reply); // code error
 		}
 
 		const himself = response.user.id === user.id;
