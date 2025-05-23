@@ -1,14 +1,17 @@
 services:
   app:
-     build: .
-     ports:
+    build:
+      context: .
+      args:
+        - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    ports:
       - "3000:3000"
-     networks:
-      - monitoring-network 
-     environment:
+    networks:
+      - monitoring-network
+    environment:
       - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
       - PORT=3000
-     volumes:
+    volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
 
@@ -26,7 +29,7 @@ services:
       - monitoring-network
     depends_on:
       - app
-    
+
   alertmanager:
    image: prom/alertmanager
    ports:
@@ -51,7 +54,7 @@ services:
       - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
     networks:
-      - monitoring-network 
+      - monitoring-network
     depends_on:
       - prometheus
 
