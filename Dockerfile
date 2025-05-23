@@ -19,8 +19,6 @@ RUN npx prisma db push
 
 RUN npx tsc
 
-RUN echo "Token from env: $NGROK_AUTHTOKEN" > ../test.txt
-
 EXPOSE 3000
 
 CMD ["sh", "-c", "ngrok config add-authtoken $NGROK_AUTHTOKEN && ngrok http https://localhost:$PORT --host-header=rewrite --inspect=false --log=stdout > ngrok.log & sleep 2 && npm run dev"]
