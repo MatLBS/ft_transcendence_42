@@ -16,7 +16,7 @@ if (appDiv) {
 			const divGlobal = document.getElementById('divGlobal');
 			if (divGlobal)
 			{
-				divGlobal.classList.toggle('none');
+				divGlobal.classList.toggle('noneViewProfile');
 				charts.globalPieChart.reset();
 				charts.globalPieChart.update();
 				charts.barChart.reset()
@@ -28,7 +28,7 @@ if (appDiv) {
 			const divLocal = document.getElementById('divLocal');
 			if (divLocal)
 			{
-				divLocal.classList.toggle('openStats');
+				divLocal.classList.toggle('openStatsViewProfile');
 				charts.localBarChart.reset();
 				charts.localBarChart.update();
 				charts.localPieChart.reset();
@@ -40,7 +40,7 @@ if (appDiv) {
 			const divSolo = document.getElementById('divSolo');
 			if (divSolo)
 			{
-				divSolo.classList.toggle('openStats');
+				divSolo.classList.toggle('openStatsViewProfile');
 				charts.soloBarChart.reset();
 				charts.soloBarChart.update();
 				charts.soloPieChart.reset();
@@ -52,7 +52,7 @@ if (appDiv) {
 			const divTournament = document.getElementById('divTournament');
 			if (divTournament)
 			{
-				divTournament.classList.toggle('openStats');
+				divTournament.classList.toggle('openStatsViewProfile');
 				charts.tournamentBarChart.reset();
 				charts.tournamentBarChart.update();
 				charts.tournamentPieChart.reset();

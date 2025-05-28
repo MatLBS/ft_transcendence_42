@@ -5,8 +5,8 @@ export const generateCode = async (req, reply) => {
 	if (!global.codeId) {
 		global.codeId = new Map();
 	}
-	// const code = Math.floor(100000 + Math.random() * 900000).toString();
-	const code = "123456";
+	const code = Math.floor(100000 + Math.random() * 900000).toString();
+	// const code = "123456";
 	const codeId = crypto.randomUUID();
 	global.codeId.set(codeId, {
 		code,
@@ -65,7 +65,7 @@ export const sendEmail = async (email, username, code) => {
 		text: text,
 	};
 	try {
-		// const info = await transporter.sendMail(mailOptions);
+		const info = await transporter.sendMail(mailOptions);
 		return { message: 'ok'};
 	} catch (error) {
 		return { message: 'Error sending email', error };
