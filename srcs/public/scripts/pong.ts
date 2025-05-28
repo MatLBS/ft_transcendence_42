@@ -3,7 +3,7 @@ import "@babylonjs/loaders";
 import * as CANNON from "cannon";
 import * as GUI from "@babylonjs/gui";
 
-const WINPOINT = 1;
+const WINPOINT = 5;
 class FirstPersonController {
 	scene!: Scene;
 	engine!: Engine;

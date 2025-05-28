@@ -292,7 +292,7 @@ async function handleTournamentSettingsClick(e: MouseEvent) {
 
 		if (target.matches('#submit-button')) {
 			if ((target as HTMLButtonElement).dataset.processing === 'true')
-				return; // Éviter le traitement multiple
+				return;
 
 			(target as HTMLButtonElement).dataset.processing = 'true';
 			const submitButton = target as HTMLButtonElement;

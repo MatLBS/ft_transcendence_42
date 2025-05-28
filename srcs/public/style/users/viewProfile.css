@@ -62,11 +62,11 @@ h2 {
 	margin: auto;
 }
 
-.openStats {
+.openStatsViewProfile {
 	display: flex !important
 }
 
-.none {
+.noneViewProfile {
 	display: none !important;
 }
 
