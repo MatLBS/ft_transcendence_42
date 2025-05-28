@@ -47,9 +47,10 @@ const addContent = async (contentAdd, css, js) => {
  */
 export const getPage = async (req, reply) => {
 	let file = req.url.split("/");
-	if (file[1] === "users")
+	if (file[1] === "users" && file[2] && file[2].length > 0) {
 		return generatePage(req, reply, "users/" + file.pop());
-	file = file.pop() || "home";
+	}
+	file = file[1] || "home";
 	return generatePage(req, reply, file);
 }
 

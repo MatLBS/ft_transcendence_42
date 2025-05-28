@@ -5,9 +5,12 @@ import { getLanguageWithoutBody } from "./getLanguage.js"
 import { isFriend } from '../dist/prisma/friends.js';
 import { errorPage } from './errorPage.js';
 
-export const getUserProfile = async (req, reply, username) => {
+export const getUserProfile = async (req, reply, file) => {
 	const response = await authenticateUser(req);
 	try {
+		if (file[3])
+			return await errorPage(req, reply, response, 404);
+		const username = file[2];
 		let userLog = await findUserById(response.user.id);
 		if (!response.status === 200 || !userLog) {
 			return await errorPage(req, reply, response, 401);

@@ -33,10 +33,10 @@ const redirectToHome = async (req, reply) => {
 }
 
 export const getPost = async (req, reply) => {
-	let file = req.body.url.split("/");
-	if (file[1] === "users")
-		return getUserProfile(req, reply, file.pop());
-	file = file.pop() || "home";
+	let parseUrl = req.body.url.split("/");
+	if (parseUrl[1] === "users" && parseUrl[2] && parseUrl[2].length > 0)
+		return getUserProfile(req, reply, parseUrl);
+	const file = parseUrl[1] || "home";
 	const jsonLanguage = await getLanguageWithoutBody(req);
 
 	let content = "", css = "", js = "", user = null, isConnected = false, response = "", friends = null;
@@ -44,6 +44,8 @@ export const getPost = async (req, reply) => {
 	try {
 		// Authentification de l'utilisateur
 		response = await authenticateUser(req);
+		if (parseUrl[2])
+			return await errorPage(req, reply, response, 404);
 		if (response.status === 200 && (user = await findUserById(response.user.id))) {
 			isConnected = true;
 			if (dontNeedLogin(file))
