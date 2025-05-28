@@ -13,7 +13,7 @@ export const addErrorContent = async (contentAdd) => {
 }
 
 // Fonction pour charger une page d'erreur si url dirrecte
-export const getErrorPageDirect = async (req, reply) => {
+export const errorPageDirect = async (req, reply) => {
 	let jsonLanguage = await getLanguageWithoutBody(req);
 	let response = await authenticateUser(req);
 	let isConnected = false, user = null;

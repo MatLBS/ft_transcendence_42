@@ -25,7 +25,7 @@ import {solo} from './controllers/solo.js';
 import { createSoloGame, updateResultSoloGame } from './controllers/createSolo.js';
 import { createLocalGame, updateResultLocalGame } from './controllers/createLocal.js';
 import { getMatchsResults, getExternalMatchsResults } from './controllers/getMatchs.js';
-import { getErrorPageDirect } from './controllers/errorPage.js';
+import { errorPageDirect } from './controllers/errorPage.js';
 import { search } from './controllers/search.js';
 import { addFriends, deleteFriends } from './controllers/handleFriends.js';
 import { webSocketConnect, webSocketConnectNewGame, webSocketConnectMessages } from './controllers/webSocket.js';
@@ -129,7 +129,7 @@ export default async function userRoutes(app) {
 	app.get('/getExternalMatchsResults/:page', getExternalMatchsResults);
 	app.get('/getWinnerTournament', getWinnerTournament);
 
-	app.setNotFoundHandler(getErrorPageDirect);
+	app.setNotFoundHandler(errorPageDirect);
 
 	app.post('/getAllMessages', getAllMessages);
 	app.post('/enterNewMessage', enterNewMessage);
