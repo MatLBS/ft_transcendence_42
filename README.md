@@ -49,4 +49,4 @@ The app will be available at http://localhost:3000.
 Developed by 42 students :
 - https://github.com/msima0
 - https://github.com/JeanBRen
-- matle-br[https://github.com/MatLBS]
+- [matle-br]https://github.com/MatLBS
