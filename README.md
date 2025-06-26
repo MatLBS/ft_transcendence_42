@@ -14,19 +14,19 @@ The project is built using Fastify and Node.js for the backend, with a custom fr
 - Responsive design with Tailwind CSS
 
 ## ⚙️ Tech Stack
-# Backend
+### Backend
 - Node.js
 - Fastify (API server)
 - WebSocket for game and chat
 - JWT for authentication
 - Prisma ORM / MySQL (database)
 
-# Frontend
+### Frontend
 - HTML / Vanilla JavaScript
 - Tailwind CSS
 - WebSocket for real-time communication
 
-# DevOps
+### DevOps
 - Docker / Docker Compose
 - Grafana / Prometheus
 
