@@ -47,6 +47,6 @@ The app will be available at http://localhost:3000.
 ## 🤝 Credits
 
 Developed by 42 students :
-- https://github.com/msima0
-- https://github.com/JeanBRen
-- [matle-br]https://github.com/MatLBS
+- [msima0](https://github.com/msima0)
+- [JeanBRen](https://github.com/JeanBRen)
+- [MatLBS](https://github.com/MatLBS)
