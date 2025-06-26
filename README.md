@@ -41,5 +41,12 @@ cp .env.example .env
 2.Compile and lauch the project.
 ```python
 make
-The app will be available at http://localhost:3000.
 ```
+The app will be available at http://localhost:3000.
+
+## 🤝 Credits
+
+Developed by 42 students :
+- https://github.com/msima0
+- https://github.com/JeanBRen
+- https://github.com/MatLBS
