@@ -59,3 +59,11 @@ Developed by 42 students :
 ![Capture d’écran 2025-06-26 à 18 21 11](https://github.com/user-attachments/assets/b1be70db-2e5f-4295-a777-0a473eb01d69)
 
 ![Capture d’écran 2025-06-26 à 18 23 33](https://github.com/user-attachments/assets/88c42a4c-5dcd-46cc-bb2a-216c8f06839e)
+
+## Contributing
+
+Pull requests are welcome !
+
+For major changes, please open an issue first to discuss what you would like to change.
+
+Enjoy the code 😁
